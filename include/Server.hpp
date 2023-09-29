@@ -27,6 +27,7 @@ class Server{
 	void	run();
 
 	void	acceptClient();
+	void	receive(Client * client);
 };
 
 #endif

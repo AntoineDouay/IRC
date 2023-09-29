@@ -10,11 +10,15 @@ void	Server::init()
 {
 	int opt = 1;
 
+	std::cout << "Cc\n";
 	if ((_server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
 		return ;
 
-	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+	if (setsockopt(_server_fd, SOL_SOCKET, /*SO_REUSEADDR | */ SO_REUSEPORT, &opt, sizeof(opt)))
+	{
+		std::cout << "pas cool\n";
 		return ;
+	}
 
 	struct sockaddr_in	address;
 	address.sin_family = AF_INET;
@@ -50,6 +54,7 @@ void	Server::run()
 			for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); ++it)
 				if((*it).revents == POLLIN)
 				{
+					receive(_clients[(*it).fd]);
 				}
 
 		}
@@ -65,11 +70,42 @@ void	Server::acceptClient()
 	if ((client_fd = accept(_p_fds[0].fd, (struct sockaddr *)&address, &len)) == -1)
 		return ;
 	
-	_clients[client_fd] = new Client(client_fd, address);
+	_clients[client_fd] = new Client(client_fd, address, this);
 
 	_p_fds.push_back(pollfd());
 	_p_fds.back().fd = client_fd;
 	_p_fds.back().events = POLLIN;
 
 	std::cout << "new client add \n";
+}
+
+void	Server::receive(Client * client)
+{
+	char buffer[1024];
+
+
+	int n = recv(client->getFD(), buffer, sizeof(buffer), 0);
+
+	if (n < 0)
+		return ; //error to manage
+
+	// if (!n)
+	// {
+	// 	client->setStatus(3); // normal shutdown of ending socket -> status = DELETE
+	// 	return ;
+	// }
+
+	buffer[n] = '\0';
+	std::string buf = buffer;
+	std::string delimiter("\n");
+	size_t pos;
+
+	while ((pos = buf.find(delimiter)) != std::string::npos)
+	{
+		std::string message = buf.substr(0, pos);
+		std::cout << message << std::endl;
+		//Command cmd(message);
+		//cmd.execute();
+		buf.erase(0 , pos + delimiter.size());
+	}
 }

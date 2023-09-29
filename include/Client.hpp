@@ -6,10 +6,14 @@
 
 enum Status{
 
+	NO_PASSWORD,
+	REGISTER,
 	ONLINE,
 	DELETE
 
 };
+
+class Server;
 
 class Client{
 
@@ -21,9 +25,16 @@ class Client{
 	std::string			_nickname;
 	std::string			_username;
 
+	Status				_status;
+
+	Server				*_serv;
+
 	public :
 
-	Client(int fd, struct sockaddr_in adress);
+	Client(int fd, struct sockaddr_in adress, Server * serv);
+
+	int	getFD();
+	void setStatus(int status);
 };
 
 #endif
