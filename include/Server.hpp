@@ -6,6 +6,7 @@
 #include "main.hpp"
 
 class Client;
+class Commands;
 
 class Server{
 
@@ -28,6 +29,8 @@ class Server{
 
 	void	acceptClient();
 	void	receive(Client * client);
+
+	std::string	getPassword();
 };
 
 #endif

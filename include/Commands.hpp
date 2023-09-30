@@ -5,40 +5,50 @@
 
 #include "main.hpp"
 
+class Server;
+class Client;
+
 class Commands{
 
 	private :
 
-	static std::map<std::string, void (Commands::*)()> _func;
+	std::map<std::string, void (Commands::*)()>	_func;
+	std::vector<std::string>							_tokens;
+
+	Server	*_serv;
+	Client	*_client;
 
 	public :
 
-	Commands(std::string full_cmd);
+	Commands(std::string cmd, Server * serv, Client * client);
 
 	void	PASS();
-	void	AWAY();
-	void	NICK();
 	void	USER();
-	void	WHOIS();
-	void	WHO();
-	void	MODE();
-	void	PING();
-	void	PONG();
-	void	JOIN();
-	void	KICK();
-	void	KILL();
-	void	PART();
-	void	TOPIC();
-	void	INVITE();
-	void	NAMES();
-	void	NOTICE();
-	void	LIST();
-	void	PRIVMSG();
-	void	WALLOPS();
-	void	OPER();
-	void	QUIT();
+	void	NICK();
+	// void	AWAY();
+	// void	WHOIS();
+	// void	WHO();
+	// void	MODE();
+	// void	PING();
+	// void	PONG();
+	// void	JOIN();
+	// void	KICK();
+	// void	KILL();
+	// void	PART();
+	// void	TOPIC();
+	// void	INVITE();
+	// void	NAMES();
+	// void	NOTICE();
+	// void	LIST();
+	// void	PRIVMSG();
+	// void	WALLOPS();
+	// void	OPER();
+	// void	QUIT();
 
 	void	init_func_map();
+	void	parse_cmd(std::string cmd);
+
+	void	execute();
 
 };
 

@@ -6,7 +6,7 @@
 #    By: adouay <adouay@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/29 15:20:33 by adouay            #+#    #+#              #
-#    Updated: 2023/09/29 15:28:00 by adouay           ###   ########.fr        #
+#    Updated: 2023/09/30 13:31:11 by adouay           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ NAME = ircserv
 #==============================================================================#
 
 CXX = c++
-CXXFLAGS = -Wall -Wextra  -std=c++98
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 DFLAGS = -MMD
 MKDIR = mkdir -p
 RM = rm -f
@@ -48,13 +48,13 @@ OBJ_DIR = obj/
 #                                   SOURCES                                    #
 #==============================================================================#
 
-SRC = main.cpp Server.cpp Client.cpp
+SRC = main.cpp Server.cpp Client.cpp Commands.cpp
 
 #==============================================================================#
 #                                   HEADERS                                    #
 #==============================================================================#
 
-HEAD = $(addprefix $(HEADER_DIR), Server.hpp Client.hpp) \
+HEAD = $(addprefix $(HEADER_DIR), Server.hpp Client.hpp Commands.hpp) \
 
 #==============================================================================#
 #                                   OBJECTS                                    #

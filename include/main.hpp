@@ -18,11 +18,13 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <map>
 #include <ctime>
 
 #include "Server.hpp"
 #include "Client.hpp"
+#include "Commands.hpp"
 
 #endif

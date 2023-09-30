@@ -14,7 +14,7 @@ void	Server::init()
 	if ((_server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
 		return ;
 
-	if (setsockopt(_server_fd, SOL_SOCKET, /*SO_REUSEADDR | */ SO_REUSEPORT, &opt, sizeof(opt)))
+	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
 	{
 		std::cout << "pas cool\n";
 		return ;
@@ -102,10 +102,15 @@ void	Server::receive(Client * client)
 
 	while ((pos = buf.find(delimiter)) != std::string::npos)
 	{
-		std::string message = buf.substr(0, pos);
-		std::cout << message << std::endl;
-		//Command cmd(message);
-		//cmd.execute();
+		std::string str = buf.substr(0, pos);
+		std::cout << str << std::endl;
+		Commands cmd(str, this, client);
+		cmd.execute();
 		buf.erase(0 , pos + delimiter.size());
 	}
+}
+
+std::string	Server::getPassword()
+{
+	return _password;
 }

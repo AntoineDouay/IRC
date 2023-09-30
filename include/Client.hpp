@@ -33,8 +33,14 @@ class Client{
 
 	Client(int fd, struct sockaddr_in adress, Server * serv);
 
-	int	getFD();
-	void setStatus(int status);
+	int			getFD();
+	Status		getStatus();
+	std::string	getUsername();
+	std::string	getNickname();
+
+	void	setStatus(int status);
+	void	setUsername(std::string str);
+	void	setNickname(std::string str);
 };
 
 #endif
