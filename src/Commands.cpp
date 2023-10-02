@@ -3,7 +3,7 @@
 
 # define RPL_WELCOME ":irc_43 001 adouay :Welcome to the Internet Relay Network <nick>!<user>@<host>\r\n"
 
-Commands::Commands(std::string cmd, Server * serv, Client * client)
+Commands::Commands(std::string cmd, Server * serv, Client * client) : _command(cmd)
 {
 	_serv = serv;
 	_client = client;
@@ -31,7 +31,7 @@ void	Commands::parse_cmd(std::string cmd)
 
 void	Commands::execute()
 {
-	std::string cmd = _tokens[0];
+	std::string cmd = _command.getCommand();
 
 	if (cmd != "PASS" && _client->getStatus() == NO_PASSWORD)
 		return ;
@@ -41,17 +41,20 @@ void	Commands::execute()
 
 void	Commands::PASS()
 {
-	if (_tokens.size() != 2)
+	std::vector<std::string> &parameters = _command.getParameters();
+	if (parameters.size() != 1)
 		return ;
-	if (_tokens[1] != _serv->getPassword())
+	if (parameters[0] != _serv->getPassword())
 		return ;
 	_client->setStatus(1);
 }
 void	Commands::USER()
 {
-	if (_tokens.size() < 2)
+	std::vector<std::string> &parameters = _command.getParameters();
+
+	if (parameters.size() < 1)
 		return ;
-	_client->setUsername(_tokens[1]);
+	_client->setUsername(parameters[0]);
 	if (_client->getNickname() != "" && _client->getStatus() != NO_PASSWORD)
 	{
 		send (_client->getFD(), RPL_WELCOME, 80, 0);
@@ -60,9 +63,11 @@ void	Commands::USER()
 }
 void	Commands::NICK()
 {
-	if (_tokens.size() != 2)
+	std::vector<std::string> &parameters = _command.getParameters();
+
+	if (parameters.size() != 1)
 		return ;
-	_client->setNickname(_tokens[1]);
+	_client->setNickname(parameters[0]);
 	if (_client->getUsername() != "" && _client->getStatus() != NO_PASSWORD)
 	{
 		send (_client->getFD(), RPL_WELCOME, 80, 0);
