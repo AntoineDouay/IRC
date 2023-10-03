@@ -1,10 +1,12 @@
 
 #ifndef COMMANDS_HPP
 
-#define COMMANDS_HPP
+# define COMMANDS_HPP
 
-#include "main.hpp"
+# include "main.hpp"
+# include "Command.hpp"
 
+class Command;
 class Server;
 class Client;
 
@@ -13,7 +15,8 @@ class Commands{
 	private :
 
 	std::map<std::string, void (Commands::*)()>	_func;
-	std::vector<std::string>							_tokens;
+	std::vector<std::string>					_tokens;
+	Command										_command;
 
 	Server	*_serv;
 	Client	*_client;
