@@ -10,7 +10,6 @@ void	Server::init()
 {
 	int opt = 1;
 
-	std::cout << "Cc\n";
 	if ((_server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
 		return ;
 
@@ -57,6 +56,11 @@ void	Server::run()
 					receive(_clients[(*it).fd]);
 				}
 
+			std::vector<Client *> v_clients = getClients();
+			for (std::vector<Client *>::iterator it = v_clients.begin(); it != v_clients.end(); it++)
+				if ((*it)->getStatus() == DELETE)
+					delClient(*it);
+
 		}
 	}
 }
@@ -77,6 +81,30 @@ void	Server::acceptClient()
 	_p_fds.back().events = POLLIN;
 
 	std::cout << "new client add \n";
+}
+
+
+void	Server::delClient(Client * client)
+{
+	std::map<int, Client *>::iterator it = _clients.find(client->getFD());
+
+	if (it != _clients.end())
+	{
+		_clients.erase(it);
+		close(client->getFD());
+	}
+
+	for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); it++)
+	{
+		if (it->fd == client->getFD())
+		{
+			_p_fds.erase(it);
+			break ;
+		}
+	}
+	close(client->getFD());
+
+	delete client;
 }
 
 void	Server::receive(Client * client)
@@ -113,4 +141,16 @@ void	Server::receive(Client * client)
 std::string	Server::getPassword()
 {
 	return _password;
+}
+
+std::vector<Client *>	Server::getClients()
+{
+	std::vector<Client *>	cli;
+
+	std::map<int, Client *>::iterator it = _clients.begin();
+
+	for (; it != _clients.end(); it++)
+		cli.push_back(it->second);
+
+	return (cli);
 }

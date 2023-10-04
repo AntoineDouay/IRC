@@ -37,6 +37,7 @@ class Client{
 	Status		getStatus();
 	std::string	getUsername();
 	std::string	getNickname();
+	std::string	getHostName();
 
 	void	setStatus(int status);
 	void	setUsername(std::string str);

@@ -28,9 +28,11 @@ class Server{
 	void	run();
 
 	void	acceptClient();
+	void	delClient(Client * client);
 	void	receive(Client * client);
 
-	std::string	getPassword();
+	std::string				getPassword();
+	std::vector<Client *>	getClients();
 };
 
 #endif

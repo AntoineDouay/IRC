@@ -25,7 +25,7 @@
 
 #include "Server.hpp"
 #include "Client.hpp"
-#include "Command.hpp"
 #include "Commands.hpp"
+#include "reply.hpp"
 
 #endif

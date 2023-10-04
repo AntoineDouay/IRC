@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tadiyamu <tadiyamu@student.42.fr>          +#+  +:+       +#+         #
+#    By: adouay <adouay@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/29 15:20:33 by adouay            #+#    #+#              #
-#    Updated: 2023/10/01 17:43:58 by tadiyamu         ###   ########.fr        #
+#    Updated: 2023/10/04 14:28:11 by adouay           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,13 +48,13 @@ OBJ_DIR = obj/
 #                                   SOURCES                                    #
 #==============================================================================#
 
-SRC = main.cpp Server.cpp Client.cpp Command.cpp Commands.cpp
+SRC = main.cpp Server.cpp Client.cpp Commands.cpp
 
 #==============================================================================#
 #                                   HEADERS                                    #
 #==============================================================================#
 
-HEAD = $(addprefix $(HEADER_DIR), Server.hpp Client.hpp Command.hpp Commands.hpp) \
+HEAD = $(addprefix $(HEADER_DIR), Server.hpp Client.hpp Commands.hpp) \
 
 #==============================================================================#
 #                                   OBJECTS                                    #

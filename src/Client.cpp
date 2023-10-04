@@ -27,8 +27,12 @@ std::string	Client::getNickname()
 std::string	Client::getUsername()
 {
 	return _username;
-
 }
+std::string	Client::getHostName()
+{
+	return inet_ntoa(_address.sin_addr);
+}
+
 
 void	Client::setStatus(int status)
 {
