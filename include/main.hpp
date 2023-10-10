@@ -24,7 +24,7 @@
 #include <ctime>
 
 #include "Server.hpp"
-#include "Client.hpp"
+#include "User.hpp"
 #include "Commands.hpp"
 #include "reply.hpp"
 

@@ -6,7 +6,7 @@
 # include "main.hpp"
 
 class Server;
-class Client;
+class User;
 
 class Commands{
 
@@ -18,11 +18,11 @@ class Commands{
 	std::vector<std::string>	_parameters;
 
 	Server	*_serv;
-	Client	*_client;
+	User	*_user;
 
 	public :
 
-	Commands(std::string cmd, Server * serv, Client * client);
+	Commands(std::string cmd, Server * serv, User * client);
 
 	void	PASS();
 	void	USER();
