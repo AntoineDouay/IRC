@@ -22,6 +22,7 @@
 #include <vector>
 #include <map>
 #include <ctime>
+#include <climits>
 
 #include "Server.hpp"
 #include "User.hpp"

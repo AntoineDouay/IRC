@@ -3,42 +3,51 @@
 
 # include "main.hpp"
 
+using namespace std;
+
 class Server;
 class User;
 
 class Channel {
 
 public :
-    //Channel(void);
-    Channel(const std::string& name, User& userCreator, Server &serv);
-    //Channel(Channel const &src);
-    ~Channel(void);
+	Channel(void);
+	Channel(const string& name, const User& userCreator, string *key);
+	Channel(Channel const &src);
+	~Channel(void);
 
-    //Channel &operator=(Channel const &rhs);
+	Channel &operator=(Channel const &rhs);
 
-    std::string getName(void) const;
-    std::string getAdmin(void) const;
-    const std::vector<User> &getUserList(void) const;
+	string getName(void) const;
+	string getAdmin(void) const;
+	const vector<User> &getUserList(void) const;
+	const string getTopic(void) const;
 
-    void addUser(User who, User newUser);
-    void deleteUser(User who, User targetUser);
-    void inviteUser(User who, User targetUser);
-    void kickUser(User who, User targetUser);
-    void setTopic(User who, std::string newTopic);
+	void addUser(const User& who, const User& newUser, string *key);
+	void deleteUser(User who, User targetUser);
+	void inviteUser(User who, User targetUser);
+	void kickUser(User who, User targetUser);
+	void setTopic(User who, string newTopic);
 
-    void setInviteMod(User who, User target); // function for -i
-    void setTopicRestricton(User who, bool isOperatorOnly); // function for -t
-    void setChannelPassword(User who, std::string password); // function for -k
-    void setOperator(User who, User target, bool isOperator); // function for -o
-    void setMaxUsers(User who, int sizeMax); // function for -l
+	void setInviteRestriction(User who); // function for -i
+	void setTopicRestriction(User who); // function for -t
+	void setChannelPassword(User who, string password); // function for -k
+	void setOperator(User who, User target); // function for -o
+	void setMaxUsers(User who, unsigned int sizeMax); // function for -l
 
 private:
-    int _id;
-    std::string 		_name;
-    std::string 		_key;
-    std::string 		_topic;
-    //std::string 		_operatorName;
-    std::vector<User *> _userList;
+	int _id;
+	string _name;
+	string *_key;
+	string _topic;
+	string _operatorName;
+	unsigned int _maxUser;
+	vector<User> _userList;
+
+	bool _inviteRestrictionOn;
+	bool _topicRestrictionOn;
+
+	vector<User>::iterator findUser(const User& user);
 
 	Server				*_serv;
 
