@@ -1,7 +1,7 @@
 
 #include "../../include/Commands.hpp"
 
-void	Commands::PASS()
+void	Commands::JOIN()
 {
 	if (_parameters.size() == 0)
 		return reply (ERR_NEEDMOREPARAMS, _command.c_str());

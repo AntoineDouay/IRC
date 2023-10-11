@@ -11,9 +11,9 @@ Channel::Channel(const std::string& name,  User& userCreator, Server &serv)
 }
 */
 
-Channel::Channel(void) {
-
-}
+//Channel::Channel(void) {
+//
+//}
 
 Channel::Channel(const string& name, const User& userCreator, string *key):
 		_name(name),
@@ -41,19 +41,23 @@ Channel::Channel(const string& name, const User& userCreator, string *key):
 	}
 	_userList.push_back(userCreator);
 	_operatorName = userCreator.getUsername();
+
+	(void)_id;
+	(void)_key;
+	(void)_serv;
 }
 
-Channel::Channel(Channel const &src) {
-
-}
+//Channel::Channel(Channel const &src) {
+//
+//}
 
 Channel::~Channel(void) {
 
 }
 
-Channel &Channel::operator=(Channel const &rhs) {
-
-}
+//Channel &Channel::operator=(Channel const &rhs) {
+//
+//}
 
 string Channel::getName(void) const {
 	return _name;
@@ -76,6 +80,8 @@ void Channel::addUser(const User& who, const User& newUser, string *key) {
 		}
 	}
 	_userList.push_back(newUser);
+	(void)who; // TODO remove
+	(void)key; // TODO remove
 }
 
 vector<User>::iterator Channel::findUser(const User& user) {
@@ -89,10 +95,12 @@ vector<User>::iterator Channel::findUser(const User& user) {
 
 void Channel::deleteUser(User who, User targetUser) {
 	_userList.erase(findUser(targetUser));
+	(void)who; // TODO remove
 }
 
 void Channel::setTopic(User who, string newTopic) {
 	_topic = newTopic;
+	(void)who; // TODO remove
 }
 
 const string Channel::getTopic(void) const {
@@ -101,13 +109,16 @@ const string Channel::getTopic(void) const {
 
 void Channel::setInviteRestriction(User who) {
 	_inviteRestrictionOn = !_inviteRestrictionOn;
+	(void)who; // TODO remove
 }
 
 void Channel::setTopicRestriction(User who) {
 	_topicRestrictionOn = !_topicRestrictionOn;
+	(void)who; // TODO remove
 }
 
 void Channel::setOperator(User who, User target) {
+	(void)who; // TODO remove
 	if (who.getUsername() == _operatorName) {
 		for (vector<User>::iterator it = _userList.begin(); it != _userList.end(); it++){
 			if (it->getUsername() == target.getUsername()){
@@ -122,6 +133,7 @@ void Channel::setOperator(User who, User target) {
 
 void Channel::setMaxUsers(User who, unsigned int sizeMax) {
 	_maxUser = sizeMax;
+	(void)who; // TODO remove
 }
 
 std::ostream & operator<<(std::ostream &o, const Channel &rhs) {

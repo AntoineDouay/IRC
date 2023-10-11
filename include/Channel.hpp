@@ -11,12 +11,12 @@ class User;
 class Channel {
 
 public :
-	Channel(void);
+//	Channel(void);
 	Channel(const string& name, const User& userCreator, string *key);
-	Channel(Channel const &src);
+//	Channel(Channel const &src);
 	~Channel(void);
 
-	Channel &operator=(Channel const &rhs);
+//	Channel &operator=(Channel const &rhs);
 
 	string getName(void) const;
 	string getAdmin(void) const;
@@ -25,13 +25,13 @@ public :
 
 	void addUser(const User& who, const User& newUser, string *key);
 	void deleteUser(User who, User targetUser);
-	void inviteUser(User who, User targetUser);
-	void kickUser(User who, User targetUser);
+//	void inviteUser(User who, User targetUser);
+//	void kickUser(User who, User targetUser);
 	void setTopic(User who, string newTopic);
 
 	void setInviteRestriction(User who); // function for -i
 	void setTopicRestriction(User who); // function for -t
-	void setChannelPassword(User who, string password); // function for -k
+//	void setChannelPassword(User who, string password); // function for -k
 	void setOperator(User who, User target); // function for -o
 	void setMaxUsers(User who, unsigned int sizeMax); // function for -l
 

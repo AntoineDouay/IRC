@@ -51,7 +51,8 @@ OBJ_DIR = obj/
 SRC = main.cpp Server.cpp User.cpp Commands.cpp Channel.cpp \
 	Commands/PASS.cpp \
 	Commands/USER.cpp \
-	Commands/NICK.cpp 
+	Commands/NICK.cpp \
+	Commands/JOIN.cpp
 
 #==============================================================================#
 #                                   HEADERS                                    #
