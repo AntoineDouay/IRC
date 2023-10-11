@@ -36,6 +36,8 @@ class Server{
 
 	std::string				getPassword();
 	std::vector<User *>		getUsers();
+
+	void createChannel(std::string const &name, User const &who, std::string *key);
 };
 
 #endif

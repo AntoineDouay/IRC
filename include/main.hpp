@@ -27,6 +27,7 @@
 #include "Server.hpp"
 #include "User.hpp"
 #include "Commands.hpp"
+#include "Channel.hpp"
 #include "reply.hpp"
 
 #endif

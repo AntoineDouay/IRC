@@ -12,6 +12,7 @@ Commands::Commands(std::string cmd, Server * serv, User * client)
 
 void	Commands::init_func_map()
 {
+	_func.insert(std::make_pair("JOIN", &Commands::JOIN));
 	_func.insert(std::make_pair("PASS", &Commands::PASS));
 	_func.insert(std::make_pair("USER", &Commands::USER));
 	_func.insert(std::make_pair("NICK", &Commands::NICK));

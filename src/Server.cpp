@@ -154,3 +154,9 @@ std::vector<User *>	Server::getUsers()
 
 	return (cli);
 }
+
+void Server::createChannel(const std::string &name, const User &who, std::string *key) {
+	cout << "a" << endl;
+	_channels.push_back(new Channel(name, who, key));
+	cout << "b" << endl;
+}
