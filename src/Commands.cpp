@@ -15,6 +15,10 @@ void	Commands::init_func_map()
 	_func.insert(std::make_pair("PASS", &Commands::PASS));
 	_func.insert(std::make_pair("USER", &Commands::USER));
 	_func.insert(std::make_pair("NICK", &Commands::NICK));
+	_func.insert(std::make_pair("JOIN", &Commands::JOIN));
+	_func.insert(std::make_pair("PING", &Commands::PING));
+	_func.insert(std::make_pair("WHOIS", &Commands::WHOIS));
+	_func.insert(std::make_pair("OPER", &Commands::OPER));
 	//
 	_func.insert(std::make_pair("QUIT", &Commands::QUIT));
 }
@@ -92,7 +96,7 @@ void	Commands::reply(std::string str, ...)
 	if (nick == "")
 		nick = "*";
 
-	std::string	_reply(":server_name " + str.substr(0, 4) + nick + " ");
+	std::string	_reply(":" + _serv->getName() + " " + str.substr(0, 4) + nick + " ");
 
 	int i = 4;
 

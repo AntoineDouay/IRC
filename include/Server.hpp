@@ -22,6 +22,7 @@ class Server{
 	int			_port;
 
 	int			_server_fd;
+	std::string	_server_name;
 
 	public :
 
@@ -35,6 +36,7 @@ class Server{
 	void	receive(User * User);
 
 	std::string				getPassword();
+	std::string				getName();
 	std::vector<User *>		getUsers();
 };
 

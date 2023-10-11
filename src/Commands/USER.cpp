@@ -9,9 +9,9 @@ void	Commands::USER()
 		return reply (ERR_ALREADYREGISTERED);
 	
 	_user->setUsername(_parameters[0]);
-	if (_user->getNickname() != "" && _user->getStatus() != NO_PASSWORD)
+	if (_user->getNickname() != "" && _user->getStatus() != NO_PASSWORD && _user->getStatus() != ONLINE)
 	{
 		reply(RPL_WELCOME, _user->getNickname().c_str(), _user->getUsername().c_str(), _user->getHostName().c_str());
-		//send welcome rply
+		_user->setStatus(2);
 	}
 }

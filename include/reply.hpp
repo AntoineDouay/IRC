@@ -11,3 +11,10 @@
 
 # define ERR_NONICKNAMEGIVEN "431 : Need a nickname parameter\r\n"
 # define ERR_NICKNAMEINUSE	 "433 <nick> : already in use\r\n"
+
+# define ERR_NOORIGIN "409 :<reason>\r\n" //ping
+
+# define RPL_WHOISUSER "311 <nick> <user> <host> * :<real_name>\r\n" //whois
+
+# define RPL_YOUREOPER "381 :<info>\r\n"
+# define ERR_PASSWDMISMATCH	"464 :<reason>\r\n" 

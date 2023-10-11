@@ -6,7 +6,7 @@
 #    By: adouay <adouay@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/29 15:20:33 by adouay            #+#    #+#              #
-#    Updated: 2023/10/10 15:47:01 by adouay           ###   ########.fr        #
+#    Updated: 2023/10/11 17:49:09 by adouay           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,11 @@ OBJ_DIR = obj/
 SRC = main.cpp Server.cpp User.cpp Commands.cpp Channel.cpp \
 	Commands/PASS.cpp \
 	Commands/USER.cpp \
-	Commands/NICK.cpp 
+	Commands/NICK.cpp \
+	Commands/JOIN.cpp \
+	Commands/PING.cpp \
+	Commands/WHOIS.cpp \
+	Commands/OPER.cpp 
 
 #==============================================================================#
 #                                   HEADERS                                    #
