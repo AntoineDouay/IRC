@@ -22,6 +22,7 @@ Channel::Channel(const string& name, const User& userCreator, string *key):
 		_inviteRestrictionOn(false),
 		_topicRestrictionOn(false)
 {
+	cout << "Channel constructor called" << endl; // TODO Only for test
 	/* Channels names are strings (beginning with a '&', '#', '+' or '!'
 	   character) of length up to fifty (50) characters. RFC2812-1.3 */
 	if ( _name.length() <= 0 && 51 <= _name.length() ){
@@ -72,10 +73,11 @@ const vector<User> &Channel::getUserList(void) const {
 }
 
 void Channel::addUser(const User& who, const User& newUser, string *key) {
+	cout << "Channel::addUser called for user: " << newUser.getNickname() << endl;
 	if (_maxUser <= _userList.size())
 		throw exception(); // channel is full
 	for (vector<User>::iterator it = _userList.begin(); it != _userList.end(); it++){
-		if (it->getUsername() == newUser.getUsername()){
+		if (it->getNickname() == newUser.getNickname()){
 			throw std::exception();
 		}
 	}

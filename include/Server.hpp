@@ -36,8 +36,10 @@ class Server{
 
 	std::string				getPassword();
 	std::vector<User *>		getUsers();
+	std::vector<Channel *>		getChannel() const;
 
 	void createChannel(std::string const &name, User const &who, std::string *key);
+	Channel *findChannel(std::string target, std::vector<Channel *> list) const;
 };
 
 #endif

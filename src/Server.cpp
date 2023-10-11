@@ -160,3 +160,16 @@ void Server::createChannel(const std::string &name, const User &who, std::string
 	_channels.push_back(new Channel(name, who, key));
 	cout << "b" << endl;
 }
+
+Channel *Server::findChannel(std::string target, std::vector<Channel *> list) const {
+	vector<Channel *>::iterator it = list.begin();
+	for (int i = 0; it != list.end(); it++) {
+		if (target == list[i]->getName())
+			return list[i];
+	}
+	return NULL;
+}
+
+std::vector<Channel *> Server::getChannel() const {
+	return _channels;
+}
