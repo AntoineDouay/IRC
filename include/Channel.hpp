@@ -2,6 +2,7 @@
 # define CHANNEL_H
 
 # include "main.hpp"
+#include <exception>
 
 using namespace std;
 
@@ -34,6 +35,15 @@ public :
 //	void setChannelPassword(User who, string password); // function for -k
 	void setOperator(User who, User target); // function for -o
 	void setMaxUsers(User who, unsigned int sizeMax); // function for -l
+
+	class CustomErrorMessage : public exception {
+	public:
+		CustomErrorMessage(string msg);
+		~CustomErrorMessage() throw();
+		const char *what() const throw();
+	private:
+		string _msg;	
+	};
 
 private:
 	int _id;

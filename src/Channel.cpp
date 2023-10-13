@@ -1,4 +1,6 @@
 #include "../include/Channel.hpp"
+#include <cstdio>
+#include <exception>
 
 /*
 Channel::Channel(const std::string& name,  User& userCreator, Server &serv)
@@ -22,7 +24,7 @@ Channel::Channel(const string& name, const User& userCreator, string *key):
 		_inviteRestrictionOn(false),
 		_topicRestrictionOn(false)
 {
-	cout << "Channel constructor called" << endl; // TODO Only for test
+	// cout << "Channel constructor called" << endl; // TODO Only for test
 	/* Channels names are strings (beginning with a '&', '#', '+' or '!'
 	   character) of length up to fifty (50) characters. RFC2812-1.3 */
 	if ( _name.length() <= 0 && 51 <= _name.length() ){
@@ -75,10 +77,10 @@ const vector<User> &Channel::getUserList(void) const {
 void Channel::addUser(const User& who, const User& newUser, string *key) {
 	cout << "Channel::addUser called for user: " << newUser.getNickname() << endl;
 	if (_maxUser <= _userList.size())
-		throw exception(); // channel is full
+		throw CustomErrorMessage(_name + " channel is full"); // channel is full
 	for (vector<User>::iterator it = _userList.begin(); it != _userList.end(); it++){
 		if (it->getNickname() == newUser.getNickname()){
-			throw std::exception();
+			throw CustomErrorMessage("Error: user already exist");
 		}
 	}
 	_userList.push_back(newUser);
@@ -128,15 +130,33 @@ void Channel::setOperator(User who, User target) {
 				return;
 			}
 		}
-		throw exception(); // user is not in the channel
+		throw CustomErrorMessage("Error: user is not in the channel"); // user is not in the channel
 	}
-	throw exception(); // who is not the channel operator
+	throw CustomErrorMessage(who.getNickname() + " is not the channel operator"); // who is not the channel operator
 }
 
 void Channel::setMaxUsers(User who, unsigned int sizeMax) {
 	_maxUser = sizeMax;
 	(void)who; // TODO remove
 }
+
+// ---------------------------------------------------- //
+// -------------------- EXCEPTIONS -------------------- //
+// ---------------------------------------------------- //
+
+Channel::CustomErrorMessage::CustomErrorMessage(string msg):
+_msg(msg)
+{}
+
+Channel::CustomErrorMessage::~CustomErrorMessage() throw() {}
+
+const char *Channel::CustomErrorMessage::what() const throw() {
+	return _msg.c_str();
+}
+
+// ---------------------------------------------------- //
+// -------------------- OVERLOAD << ------------------- //
+// ---------------------------------------------------- //
 
 std::ostream & operator<<(std::ostream &o, const Channel &rhs) {
 	vector<User> userList = rhs.getUserList();
