@@ -30,7 +30,7 @@ class Commands{
 	// void	AWAY();
 	void	WHOIS();
 	// void	WHO();
-	// void	MODE();
+	void	MODE();
 	void	PING();
 	//void	PONG();
 	void	JOIN();

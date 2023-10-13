@@ -38,6 +38,7 @@ class Server{
 	std::string				getPassword();
 	std::string				getName();
 	std::vector<User *>		getUsers();
+	std::vector<Channel *>	getChannels();
 };
 
 #endif

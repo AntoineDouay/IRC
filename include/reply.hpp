@@ -18,3 +18,7 @@
 
 # define RPL_YOUREOPER "381 :<info>\r\n"
 # define ERR_PASSWDMISMATCH	"464 :<reason>\r\n" 
+
+# define ERR_UNKNOWNMODE "472 <char> :<reason>\r\n"
+# define ERR_USERNOTINCHANNEL "<nick> <channel> :<reason>\r\n"
+# define ERR_USERSDONTMATCH " 502 :<reason>\r\n" // MODE

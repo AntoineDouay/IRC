@@ -160,3 +160,8 @@ std::vector<User *>	Server::getUsers()
 
 	return (cli);
 }
+
+std::vector<Channel *>	Server::getChannels()
+{
+	return _channels;
+}
