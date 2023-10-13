@@ -17,7 +17,7 @@ Channel::Channel(const std::string& name,  User& userCreator, Server &serv)
 //
 //}
 
-Channel::Channel(const string& name, const User& userCreator, string *key):
+Channel::Channel(const string& name, const User& userCreator, string key):
 		_name(name),
 		_key(key),
 		_maxUser(UINT_MAX),
@@ -74,8 +74,10 @@ const vector<User> &Channel::getUserList(void) const {
 	return _userList;
 }
 
-void Channel::addUser(const User& who, const User& newUser, string *key) {
+void Channel::addUser(const User& who, const User& newUser, string key) {
 	cout << "Channel::addUser called for user: " << newUser.getNickname() << endl;
+	if (_key != "" && key != _key)
+		throw CustomErrorMessage("Bad key");
 	if (_maxUser <= _userList.size())
 		throw CustomErrorMessage(_name + " channel is full"); // channel is full
 	for (vector<User>::iterator it = _userList.begin(); it != _userList.end(); it++){
