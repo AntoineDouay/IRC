@@ -12,4 +12,4 @@
 # define ERR_NONICKNAMEGIVEN "431 : Need a nickname parameter\r\n"
 # define ERR_NICKNAMEINUSE	 "433 <nick> : already in use\r\n"
 
-# define ERR_BADCHANNELKEY "475 <channel> : Bad channel key\r\n"
+# define ERR_BADCHANNELKEY "475 <channel> :Bad channel key\r\n"

@@ -75,19 +75,18 @@ const vector<User> &Channel::getUserList(void) const {
 }
 
 void Channel::addUser(const User& who, const User& newUser, string key) {
-	cout << "Channel::addUser called for user: " << newUser.getNickname() << endl;
+	// cout << "Channel::addUser called for user: " << newUser.getNickname() << endl; //TODO it's only for test
 	if (_key != "" && key != _key)
 		throw CustomErrorMessage("Bad key");
 	if (_maxUser <= _userList.size())
 		throw CustomErrorMessage(_name + " channel is full"); // channel is full
 	for (vector<User>::iterator it = _userList.begin(); it != _userList.end(); it++){
 		if (it->getNickname() == newUser.getNickname()){
-			throw CustomErrorMessage("Error: user already exist");
+			throw CustomErrorMessage("User already exist");
 		}
 	}
 	_userList.push_back(newUser);
 	(void)who; // TODO remove
-	(void)key; // TODO remove
 }
 
 vector<User>::iterator Channel::findUser(const User& user) {
@@ -147,7 +146,7 @@ void Channel::setMaxUsers(User who, unsigned int sizeMax) {
 // ---------------------------------------------------- //
 
 Channel::CustomErrorMessage::CustomErrorMessage(string msg):
-_msg(msg)
+_msg("Error: " + msg)
 {}
 
 Channel::CustomErrorMessage::~CustomErrorMessage() throw() {}
