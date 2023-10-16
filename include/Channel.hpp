@@ -13,7 +13,7 @@ class Channel {
 
 public :
 //	Channel(void);
-	Channel(const string& name, const User& userCreator, string *key);
+	Channel(const string& name, const User& userCreator, string key);
 //	Channel(Channel const &src);
 	~Channel(void);
 
@@ -24,7 +24,7 @@ public :
 	const vector<User> &getUserList(void) const;
 	const string getTopic(void) const;
 
-	void addUser(const User& who, const User& newUser, string *key);
+	void addUser(const User& who, const User& newUser, string key);
 	void deleteUser(User who, User targetUser);
 //	void inviteUser(User who, User targetUser);
 //	void kickUser(User who, User targetUser);
@@ -48,7 +48,7 @@ public :
 private:
 	int _id;
 	string _name;
-	string *_key;
+	string _key;
 	string _topic;
 	string _operatorName;
 	unsigned int _maxUser;
