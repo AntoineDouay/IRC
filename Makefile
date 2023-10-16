@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adouay <adouay@student.42.fr>              +#+  +:+       +#+         #
+#    By: apellegr <apellegr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/29 15:20:33 by adouay            #+#    #+#              #
-#    Updated: 2023/10/10 15:47:01 by adouay           ###   ########.fr        #
+#    Updated: 2023/10/16 16:39:18 by apellegr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,8 @@ SRC = main.cpp Server.cpp User.cpp Commands.cpp Channel.cpp \
 	Commands/PASS.cpp \
 	Commands/USER.cpp \
 	Commands/NICK.cpp \
-	Commands/JOIN.cpp
+	Commands/JOIN.cpp \
+	Commands/KICK.cpp
 
 #==============================================================================#
 #                                   HEADERS                                    #

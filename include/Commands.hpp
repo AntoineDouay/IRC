@@ -34,7 +34,7 @@ class Commands{
 	// void	PING();
 	// void	PONG();
 	void	JOIN();
-	// void	KICK();
+	void	KICK();
 	// void	KILL();
 	// void	PART();
 	// void	TOPIC();
