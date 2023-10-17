@@ -53,6 +53,7 @@ class Commands{
 
 	void	execute();
 	void	reply(std::string str, ...);
+	void	kick_reply(std::string serverName, std::string channel, std::string target, std::string reason);
 
 };
 

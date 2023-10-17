@@ -112,6 +112,7 @@ void	Commands::reply(std::string str, ...)
 		}
 		i++;
 	}
+//	cout << "|" << _reply << "|" << endl; // TODO only for test
 	send(_user->getFD(), _reply.c_str(), _reply.size(), 0);
 }
 

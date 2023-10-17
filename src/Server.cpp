@@ -4,6 +4,7 @@
 
 Server::Server(int port, std::string pssw) : _password(pssw), _port(port)
 {
+	_server_name = "ft_irc43";
 }
 
 void	Server::init()
@@ -141,6 +142,11 @@ void	Server::receive(User * user)
 std::string	Server::getPassword()
 {
 	return _password;
+}
+
+std::string	Server::getName()
+{
+	return _server_name;;
 }
 
 std::vector<User *>	Server::getUsers()
