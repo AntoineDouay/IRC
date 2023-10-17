@@ -6,7 +6,7 @@
 # include "main.hpp"
 
 class Server;
-class Client;
+class User;
 
 class Commands{
 
@@ -18,23 +18,26 @@ class Commands{
 	std::vector<std::string>	_parameters;
 
 	Server	*_serv;
-	Client	*_client;
+	User	*_user;
 
 	public :
 
-	Commands(std::string cmd, Server * serv, Client * client);
+	Commands(std::string cmd, Server * serv, User * client);
 
 	void	PASS();
 	void	USER();
 	void	NICK();
 	// void	AWAY();
-	// void	WHOIS();
+	void	WHOIS();
 	// void	WHO();
-	// void	MODE();
-	// void	PING();
-	// void	PONG();
-	// void	JOIN();
-	// void	KICK();
+
+	void	MODE();
+	void	PING();
+	//void	PONG();
+	void	JOIN();
+
+	void	KICK();
+
 	// void	KILL();
 	// void	PART();
 	// void	TOPIC();
@@ -44,7 +47,7 @@ class Commands{
 	// void	LIST();
 	// void	PRIVMSG();
 	// void	WALLOPS();
-	// void	OPER();
+	void	OPER();
 	void	QUIT();
 
 	void	init_func_map();
@@ -53,6 +56,7 @@ class Commands{
 
 	void	execute();
 	void	reply(std::string str, ...);
+	void	kick_reply(std::string serverName, std::string channel, std::string target, std::string reason);
 
 };
 

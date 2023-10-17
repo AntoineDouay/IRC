@@ -5,21 +5,25 @@
 
 #include "main.hpp"
 
-class Client;
+class User;
 class Commands;
+class Channel;
 
 class Server{
 
 	private :
 
-	std::map<int, Client *> _clients;
-	std::vector<pollfd>	_p_fds;
+	std::vector<pollfd>		_p_fds;
+
+	std::map<int, User *> 	_users;
+	std::vector<Channel *>	_channels;
 
 	std::string	_password;
 	int			_port;
 
 	int			_server_fd;
-
+	std::string	_server_name;
+  
 	public :
 
 	Server(int port, std::string pssw);
@@ -27,12 +31,20 @@ class Server{
 	void	init();
 	void	run();
 
-	void	acceptClient();
-	void	delClient(Client * client);
-	void	receive(Client * client);
+	void	acceptUser();
+	void	delUser(User * User);
+	void	receive(User * User);
 
 	std::string				getPassword();
-	std::vector<Client *>	getClients();
+	std::string				getName();
+	std::vector<User *>		getUsers();
+
+	std::vector<Channel *>	getChannels();
+
+	std::vector<Channel *>		getChannel() const;
+
+	void createChannel(std::string const &name, User const &who, std::string key);
+	Channel *findChannel(std::string target, std::vector<Channel *> list) const;
 };
 
 #endif

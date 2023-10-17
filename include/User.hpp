@@ -1,6 +1,6 @@
-#ifndef CLIENT_HPP
+#ifndef USER_HPP
 
-#define CLIENT_HPP
+#define USER_HPP
 
 #include "main.hpp"
 
@@ -15,7 +15,7 @@ enum Status{
 
 class Server;
 
-class Client{
+class User{
 
 	private :
 
@@ -25,20 +25,22 @@ class Client{
 	std::string			_nickname;
 	std::string			_username;
 
+	bool				_is_oper;
 	Status				_status;
 
 	Server				*_serv;
 
 	public :
 
-	Client(int fd, struct sockaddr_in adress, Server * serv);
+	User(int fd, struct sockaddr_in adress, Server * serv);
 
-	int			getFD();
-	Status		getStatus();
-	std::string	getUsername();
-	std::string	getNickname();
-	std::string	getHostName();
+	int			getFD() const;
+	Status		getStatus() const;
+	std::string	getUsername() const;
+	std::string	getNickname() const;
+	std::string	getHostName() const;
 
+	void	setIsOper();
 	void	setStatus(int status);
 	void	setUsername(std::string str);
 	void	setNickname(std::string str);

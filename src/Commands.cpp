@@ -2,19 +2,26 @@
 #include "../include/Commands.hpp"
 
 
-Commands::Commands(std::string cmd, Server * serv, Client * client) 
+Commands::Commands(std::string cmd, Server * serv, User * client) 
 {
 	_serv = serv;
-	_client = client;
+	_user = client;
 	parse_cmd(cmd);
 	init_func_map();
 }
 
 void	Commands::init_func_map()
 {
+	_func.insert(std::make_pair("JOIN", &Commands::JOIN));
+	_func.insert(std::make_pair("KICK", &Commands::KICK));
 	_func.insert(std::make_pair("PASS", &Commands::PASS));
 	_func.insert(std::make_pair("USER", &Commands::USER));
 	_func.insert(std::make_pair("NICK", &Commands::NICK));
+	_func.insert(std::make_pair("JOIN", &Commands::JOIN));
+	_func.insert(std::make_pair("PING", &Commands::PING));
+	_func.insert(std::make_pair("WHOIS", &Commands::WHOIS));
+	_func.insert(std::make_pair("OPER", &Commands::OPER));
+//	_func.insert(std::make_pair("MODE", &Commands::MODE));
 	//
 	_func.insert(std::make_pair("QUIT", &Commands::QUIT));
 }
@@ -77,7 +84,7 @@ void	Commands::execute()
 {
 	std::string cmd = _command;
 
-	if (cmd != "PASS" && _client->getStatus() == NO_PASSWORD)
+	if (cmd != "PASS" && _user->getStatus() == NO_PASSWORD)
 		return ;
 	if (_func.find(cmd) != _func.end())
 		(this->*_func[cmd])();
@@ -87,12 +94,12 @@ void	Commands::reply(std::string str, ...)
 {
 	va_list		vl;
 
-	std::string nick(_client->getNickname());
+	std::string nick(_user->getNickname());
 
 	if (nick == "")
 		nick = "*";
 
-	std::string	_reply(":server_name " + str.substr(0, 4) + nick + " ");
+	std::string	_reply(":" + _serv->getName() + " " + str.substr(0, 4) + nick + " ");
 
 	int i = 4;
 
@@ -110,67 +117,68 @@ void	Commands::reply(std::string str, ...)
 		}
 		i++;
 	}
-	send(_client->getFD(), _reply.c_str(), _reply.size(), 0);
+//	cout << "|" << _reply << "|" << endl; // TODO only for test
+	send(_user->getFD(), _reply.c_str(), _reply.size(), 0);
 }
 
-void	Commands::PASS()
-{
-	if (_parameters.size() == 0)
-		return reply (ERR_NEEDMOREPARAMS, _command.c_str());
-	if (_client->getStatus() != NO_PASSWORD)
-		return reply (ERR_ALREADYREGISTERED);
-	// std::cout << _parameters[0] << std::endl;
-	// std::cout << _serv->getPassword() << std::endl;
+// void	Commands::PASS()
+// {
+// 	if (_parameters.size() == 0)
+// 		return reply (ERR_NEEDMOREPARAMS, _command.c_str());
+// 	if (_user->getStatus() != NO_PASSWORD)
+// 		return reply (ERR_ALREADYREGISTERED);
+// 	// std::cout << _parameters[0] << std::endl;
+// 	// std::cout << _serv->getPassword() << std::endl;
 
-	if (_parameters[0] == _serv->getPassword())
-		_client->setStatus(1);
+// 	if (_parameters[0] == _serv->getPassword())
+// 		_user->setStatus(1);
 	
-	return ;
-}
+// 	return ;
+// }
 
-void	Commands::USER()
-{
-	if (_parameters.size() == 0)
-		return reply (ERR_NEEDMOREPARAMS);
-	if (_client->getStatus() != REGISTER)
-		return reply (ERR_ALREADYREGISTERED);
+// void	Commands::USER()
+// {
+// 	if (_parameters.size() == 0)
+// 		return reply (ERR_NEEDMOREPARAMS);
+// 	if (_user->getStatus() != REGISTER)
+// 		return reply (ERR_ALREADYREGISTERED);
 	
-	_client->setUsername(_parameters[0]);
-	if (_client->getNickname() != "" && _client->getStatus() != NO_PASSWORD)
-	{
-		reply(RPL_WELCOME, _client->getNickname().c_str(), _client->getUsername().c_str(), _client->getHostName().c_str());
-		//send welcome rply
-	}
-}
+// 	_user->setUsername(_parameters[0]);
+// 	if (_user->getNickname() != "" && _user->getStatus() != NO_PASSWORD)
+// 	{
+// 		reply(RPL_WELCOME, _user->getNickname().c_str(), _user->getUsername().c_str(), _user->getHostName().c_str());
+// 		//send welcome rply
+// 	}
+// }
 
-void	Commands::NICK()
-{
-	if (_parameters.size() == 0)
-		return reply (ERR_NONICKNAMEGIVEN);
+// void	Commands::NICK()
+// {
+// 	if (_parameters.size() == 0)
+// 		return reply (ERR_NONICKNAMEGIVEN);
 
-	std::vector<Client *> cli = _serv->getClients();
+// 	std::vector<User *> u = _serv->getUsers();
 
-	for (size_t i = 0; i < cli.size(); i++)
-		if (_parameters[0] == cli[i]->getNickname())
-			return reply (ERR_NICKNAMEINUSE, _parameters[0].c_str());
+// 	for (size_t i = 0; i < u.size(); i++)
+// 		if (_parameters[0] == u[i]->getNickname())
+// 			return reply (ERR_NICKNAMEINUSE, _parameters[0].c_str());
 
-	_client->setNickname(_parameters[0]);
-	if (_client->getUsername() != "" && _client->getStatus() != NO_PASSWORD)
-	{
-		reply(RPL_WELCOME, _client->getNickname().c_str(), _client->getUsername().c_str(), _client->getHostName().c_str());
-		//send welcome rply
+// 	_user->setNickname(_parameters[0]);
+// 	if (_user->getUsername() != "" && _user->getStatus() != NO_PASSWORD)
+// 	{
+// 		reply(RPL_WELCOME, _user->getNickname().c_str(), _user->getUsername().c_str(), _user->getHostName().c_str());
+// 		//send welcome rply
 
-	}
-}
+// 	}
+// }
 
 void	Commands::QUIT()
 {
-	std::string str(_client->getNickname() + ": QUIT ");
+	std::string str(_user->getNickname() + ": QUIT ");
 
 	if (_parameters.size() > 0)
 		str += _parameters[0];
-	_client->setStatus(3);
-	send (_client->getFD(), str.c_str(), str.size(), 0); //nul
+	_user->setStatus(3);
+	send (_user->getFD(), str.c_str(), str.size(), 0); //nul
 }
 
 // void	Commands::PASS()
@@ -180,7 +188,7 @@ void	Commands::QUIT()
 // 		return ;
 // 	if (parameters[0] != _serv->getPassword())
 // 		return ;
-// 	_client->setStatus(1);
+// 	_user->setStatus(1);
 // }
 // void	Commands::USER()
 // {

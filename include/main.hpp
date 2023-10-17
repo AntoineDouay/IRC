@@ -22,10 +22,12 @@
 #include <vector>
 #include <map>
 #include <ctime>
+#include <climits>
 
 #include "Server.hpp"
-#include "Client.hpp"
+#include "User.hpp"
 #include "Commands.hpp"
+#include "Channel.hpp"
 #include "reply.hpp"
 
 #endif

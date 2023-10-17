@@ -4,6 +4,7 @@
 
 Server::Server(int port, std::string pssw) : _password(pssw), _port(port)
 {
+	_server_name = "ft_irc43";
 }
 
 void	Server::init()
@@ -47,79 +48,79 @@ void	Server::run()
 		return;
 
 		if (_p_fds[0].revents == POLLIN)
-			acceptClient();
+			acceptUser();
 		else
 		{
 			for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); ++it)
 				if((*it).revents == POLLIN)
 				{
-					receive(_clients[(*it).fd]);
+					receive(_users[(*it).fd]);
 				}
 
-			std::vector<Client *> v_clients = getClients();
-			for (std::vector<Client *>::iterator it = v_clients.begin(); it != v_clients.end(); it++)
+			std::vector<User *> v_users = getUsers();
+			for (std::vector<User *>::iterator it = v_users.begin(); it != v_users.end(); it++)
 				if ((*it)->getStatus() == DELETE)
-					delClient(*it);
+					delUser(*it);
 
 		}
 	}
 }
 
-void	Server::acceptClient()
+void	Server::acceptUser()
 {
-	int 					client_fd;
+	int 					user_fd;
 	socklen_t				len;
 	struct sockaddr_in		address;
 
-	if ((client_fd = accept(_p_fds[0].fd, (struct sockaddr *)&address, &len)) == -1)
+	if ((user_fd = accept(_p_fds[0].fd, (struct sockaddr *)&address, &len)) == -1)
 		return ;
 	
-	_clients[client_fd] = new Client(client_fd, address, this);
+	_users[user_fd] = new User(user_fd, address, this);
 
 	_p_fds.push_back(pollfd());
-	_p_fds.back().fd = client_fd;
+	_p_fds.back().fd = user_fd;
 	_p_fds.back().events = POLLIN;
 
 	std::cout << "new client add \n";
 }
 
 
-void	Server::delClient(Client * client)
+void	Server::delUser(User * user)
 {
-	std::map<int, Client *>::iterator it = _clients.find(client->getFD());
+	std::map<int, User *>::iterator it = _users.find(user->getFD());
 
-	if (it != _clients.end())
+	if (it != _users.end())
 	{
-		_clients.erase(it);
-		close(client->getFD());
+		_users.erase(it);
+		close(user->getFD());
 	}
 
 	for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); it++)
 	{
-		if (it->fd == client->getFD())
+		if (it->fd == user->getFD())
 		{
 			_p_fds.erase(it);
 			break ;
 		}
 	}
-	close(client->getFD());
+	close(user->getFD());
 
-	delete client;
+	delete user;
 }
 
-void	Server::receive(Client * client)
+void	Server::receive(User * user)
 {
 	char buffer[1024];
 
 
-	int n = recv(client->getFD(), buffer, sizeof(buffer), 0);
+	int n = recv(user->getFD(), buffer, sizeof(buffer), 0);
 
 	if (n < 0)
 		return ; //error to manage
 
 	// if (!n)
 	// {
-	// 	client->setStatus(3); // normal shutdown of ending socket -> status = DELETE
+	// 	user->setStatus(3); // normal shutdown of ending socket -> status = DELETE
 	// 	return ;
 	// }
 
@@ -132,7 +133,7 @@ void	Server::receive(Client * client)
 	{
 		std::string str = buf.substr(0, pos);
 		std::cout << str << std::endl;
-		Commands cmd(str, this, client);
+		Commands cmd(str, this, user);
 		cmd.execute();
 		buf.erase(0 , pos + delimiter.size());
 	}
@@ -143,14 +144,45 @@ std::string	Server::getPassword()
 	return _password;
 }
 
-std::vector<Client *>	Server::getClients()
+std::string	Server::getName()
 {
-	std::vector<Client *>	cli;
+	return _server_name;;
+}
 
-	std::map<int, Client *>::iterator it = _clients.begin();
+std::vector<User *>	Server::getUsers()
+{
+	std::vector<User *>	cli;
 
-	for (; it != _clients.end(); it++)
+	std::map<int, User *>::iterator it = _users.begin();
+
+	for (; it != _users.end(); it++)
 		cli.push_back(it->second);
 
 	return (cli);
 }
+
+std::vector<Channel *>	Server::getChannels()
+{
+	return _channels;
+}
+
+void Server::createChannel(const std::string &name, const User &who, std::string key) {
+	_channels.push_back(new Channel(name, who, key));
+//	for (vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++){
+//		cout << "chan: " << it[0]->getName() << endl;
+//	}
+}
+
+Channel *Server::findChannel(std::string target, std::vector<Channel *> list) const {
+	vector<Channel *>::iterator it = list.begin();
+	for (; it != list.end(); it++) {
+		if (target == it[0]->getName())
+			return it[0];
+	}
+	return NULL;
+}
+
+std::vector<Channel *> Server::getChannel() const {
+	return _channels;
+}
+

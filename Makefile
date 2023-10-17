@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adouay <adouay@student.42.fr>              +#+  +:+       +#+         #
+#    By: apellegr <apellegr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/29 15:20:33 by adouay            #+#    #+#              #
-#    Updated: 2023/10/04 14:28:11 by adouay           ###   ########.fr        #
+#    Updated: 2023/10/16 16:39:18 by apellegr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,13 +48,22 @@ OBJ_DIR = obj/
 #                                   SOURCES                                    #
 #==============================================================================#
 
-SRC = main.cpp Server.cpp Client.cpp Commands.cpp
+SRC = main.cpp Server.cpp User.cpp Commands.cpp Channel.cpp \
+	Commands/PASS.cpp \
+	Commands/USER.cpp \
+	Commands/NICK.cpp \
+	Commands/JOIN.cpp \
+	Commands/PING.cpp \
+	Commands/WHOIS.cpp \
+	Commands/OPER.cpp \
+	Commands/KICK.cpp
+
 
 #==============================================================================#
 #                                   HEADERS                                    #
 #==============================================================================#
 
-HEAD = $(addprefix $(HEADER_DIR), Server.hpp Client.hpp Commands.hpp) \
+HEAD = $(addprefix $(HEADER_DIR), Server.hpp User.hpp Commands.hpp Channel.hpp) \
 
 #==============================================================================#
 #                                   OBJECTS                                    #
@@ -74,6 +83,7 @@ $(NAME) : $(OBJ)
 	echo "$(GREEN)Done$(END)"
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(HEAD) Makefile
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(DFLAGS) -c $< -o $@
 
 $(OBJ_DIR) :
