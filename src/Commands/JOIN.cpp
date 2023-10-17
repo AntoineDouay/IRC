@@ -7,7 +7,8 @@ void	Commands::JOIN()
 	string	tmp_key;
 	if (_parameters.size() == 0)
 		return reply (ERR_NEEDMOREPARAMS, _command.c_str());
-	if (_parameters.size() >= 2)
+
+  if (_parameters.size() >= 2)
 		tmp_key = _parameters[1];
 	else
 	 	tmp_key = "";

@@ -23,6 +23,7 @@ class Server{
 
 	int			_server_fd;
 	std::string	_server_name;
+  
 	public :
 
 	Server(int port, std::string pssw);
@@ -37,6 +38,9 @@ class Server{
 	std::string				getPassword();
 	std::string				getName();
 	std::vector<User *>		getUsers();
+
+	std::vector<Channel *>	getChannels();
+
 	std::vector<Channel *>		getChannel() const;
 
 	void createChannel(std::string const &name, User const &who, std::string key);

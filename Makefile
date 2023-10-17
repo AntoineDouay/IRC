@@ -53,7 +53,11 @@ SRC = main.cpp Server.cpp User.cpp Commands.cpp Channel.cpp \
 	Commands/USER.cpp \
 	Commands/NICK.cpp \
 	Commands/JOIN.cpp \
+	Commands/PING.cpp \
+	Commands/WHOIS.cpp \
+	Commands/OPER.cpp \
 	Commands/KICK.cpp
+
 
 #==============================================================================#
 #                                   HEADERS                                    #

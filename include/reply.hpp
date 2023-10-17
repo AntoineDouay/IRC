@@ -13,6 +13,17 @@
 # define ERR_NONICKNAMEGIVEN "431 : Need a nickname parameter\r\n"
 # define ERR_NICKNAMEINUSE	 "433 <nick> : already in use\r\n"
 
+# define ERR_NOORIGIN "409 :<reason>\r\n" //ping
+
+# define RPL_WHOISUSER "311 <nick> <user> <host> * :<real_name>\r\n" //whois
+
+# define RPL_YOUREOPER "381 :<info>\r\n"
+# define ERR_PASSWDMISMATCH	"464 :<reason>\r\n" 
+
+# define ERR_UNKNOWNMODE "472 <char> :<reason>\r\n"
+# define ERR_USERNOTINCHANNEL "<nick> <channel> :<reason>\r\n"
+# define ERR_USERSDONTMATCH " 502 :<reason>\r\n" // MODE
+
 # define ERR_BADCHANNELKEY "475 <channel> :Bad channel key\r\n"
 
 // For kick command error
@@ -22,3 +33,4 @@
 # define ERR_NOTONCHANNEL "442 <channel> :<reason>\r\n"
 # define ERR_BADCHANMASK "476 <channel> :<reason>\r\n"
 # define ERR_CHANOPRIVSNEEDED "482 <channel> :<reason>\r\n"
+

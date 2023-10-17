@@ -28,13 +28,16 @@ class Commands{
 	void	USER();
 	void	NICK();
 	// void	AWAY();
-	// void	WHOIS();
+	void	WHOIS();
 	// void	WHO();
-	// void	MODE();
-	// void	PING();
-	// void	PONG();
+
+	void	MODE();
+	void	PING();
+	//void	PONG();
 	void	JOIN();
+
 	void	KICK();
+
 	// void	KILL();
 	// void	PART();
 	// void	TOPIC();
@@ -44,7 +47,7 @@ class Commands{
 	// void	LIST();
 	// void	PRIVMSG();
 	// void	WALLOPS();
-	// void	OPER();
+	void	OPER();
 	void	QUIT();
 
 	void	init_func_map();

@@ -36,7 +36,13 @@ public :
 	void setOperator(User who, User target); // function for -o
 	void setMaxUsers(User who, unsigned int sizeMax); // function for -l
 
-	class CustomErrorMessage : public exception {
+//     void setInviteMod(User who, User target); // function for -i
+//     void setTopicRestricton(User who, bool isOperatorOnly); // function for -t
+//     void setChannelPassword(User who, std::string password); // function for +k
+//     void setOperator(User who, User target, bool isOperator); // function for -o
+//     void setMaxUsers(User who, int sizeMax); // function for -l
+	
+  class CustomErrorMessage : public exception {
 	public:
 		CustomErrorMessage(string msg);
 		~CustomErrorMessage() throw();
@@ -44,6 +50,10 @@ public :
 	private:
 		string _msg;	
 	};
+
+	void	removePassword(); // -k
+
+	std::string getName();
 
 private:
 	int _id;
