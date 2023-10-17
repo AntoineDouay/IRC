@@ -15,7 +15,12 @@ void Commands::kick_reply(std::string serverName, std::string channel, std::stri
 	output.append(serverName + " KICK " + channel + " " + target + " :" + reason + "\r\n");
 
 //	cout << "|" << output << "|" << endl; // TODO only for test
-	vector<User> userList = _serv->getChannel()[0]->getUserList();
+	Channel *channelTarget = _serv->findChannel(channel, _serv->getChannel());
+	if (channelTarget == NULL) {
+		reply(ERR_NOSUCHCHANNEL, channel.c_str(), "channel not exist");
+		return;
+	}
+	vector<User> userList = channelTarget->getUserList();
 	vector<User>::iterator it = userList.begin();
 
 	for (; it != userList.end(); it++) {
