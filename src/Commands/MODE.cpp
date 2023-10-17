@@ -14,7 +14,7 @@ void	Commands::MODE()
 	// if (_parameters[0] !=_user->getNickname())
 	// 	return reply (ERR_USERSDONTMATCH, "the nickname is not yours"); 
 
-	std::vector<Channel *> chan = _serv->getChannels();
+	std::vector<Channel *> chan = _serv->getChannel();
 
 	for (size_t i = 0; i < chan.size(); i++)
 		if (_parameters[0] == chan[i]->getName())

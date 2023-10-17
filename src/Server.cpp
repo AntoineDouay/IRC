@@ -161,11 +161,6 @@ std::vector<User *>	Server::getUsers()
 	return (cli);
 }
 
-std::vector<Channel *>	Server::getChannels()
-{
-	return _channels;
-}
-
 void Server::createChannel(const std::string &name, const User &who, std::string key) {
 	_channels.push_back(new Channel(name, who, key));
 //	for (vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++){

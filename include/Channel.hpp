@@ -53,8 +53,6 @@ public :
 
 	void	removePassword(); // -k
 
-	std::string getName();
-
 private:
 	int _id;
 	string _name;
