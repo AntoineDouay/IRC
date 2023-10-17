@@ -28,9 +28,13 @@ public :
 
     void setInviteMod(User who, User target); // function for -i
     void setTopicRestricton(User who, bool isOperatorOnly); // function for -t
-    void setChannelPassword(User who, std::string password); // function for -k
+    void setChannelPassword(User who, std::string password); // function for +k
     void setOperator(User who, User target, bool isOperator); // function for -o
     void setMaxUsers(User who, int sizeMax); // function for -l
+
+	void	removePassword(); // -k
+
+	std::string getName();
 
 private:
     int _id;

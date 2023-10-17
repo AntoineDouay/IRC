@@ -10,4 +10,7 @@ Channel::Channel(const std::string& name,  User& userCreator, Server &serv)
 	_serv = &serv;
 }
 
-
+std::string Channel::getName()
+{
+	return _name;
+}

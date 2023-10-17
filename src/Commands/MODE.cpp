@@ -38,42 +38,42 @@ void	Commands::MODE()
 	{
 		case 'i':
 		{
-			if (sign == 0)
-				chan[i].setMode('i', false);
+			//if (sign == 0)
+			// 	chan[i].setMode();
 			if (sign == 1)
-				chan[i].setMode('i', true);
+				chan[i].setInviteMod();
 			break;
 		}
 		case 't':
 		{
-			if (sign == 0)
-				chan[i].setMode('t', false);
+			//if (sign == 0)
+			 //	chan[i].setMode();
 			if (sign == 1)
-				chan[i].setMode('t', true);
+				chan[i].setTopicRestricton();
 			break;
 		}
 		case 'k':
 		{
 			if (sign == 0)
-				chan[i].setMode('k', false);
+				chan[i].removePassword();
 			if (sign == 1)
-				chan[i].setMode('k', true);
+				chan[i].setChannelPassword();
 			break;
 		}
 		case 'o':
 		{
-			if (sign == 0)
-				chan[i].setMode('o', false);
+			//if (sign == 0)
+			//	chan[i].setMode();
 			if (sign == 1)
-				chan[i].setMode('o', true);
+				chan[i].setOperator();
 			break;
 		}
 		case 'l':
 		{
-			if (sign == 0)
-				chan[i].setMode('l', false);
+			//if (sign == 0)
+			 //	chan[i].setMode();
 			if (sign == 1)
-				chan[i].setMode('l', true);
+				chan[i].setMaxUsers();
 			break;
 		};
 		default:
