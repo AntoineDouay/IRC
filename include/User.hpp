@@ -34,11 +34,11 @@ class User{
 
 	User(int fd, struct sockaddr_in adress, Server * serv);
 
-	int			getFD();
-	Status		getStatus();
-	std::string	getUsername();
-	std::string	getNickname();
-	std::string	getHostName();
+	int			getFD() const;
+	Status		getStatus() const;
+	std::string	getUsername() const;
+	std::string	getNickname() const;
+	std::string	getHostName() const;
 
 	void	setIsOper();
 	void	setStatus(int status);
