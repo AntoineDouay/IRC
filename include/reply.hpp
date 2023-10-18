@@ -3,7 +3,7 @@
 /*  ----RPLY----- */
 
 # define RPL_WELCOME "001 :Welcome to the Internet Relay Network <nick>!<user>@<host>\r\n"
-# define KICK_REPLY "KICK <channel> <target> <reason>"
+# define KICK_REPLY ":<who> KICK <channel> <target> :<reason>\n"
 
 /*  ---- ERR ----- */
 
