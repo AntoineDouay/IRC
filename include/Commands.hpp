@@ -45,7 +45,7 @@ class Commands{
 	// void	NAMES();
 	// void	NOTICE();
 	// void	LIST();
-	// void	PRIVMSG();
+	void	PRIVMSG();
 	// void	WALLOPS();
 	void	OPER();
 	void	QUIT();

@@ -1,87 +1,114 @@
 #include "../../include/Commands.hpp"
 
+
+void	handleSinglePrivMSG(Server *server, std::string &preMessage,
+	const std::string &message,
+	const std::string &nick, const std::string &username,
+	const std::string &hostname)
+{
+	std::vector<User *>	users = server->getUsers();
+	User 				*user = 0;
+
+	for (size_t i = 0; i < users.size(); i++)
+	{
+		if (nick.size() > 0 && nick != users[i]->getNickname())
+			continue ;
+		if (username.size() > 0 && username != users[i]->getUsername())
+			continue ;
+		if (hostname.size() > 0 && hostname != users[i]->getHostName())
+			continue ;
+		user = users[i];
+	}
+	if (user)
+	{
+		std::cout << "USER is found" << std::endl;
+		preMessage += nick + " :" + message + "\r\n";
+		std::cout << preMessage;
+		send(user->getFD(), message.c_str(), message.size(), 0);
+	}
+	else
+		Commands::reply(ERR_NORECIPIENT, _command.c_str());
+}
+
 void	Commands::PRIVMSG()
 {
-		std::vector<std::string> params;
-	params.push_back("Mari");
-	params.push_back("#lari");
-	params.push_back("kalt%millennium.stealth.net");
-	params.push_back("kalt%millennium.stealth.net@irc.stealth.net");
-	params.push_back("kalt%millennium.stealth.net");
-	params.push_back("Wiz!jto@tolsun.oulu.fi");
-	params.push_back("$*.fi");
-	params.push_back("#*.edu");
+	bool		isChannel	= false;
+	bool		isRegex		= false;
+	std::string recipent;
+	std::string	channel		= "";
+	std::string	nick		= "";
+	std::string	username	= "";
+	std::string	hostname	= "";
+	std::string	servername	= "";
+	std::string preMessage		= "";
+	std::size_t	found;
 
-	for (size_t i = 0; i < params.size(); i++)
+	if (_parameters.size() == 0)
 	{
-		std::cout << "-----------------------------------" << std::endl;
-		std::cout << params[i] << std::endl;
-		bool		isChannel	= false;
-		bool		isRegex		= false;
-		std::string channel		= "";
-		std::string nick		= "";
-		std::string username	= "";
-		std::string hostname	= "";
-		std::string servername	= "";
-		std::size_t found;
+		Commands::reply(ERR_NORECIPIENT, _command.c_str());
+		return ;
+	}
+	if (_parameters.size() == 1)
+	{
+		Commands::reply(ERR_NOTEXTTOSEND);
+		return ;
+	}
+	recipent = _parameters[0];
+	if (recipent.size() == 0)
+		return ;
+	//check if it's channel
+	found = recipent.find("*");
 
-		if (params[i].size() == 0)
-			return (0);
-		//check if it's channel
-		found = params[i].find("*");
-		if (params[i].size() > 0 && params[i][0] == '#'
-			&& found == std::string::npos)
+	if (recipent.size() > 0 && recipent[0] == '#'
+		&& found == std::string::npos)
+	{
+		isChannel = true;
+		channel = recipent.substr(1, recipent.size() - 1);
+		//Handle channel here
+	}
+	if ((recipent[0] == '#' || recipent[0] == '$')
+		&& found != std::string::npos)
+	{
+		isRegex = true;
+		//Handle regex here
+	}
+	if (!isChannel && !isRegex)
+	{
+		//nickname parse
+		found = recipent.find("!");
+		if (found != std::string::npos)
+			nick = recipent.substr(0, found);
+		else if (recipent.find("!") == std::string::npos
+			&& recipent.find("@") == std::string::npos
+			&& recipent.find("%") == std::string::npos)
+			nick = recipent;
+		//username parse
+		if (recipent.find("@") != std::string::npos
+			|| recipent.find("%") != std::string::npos)
 		{
-			isChannel = true;
-			channel = params[i].substr(1, params[i].size() - 1);
-			//Handle channel here
+			found = recipent.find("!");
+			if (found != std::string::npos)
+				username = recipent.substr(found + 1, \
+					std::min(recipent.find("%"), \
+					recipent.find("@")) - found - 1);
+			else
+				username = recipent.substr(0, std::min(recipent.find("%"), recipent.find("@")));
 		}
-		if ((params[i][0] == '#' || params[i][0] == '$')
-			&& found != std::string::npos)
+		//hostname parse
+		found = recipent.find("@");
+		if (found != std::string::npos)
+			hostname = recipent.substr(found + 1);
+		//servername parse
+		found = recipent.find("%");
+		if (found != std::string::npos)
 		{
-			isRegex = true;
-			//Handle regex here
+			std::size_t foundHost = recipent.find("@");
+			if (foundHost != std::string::npos)
+				servername = recipent.substr(found + 1, foundHost - found);
+			else
+				servername = recipent.substr(found + 1);
 		}
-		if (!isChannel && !isRegex)
-		{
-			//nickname parse
-			found = params[i].find("!");
-			if (found != std::string::npos)
-				nick = params[i].substr(0, found);
-			else if (params[i].find("!") == std::string::npos
-				&& params[i].find("@") == std::string::npos
-				&& params[i].find("%") == std::string::npos)
-				nick = params[i];
-			//username parse
-			if (params[i].find("@") != std::string::npos
-				|| params[i].find("%") != std::string::npos)
-			{
-				found = params[i].find("!");
-				if (found != std::string::npos)
-					username = params[i].substr(found + 1, std::min(params[i].find("%"), params[i].find("@")) - found - 1);
-				else
-					username = params[i].substr(0, std::min(params[i].find("%"), params[i].find("@")));
-			}
-			//hostname parse
-			found = params[i].find("@");
-			if (found != std::string::npos)
-				hostname = params[i].substr(found + 1);
-			//servername parse
-			found = params[i].find("%");
-			if (found != std::string::npos)
-			{
-				std::size_t foundHost = params[i].find("@");
-				if (foundHost != std::string::npos)
-					servername = params[i].substr(found + 1, foundHost - found);
-				else
-					servername = params[i].substr(found + 1);
-			}
-			//Handle everything else
-			std::cout << "User " << std::endl;
-			std::cout << "Nick: " << nick << std::endl;
-			std::cout << "Username: " << username << std::endl;
-			std::cout << "Hostname: " << hostname << std::endl;
-			std::cout << "Servername: " << servername << std::endl;
-		}
+		preMessage = ":" + _user->getNickname() + " PRIVMSG ";
+		handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
 	}
 }
