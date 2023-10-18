@@ -2,7 +2,7 @@
 #include "../include/Commands.hpp"
 
 
-Commands::Commands(std::string cmd, Server * serv, User * client) 
+Commands::Commands(std::string cmd, Server * serv, User * client)
 {
 	_serv = serv;
 	_user = client;
@@ -28,43 +28,49 @@ void	Commands::init_func_map()
 
 void	Commands::parse_cmd(const std::string &instruction)
 {
-	// std::string	value;
-	// std::string	trailing;
-	// size_t		trailingPos;
-	// std::string	s;
+	std::string	value;
+	std::string	trailing;
+	size_t		trailingPos;
 	bool		flag;
 
-	// if (hasCrlf(instruction))
-	// {
-	// 	trailingPos = instruction.find(":");
-	// 	if (trailingPos != std::string::npos)
-	// 	{
-	// 		value = instruction.substr(0, trailingPos - 1);
-	// 		trailing = instruction.substr(trailingPos + 1, instruction.size() - trailingPos - 2);
-	// 	}
-	// 	else
-	// 		value = instruction.substr(0, instruction.size() - 2);
-		std::stringstream	ss(instruction);
-		std::string			str;
-		flag = false;
-		while (ss >> str) // std::getline(ss, s, ' ')
+	trailingPos = instruction.find(":");
+	if (trailingPos != std::string::npos)
+	{
+		value = instruction.substr(0, trailingPos - 1);
+		trailing = instruction.substr(trailingPos + 1, instruction.size() - trailingPos);
+	}
+	else
+		value = instruction.substr(0, instruction.size());
+	std::stringstream	ss(value);
+	std::string			str;
+	flag = false;
+	while (ss >> str)
+	{
+		if (!flag)
 		{
-			if (!flag)
-			{
-				_command = str;
-				flag = true;
-			}
-			else
-				_parameters.push_back(str);
+			_command = str;
+			flag = true;
 		}
+		else
+			_parameters.push_back(str);
+	}
+	if (trailing.size() > 0)
+		_parameters.push_back(trailing);
+	// std::cout << "Parsing test --------------------------------";
+	// for (size_t i = 0; i < _parameters.size(); i++)
+	// {
+	// 	std::cout << _parameters[i] << std::endl;
+	// 	for (int m = 0; m < _parameters[i][m]; m++)
+	// 	{
+	// 		if (_parameters[i][m] == '\n')
+	// 			std::cout << "\\n" << std::endl;
+	// 		else if (_parameters[i][m] == '\r')
+	// 			std::cout << "\\r" << std::endl;
+	// 		else
+	// 			std::cout << _parameters[i][m] << std::endl;
 	// 	}
-	// 	if (trailing.size() > 0)
-	// 		_parameters.push_back(trailing);
+	// 	std::cout << std::endl;
 	// }
-	// else
-	// 	_command = "";
-
-	//std::cout << _command << std::endl;
 }
 
 bool	Commands::hasCrlf(const std::string &instruction)
@@ -132,7 +138,7 @@ void	Commands::reply(std::string str, ...)
 
 // 	if (_parameters[0] == _serv->getPassword())
 // 		_user->setStatus(1);
-	
+
 // 	return ;
 // }
 
@@ -142,7 +148,7 @@ void	Commands::reply(std::string str, ...)
 // 		return reply (ERR_NEEDMOREPARAMS);
 // 	if (_user->getStatus() != REGISTER)
 // 		return reply (ERR_ALREADYREGISTERED);
-	
+
 // 	_user->setUsername(_parameters[0]);
 // 	if (_user->getNickname() != "" && _user->getStatus() != NO_PASSWORD)
 // 	{
