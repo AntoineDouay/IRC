@@ -141,6 +141,16 @@ void Channel::setMaxUsers(User who, unsigned int sizeMax) {
 	(void)who; // TODO remove
 }
 
+bool Channel::isInChannel(const string &target) {
+	vector<User>::iterator it = _userList.begin();
+	for (; it != _userList.end(); it++) {
+		if (it->getNickname() == target) {
+			return true;
+		}
+	}
+	return false;
+}
+
 // ---------------------------------------------------- //
 // -------------------- EXCEPTIONS -------------------- //
 // ---------------------------------------------------- //

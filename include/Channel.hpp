@@ -41,7 +41,9 @@ public :
 //     void setChannelPassword(User who, std::string password); // function for +k
 //     void setOperator(User who, User target, bool isOperator); // function for -o
 //     void setMaxUsers(User who, int sizeMax); // function for -l
-	
+
+	bool isInChannel(const string &target);
+
   class CustomErrorMessage : public exception {
 	public:
 		CustomErrorMessage(string msg);
@@ -68,7 +70,6 @@ private:
 	vector<User>::iterator findUser(const User& user);
 
 	Server				*_serv;
-
 };
 
 //std::ostream & operator<<(std::ostream &o, Channel const &rhs);

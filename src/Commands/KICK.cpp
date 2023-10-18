@@ -23,6 +23,11 @@ void Commands::kick_reply(std::string serverName, std::string channel, std::stri
 	vector<User> userList = channelTarget->getUserList();
 	vector<User>::iterator it = userList.begin();
 
+	if (!channelTarget->isInChannel(target)) {
+		reply(ERR_USERNOTINCHANNEL, target.c_str(), channel.c_str(),"not in the channel");
+		return;
+	}
+
 	for (; it != userList.end(); it++) {
 		cout << "it: " << it->getNickname() << "fd: " << it->getFD() << endl;
 		send(it->getFD(), output.c_str(), output.size(), 0);
