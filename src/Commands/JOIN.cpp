@@ -18,22 +18,18 @@ void	Commands::JOIN()
 		try {
 			tmp->addUser(_user[0], _user[0], tmp_key);
 
-			string output = ":";
-
-			output.append(_user->getUsername() + "!" + _user->getNickname() + "@" + _serv->getName() + " JOIN " + tmp->getName() + "\r\n");
-			cout << "output: " << output << endl;
-			vector<User> userList = tmp->getUserList();
-			vector<User>::iterator it = userList.begin();
-			for (; it != userList.end(); it++) {
-				send(it->getFD(), output.c_str(), output.size(), 0);
-			}
+			reply(tmp->getUserList(), JOIN_REPLY, _user->getNickname().c_str(),
+				  _user->getUsername().c_str(), _serv->getName().c_str(), tmp->getName().c_str());
 		} catch (exception &e) {
 			reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
 			cout << e.what() << endl;
 		}
-	} else
+	} else {
 		_serv->createChannel(_parameters[0], _user[0], tmp_key);
-
+		tmp = _serv->findChannel(_parameters[0], _serv->getChannel());
+		reply(tmp->getUserList(), JOIN_REPLY, _user->getNickname().c_str(),
+			  _user->getUsername().c_str(), _serv->getName().c_str(), tmp->getName().c_str());
+	}
 	if (_parameters[0] == _serv->getPassword())
 		_user->setStatus(1);
 	
