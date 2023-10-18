@@ -106,6 +106,7 @@ void	Server::delUser(User * user)
 	close(user->getFD());
 
 	delete user;
+	printUserList();
 }
 
 void	Server::receive(User * user)
@@ -139,6 +140,17 @@ void	Server::receive(User * user)
 	}
 }
 
+void	Server::printUserList()
+{
+	std::map<int, User *>::iterator it = _users.begin();
+	std::cout << "--- User List ---\n";
+	for (;it != _users.end(); it++)
+	{
+		std::cout << it->second->getNickname() << std::endl;
+	}
+	std::cout << "-----------------\n";
+}
+
 std::string	Server::getPassword()
 {
 	return _password;
@@ -159,6 +171,17 @@ std::vector<User *>	Server::getUsers()
 		cli.push_back(it->second);
 
 	return (cli);
+}
+
+User *Server::getOneUser(std::string nickname)
+{
+	std::vector<User *>	cli = getUsers();
+
+	std::vector<User *>::iterator it = cli.begin();
+	for(; it != cli.end(); it++)
+		if ((*it)->getNickname() == nickname)
+			return *it;
+	return (NULL);
 }
 
 void Server::createChannel(const std::string &name, const User &who, std::string key) {

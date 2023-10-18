@@ -25,7 +25,6 @@ class User{
 	std::string			_nickname;
 	std::string			_username;
 
-	bool				_is_oper;
 	Status				_status;
 
 	Server				*_serv;
@@ -40,7 +39,6 @@ class User{
 	std::string	getNickname() const;
 	std::string	getHostName() const;
 
-	void	setIsOper();
 	void	setStatus(int status);
 	void	setUsername(std::string str);
 	void	setNickname(std::string str);

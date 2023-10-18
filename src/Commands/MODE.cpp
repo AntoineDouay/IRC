@@ -1,8 +1,78 @@
 
 #include "../../include/Commands.hpp"
 
+void	mode_i(User &user, Channel &chan, int sign)
+{
+		if (sign)
+			chan.setInviteRestriction(user);
+		else
+			chan.removeInviteRestriction(user);
+}
 
-// NEED GETNAME FOR CHANNEL
+void	mode_l(User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
+{
+	if (parameters.size() < 3)
+		return; //err management
+	if (parameters[2].size() == 0)
+		return;
+
+	std::istringstream ss(parameters[2]);
+	unsigned int n;
+
+	ss >> n;
+
+		if (sign)
+			chan.setMaxUsers(user, n);
+		else
+			chan.removeMaxUsersRestriction(user);
+}
+
+void	mode_te(User &user, Channel &chan, int sign)
+{
+		if (sign)
+			chan.setTopicRestriction(user);
+		else
+			chan.removeTopicRestriction(user);
+		// need get topicrestriction to check
+}
+
+void	mode_k(User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
+{
+	if (parameters.size() < 3)
+		return; //err management
+	if (parameters[2].size() == 0)
+		return;
+
+	if (sign)
+		chan.setChannelPassword(user, parameters[2]);
+	else
+		chan.removeChannelPassword(user);
+}
+
+void	mode_o(User &user, Server &serv, std::vector<std::string> &parameters, Channel &chan, int sign)
+{
+	if (parameters.size() < 3)
+		return; //err management
+	User *target = serv.getOneUser(parameters[2]);
+
+	if (target == NULL) // bloque une execption
+		return ;
+
+	try {
+		if (sign)
+			chan.setOperator(user, *target);
+		else
+			chan.removeOperator(user, *target);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	// std::vector<User> operList = chan.getAdmin();
+	// std::vector<User>::iterator it = operList.begin();
+	// for (; it != operList.end(); it++)
+	// 	std::cout << "ope : " <<  it->getNickname() << std::endl;
+}
 
 void	Commands::MODE()
 {
@@ -16,12 +86,14 @@ void	Commands::MODE()
 
 	std::vector<Channel *> chan = _serv->getChannel();
 
-	for (size_t i = 0; i < chan.size(); i++)
+	size_t i = 0;
+	for (; i < chan.size(); i++)
 		if (_parameters[0] == chan[i]->getName())
 			break ;
 
 	if (i == chan.size()) //pas trouver l'err
 		return ;
+	std::cout << "chan name " << chan[i]->getName() << std::endl;
 
 	if (_parameters[1].size() != 0 && (_parameters[1].at(0) != '+' && _parameters[1].at(0) != '-'))
 		return ; //same
@@ -38,42 +110,28 @@ void	Commands::MODE()
 	{
 		case 'i':
 		{
-			//if (sign == 0)
-			// 	chan[i].setMode();
-			if (sign == 1)
-				chan[i].setInviteMod();
+			mode_i(*_user, *(chan[i]), sign);
 			break;
 		}
 		case 't':
 		{
-			//if (sign == 0)
-			 //	chan[i].setMode();
-			if (sign == 1)
-				chan[i].setTopicRestricton();
+			mode_te(*_user, *(chan[i]), sign);
 			break;
 		}
 		case 'k':
 		{
-			if (sign == 0)
-				chan[i].removePassword();
-			if (sign == 1)
-				chan[i].setChannelPassword();
+			mode_k(*_user, _parameters, *(chan[i]), sign);
 			break;
 		}
 		case 'o':
 		{
-			//if (sign == 0)
-			//	chan[i].setMode();
-			if (sign == 1)
-				chan[i].setOperator();
+			mode_o(*_user, *_serv, _parameters, *(chan[i]), sign);
 			break;
+		
 		}
 		case 'l':
 		{
-			//if (sign == 0)
-			 //	chan[i].setMode();
-			if (sign == 1)
-				chan[i].setMaxUsers();
+			mode_l(*_user, _parameters, *(chan[i]), sign);
 			break;
 		};
 		default:

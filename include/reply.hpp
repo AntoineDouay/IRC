@@ -3,7 +3,11 @@
 /*  ----RPLY----- */
 
 # define RPL_WELCOME "001 :Welcome to the Internet Relay Network <nick>!<user>@<host>\r\n"
-# define KICK_REPLY "KICK <channel> <target> <reason>"
+# define RPL_YOURHOST "002 :Your host is <servername>, running version <version>\r\n"
+# define RPL_CREATED "003 :This server was created <date>\r\n"
+# define RPL_MYINFO	"004 <server_name> <version> <user_modes> <chan_modes>\r\n"
+
+# define KICK_REPLY "606 KICK <channel> <target> <reason>"
 
 /*  ---- ERR ----- */
 

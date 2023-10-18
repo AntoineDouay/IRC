@@ -7,7 +7,6 @@ User::User(int fd, struct sockaddr_in adress, Server * serv) : _fd(fd), _address
 	(void)_address;
 	_nickname = "";
 	_username = "";
-	_is_oper = false;
 	(void)_serv;
 }
 
@@ -32,13 +31,6 @@ std::string	User::getUsername() const
 std::string	User::getHostName() const
 {
 	return inet_ntoa(_address.sin_addr);
-}
-
-
-
-void	User::setIsOper()
-{
-	_is_oper = true;
 }
 
 void	User::setStatus(int status)
