@@ -16,10 +16,20 @@ void Commands::kick_reply(std::string serverName, std::string channel, std::stri
 
 //	cout << "|" << output << "|" << endl; // TODO only for test
 	Channel *channelTarget = _serv->findChannel(channel, _serv->getChannel());
+
 	if (channelTarget == NULL) {
 		reply(ERR_NOSUCHCHANNEL, channel.c_str(), "channel not exist");
 		return;
 	}
+	if (!channelTarget->isInChannel(target)) {
+		reply(ERR_USERNOTINCHANNEL, target.c_str(), channel.c_str(),"not in the channel");
+		return;
+	}
+	if (!channelTarget->isInChannel(_user->getNickname())) {
+		reply(ERR_NOTONCHANNEL, channel.c_str(), "your not in this channel");
+		return;
+	}
+
 	vector<User> userList = channelTarget->getUserList();
 	vector<User>::iterator it = userList.begin();
 
