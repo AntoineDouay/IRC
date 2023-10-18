@@ -17,6 +17,16 @@ void	Commands::JOIN()
 	if (tmp) {
 		try {
 			tmp->addUser(_user[0], _user[0], tmp_key);
+
+			string output = ":";
+
+			output.append(_user->getUsername() + "!" + _user->getNickname() + "@" + _serv->getName() + " JOIN " + tmp->getName() + "\r\n");
+			cout << "output: " << output << endl;
+			vector<User> userList = tmp->getUserList();
+			vector<User>::iterator it = userList.begin();
+			for (; it != userList.end(); it++) {
+				send(it->getFD(), output.c_str(), output.size(), 0);
+			}
 		} catch (exception &e) {
 			reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
 			cout << e.what() << endl;
