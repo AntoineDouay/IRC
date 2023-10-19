@@ -34,6 +34,5 @@
 # define ERR_NOSUCHCHANNEL "403 <channel> :<reason>\r\n"
 # define ERR_USERNOTINCHANNEL "441 <nick> <channel> :<reason>\r\n"
 # define ERR_NOTONCHANNEL "442 <channel> :<reason>\r\n"
-# define ERR_BADCHANMASK "476 <channel> :<reason>\r\n"
 # define ERR_CHANOPRIVSNEEDED "482 <channel> :<reason>\r\n"
 

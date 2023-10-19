@@ -204,3 +204,14 @@ std::vector<Channel *> Server::getChannel() const {
 	return _channels;
 }
 
+User *Server::findUser(const string& targetUser, vector<User *> userList) {
+//	vector<User *> tmp = getUsers();
+	vector<User *>::iterator it = userList.begin();
+
+	for (;it != userList.end(); it++) {
+		if (it[0]->getNickname() == targetUser)
+			return *it;
+	}
+	return NULL;
+}
+

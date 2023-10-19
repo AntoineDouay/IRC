@@ -237,6 +237,16 @@ void Channel::removeMaxUsersRestriction(User who)
 		_maxUser = UINT_MAX;
 }
 
+bool Channel::isInChannel(const string &target) {
+	vector<User>::iterator it = _userList.begin();
+	for (; it != _userList.end(); it++) {
+		if (it->getNickname() == target) {
+			return true;
+		}
+	}
+	return false;
+}
+
 // ---------------------------------------------------- //
 // -------------------- EXCEPTIONS -------------------- //
 // ---------------------------------------------------- //

@@ -40,7 +40,9 @@ class Server{
 	std::string				getPassword();
 	std::string				getName();
 	std::vector<User *>		getUsers();
+  
 	User 					*getOneUser(std::string nickname);
+	User *					findUser(const std::string& targetUser, std::vector<User *> userList);
 
 	std::vector<Channel *>		getChannel() const;
 
