@@ -2,9 +2,9 @@
 
 
 void	Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
-	const std::string &message,
-	const std::string &nick, const std::string &username,
-	const std::string &hostname)
+			const std::string &message,
+			const std::string &nick, const std::string &username,
+			const std::string &hostname)
 {
 	std::vector<User *>	users = server->getUsers();
 	User 				*user = 0;
@@ -21,7 +21,6 @@ void	Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
 	}
 	if (user)
 	{
-		std::cout << "USER is found" << std::endl;
 		preMessage += nick + " :" + message + "\r\n";
 		send(user->getFD(), preMessage.c_str(), preMessage.size(), 0);
 	}
@@ -57,9 +56,7 @@ void	Commands::handleChannelMSG(Server *server, User *user,
 				}
 			}
 			if (!isMyChan)
-			{
 				Commands::reply(ERR_CANNOTSENDTOCHAN, name.c_str());
-			}
 			return ;
 		}
 	}
