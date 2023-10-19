@@ -1,7 +1,7 @@
 #include "../../include/Commands.hpp"
 
 
-void	handleSinglePrivMSG(Server *server, std::string &preMessage,
+void	Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
 	const std::string &message,
 	const std::string &nick, const std::string &username,
 	const std::string &hostname)
@@ -25,22 +25,28 @@ void	handleSinglePrivMSG(Server *server, std::string &preMessage,
 		preMessage += nick + " :" + message + "\r\n";
 		send(user->getFD(), preMessage.c_str(), preMessage.size(), 0);
 	}
-	// else
-	// 	Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
+	else
+		Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
 }
 
-void	handleChannelMSG(Server *server, User *user,
+void	Commands::handleChannelMSG(Server *server, User *user,
 			const std::string &name, std::string &message)
 {
 	std::vector<Channel *>	channels = server->getChannel();
+
 	for (size_t i = 0; i < channels.size(); i++)
 	{
 		std::cout << channels[i]->getName() << std::endl;
 		if (channels[i]->getName() == name)
 		{
-			std::cout << "Found a channel" << std::endl;
+			bool					isMyChan = false;
 			const std::vector<User> users = channels[i]->getUserList();
 			for (size_t d = 0; d < users.size(); d++)
+			{
+				if (user->getNickname() == users[d].getNickname())
+					isMyChan = true;
+			}
+			for (size_t d = 0; isMyChan && d < users.size(); d++)
 			{
 				if (user->getNickname() != users[d].getNickname())
 				{
@@ -50,10 +56,14 @@ void	handleChannelMSG(Server *server, User *user,
 					send(users[d].getFD(), finalMessage.c_str(), finalMessage.size(), 0);
 				}
 			}
+			if (!isMyChan)
+			{
+				Commands::reply(ERR_CANNOTSENDTOCHAN, name.c_str());
+			}
 			return ;
 		}
 	}
-	// Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
+	Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
 }
 
 void	Commands::PRIVMSG()
