@@ -23,11 +23,37 @@ void	handleSinglePrivMSG(Server *server, std::string &preMessage,
 	{
 		std::cout << "USER is found" << std::endl;
 		preMessage += nick + " :" + message + "\r\n";
-		std::cout << preMessage;
-		send(user->getFD(), message.c_str(), message.size(), 0);
+		send(user->getFD(), preMessage.c_str(), preMessage.size(), 0);
 	}
-	else
-		Commands::reply(ERR_NORECIPIENT, _command.c_str());
+	// else
+	// 	Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
+}
+
+void	handleChannelMSG(Server *server, User *user,
+			const std::string &name, std::string &message)
+{
+	std::vector<Channel *>	channels = server->getChannel();
+	for (size_t i = 0; i < channels.size(); i++)
+	{
+		std::cout << channels[i]->getName() << std::endl;
+		if (channels[i]->getName() == name)
+		{
+			std::cout << "Found a channel" << std::endl;
+			const std::vector<User> users = channels[i]->getUserList();
+			for (size_t d = 0; d < users.size(); d++)
+			{
+				if (user->getNickname() != users[d].getNickname())
+				{
+					std::string finalMessage = ":" + user->getNickname()
+						+ "!" + user->getUsername() + "@" + user->getHostName()
+						+ " PRIVMSG " + name + " :" + message + "\r\n";
+					send(users[d].getFD(), finalMessage.c_str(), finalMessage.size(), 0);
+				}
+			}
+			return ;
+		}
+	}
+	// Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
 }
 
 void	Commands::PRIVMSG()
@@ -40,7 +66,7 @@ void	Commands::PRIVMSG()
 	std::string	username	= "";
 	std::string	hostname	= "";
 	std::string	servername	= "";
-	std::string preMessage		= "";
+	std::string preMessage	= "";
 	std::size_t	found;
 
 	if (_parameters.size() == 0)
@@ -63,8 +89,8 @@ void	Commands::PRIVMSG()
 		&& found == std::string::npos)
 	{
 		isChannel = true;
-		channel = recipent.substr(1, recipent.size() - 1);
-		//Handle channel here
+		handleChannelMSG(_serv, _user, recipent, _parameters[1]);
+		return ;
 	}
 	if ((recipent[0] == '#' || recipent[0] == '$')
 		&& found != std::string::npos)
@@ -112,3 +138,11 @@ void	Commands::PRIVMSG()
 		handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
 	}
 }
+
+/*
+
+CAP LS
+PASS aaa
+NICK migi
+USER migi migi localhost :Migi Dali
+*/
