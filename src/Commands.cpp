@@ -22,6 +22,7 @@ void	Commands::init_func_map()
 	_func.insert(std::make_pair("WHOIS", &Commands::WHOIS));
 	_func.insert(std::make_pair("OPER", &Commands::OPER));
 	_func.insert(std::make_pair("MODE", &Commands::MODE));
+	_func.insert(std::make_pair("INVITE", &Commands::INVITE));
 	//
 	_func.insert(std::make_pair("QUIT", &Commands::QUIT));
 }

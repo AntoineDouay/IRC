@@ -36,3 +36,12 @@
 # define ERR_NOTONCHANNEL "442 <channel> :<reason>\r\n"
 # define ERR_CHANOPRIVSNEEDED "482 <channel> :<reason>\r\n"
 
+// for join
+# define ERR_INVITEONLYCHAN "473 <channel> :<reason>\r\n"
+
+// for invite
+# define ERR_NOSUCHNICK "401 <nick> :<reason>\r\n"
+# define ERR_NOTONCHANNEL "442 <channel> :<reason>\r\n"
+# define ERR_USERONCHANNEL "443 <nick> <channel> :<reason>\r\n"
+# define ERR_CHANOPRIVSNEEDED "482 <channel> :<reason>\r\n"
+# define RPL_INVITING "341 <nick> <channel>\r\n"

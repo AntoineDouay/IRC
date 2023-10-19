@@ -20,6 +20,8 @@ void	Server::init()
 		return ;
 	}
 
+	fcntl(_server_fd, F_SETFL, O_NONBLOCK);
+
 	struct sockaddr_in	address;
 	address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
@@ -44,7 +46,7 @@ void	Server::run()
 {
 	while (42)
 	{
-		if (poll(&_p_fds[0], _p_fds.size(), 6000) == -1)
+		if (poll(&_p_fds[0], _p_fds.size(), 600) == -1)
 		return;
 
 		if (_p_fds[0].revents == POLLIN)

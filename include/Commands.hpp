@@ -41,7 +41,7 @@ class Commands{
 	// void	KILL();
 	// void	PART();
 	// void	TOPIC();
-	// void	INVITE();
+	void	INVITE();
 	// void	NAMES();
 	// void	NOTICE();
 	// void	LIST();
