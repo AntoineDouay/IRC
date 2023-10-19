@@ -75,15 +75,22 @@ const vector<User> &Channel::getUserList(void) const {
 }
 
 string 	Channel::getKey(void) const
-{}
+{
+	return _key;
+}
 unsigned int Channel::getMaxUser(void) const
-{}
-bool Channel::getinviteRestrictionOn(void) const
-{}
-bool Channel::gettopicRestrictionOn(void) const
-{}
+{
+	return _maxUser;
+}
+bool Channel::getInviteRestrictionOn(void) const
+{
+	return _inviteRestrictionOn;
+}
+bool Channel::getTopicRestrictionOn(void) const
+{
+	return _topicRestrictionOn;
+}
 	
-
 bool Channel::userIsOper(User &target)
 {
 	vector<User>::iterator it = _operatorList.begin();

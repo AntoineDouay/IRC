@@ -22,8 +22,8 @@ public :
 	string getName(void) const;
 	string getKey(void) const;
 	unsigned int getMaxUser(void) const;
-	bool getinviteRestrictionOn(void) const;
-	bool gettopicRestrictionOn(void) const;
+	bool getInviteRestrictionOn(void) const;
+	bool getTopicRestrictionOn(void) const;
 	
 	const vector<User> &getAdmin(void) const;
 	const vector<User> &getUserList(void) const;
