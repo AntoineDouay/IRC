@@ -35,9 +35,13 @@ class Server{
 	void	delUser(User * User);
 	void	receive(User * User);
 
+	void	printUserList();
+
 	std::string				getPassword();
 	std::string				getName();
 	std::vector<User *>		getUsers();
+  
+	User 					*getOneUser(std::string nickname);
 	User *					findUser(const std::string& targetUser, std::vector<User *> userList);
 
 	std::vector<Channel *>		getChannel() const;

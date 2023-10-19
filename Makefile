@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: apellegr <apellegr@student.42.fr>          +#+  +:+       +#+         #
+#    By: adouay <adouay@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/29 15:20:33 by adouay            #+#    #+#              #
-#    Updated: 2023/10/16 16:39:18 by apellegr         ###   ########.fr        #
+#    Updated: 2023/10/18 16:02:16 by adouay           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SRC = main.cpp Server.cpp User.cpp Commands.cpp Channel.cpp \
 	Commands/JOIN.cpp \
 	Commands/PING.cpp \
 	Commands/WHOIS.cpp \
+	Commands/MODE.cpp \
 	Commands/OPER.cpp \
 	Commands/KICK.cpp
 
