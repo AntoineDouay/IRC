@@ -18,7 +18,8 @@ void	Commands::JOIN()
 		try {
 			if (tmp->getInviteRestrictionOn())
 				return reply (ERR_INVITEONLYCHAN, tmp->getName().c_str(), "has invite only restriction");
-			// need max usercheck
+			
+			// need to check in invited userlist;
 			
 			tmp->addUser(_user[0], _user[0], tmp_key);
 			string output = ":";

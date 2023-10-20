@@ -115,6 +115,11 @@ void Channel::addUser(const User& who, const User& newUser, string key) {
 	(void)who; // TODO remove
 }
 
+void	Channel::addInvitedUser(const User& invited)
+{
+	_invitedUserList.push_back(invited);
+}
+
 vector<User>::iterator Channel::findUser(const User& user) {
 	vector<User>::iterator it;
 	for (it = _userList.begin(); it != _userList.end(); it++){
@@ -166,7 +171,10 @@ void Channel::removeInviteRestriction(User who) {
 		if (userIsOper(who))
 	{
 		if (_inviteRestrictionOn == true)
+		{
 			_inviteRestrictionOn = false;
+			_invitedUserList.clear();
+		}
 		else 
 			throw CustomErrorMessage("channel already have invite restriction off");
 	}
