@@ -16,8 +16,12 @@ void	Commands::JOIN()
 	// 	std::cout << *it << std::endl;
 	if (tmp) {
 		try {
+			if (tmp->getInviteRestrictionOn())
+				return reply (ERR_INVITEONLYCHAN, tmp->getName().c_str(), "has invite only restriction");
+			
+			// need to check in invited userlist;
+			
 			tmp->addUser(_user[0], _user[0], tmp_key);
-
 			string output = ":";
 
 			output.append(_user->getUsername() + "!" + _user->getNickname() + "@" + _serv->getName() + " JOIN " + tmp->getName() + "\r\n");
