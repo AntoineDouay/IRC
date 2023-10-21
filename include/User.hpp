@@ -25,7 +25,9 @@ class User{
 	std::string			_nickname;
 	std::string			_username;
 
-	bool				_is_oper;
+	time_t				_last_ping;
+	time_t				_last_time_active;
+
 	Status				_status;
 
 	Server				*_serv;
@@ -39,8 +41,11 @@ class User{
 	std::string	getUsername() const;
 	std::string	getNickname() const;
 	std::string	getHostName() const;
+	time_t		getLastActivity() const;
+	time_t		getLastPing() const;
 
-	void	setIsOper();
+	void	setLastPing();
+	void	setLastActivity();
 	void	setStatus(int status);
 	void	setUsername(std::string str);
 	void	setNickname(std::string str);

@@ -3,7 +3,11 @@
 /*  ----RPLY----- */
 
 # define RPL_WELCOME "001 :Welcome to the Internet Relay Network <nick>!<user>@<host>\r\n"
-# define KICK_REPLY "KICK <channel> <target> <reason>"
+# define RPL_YOURHOST "002 :Your host is <servername>, running version <version>\r\n"
+# define RPL_CREATED "003 :This server was created <date>\r\n"
+# define RPL_MYINFO	"004 <server_name> <version> <user_modes> <chan_modes>\r\n"
+
+# define KICK_REPLY "606 KICK <channel> <target> <reason>"
 
 /*  ---- ERR ----- */
 
@@ -30,7 +34,6 @@
 # define ERR_NOSUCHCHANNEL "403 <channel> :<reason>\r\n"
 # define ERR_USERNOTINCHANNEL "441 <nick> <channel> :<reason>\r\n"
 # define ERR_NOTONCHANNEL "442 <channel> :<reason>\r\n"
-# define ERR_BADCHANMASK "476 <channel> :<reason>\r\n"
 # define ERR_CHANOPRIVSNEEDED "482 <channel> :<reason>\r\n"
 
 //For private msg
@@ -39,4 +42,12 @@
 # define ERR_CANNOTSENDTOCHAN "404 <channel name> :Cannot send to channel\r\n"
 # define ERR_TOOMANYTARGETS "407 <target> :<error code> recipents. <abort message>\r\n"
 
+// for join
+# define ERR_INVITEONLYCHAN "473 <channel> :<reason>\r\n"
 
+// for invite
+# define ERR_NOSUCHNICK "401 <nick> :<reason>\r\n"
+# define ERR_NOTONCHANNEL "442 <channel> :<reason>\r\n"
+# define ERR_USERONCHANNEL "443 <nick> <channel> :<reason>\r\n"
+# define ERR_CHANOPRIVSNEEDED "482 <channel> :<reason>\r\n"
+# define RPL_INVITING "341 <nick> <channel>\r\n"

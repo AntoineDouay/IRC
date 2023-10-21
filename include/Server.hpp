@@ -9,6 +9,9 @@ class User;
 class Commands;
 class Channel;
 
+# define TIME_OUT	180 // 3min
+# define SERV_PING		30 // ping every seconds	
+
 class Server{
 
 	private :
@@ -34,10 +37,16 @@ class Server{
 	void	acceptUser();
 	void	delUser(User * User);
 	void	receive(User * User);
+	void	pingUser();
+
+	void	printUserList();
 
 	std::string				getPassword();
 	std::string				getName();
 	std::vector<User *>		getUsers();
+  
+	User 					*getOneUser(std::string nickname);
+	User *					findUser(const std::string& targetUser, std::vector<User *> userList);
 
 	std::vector<Channel *>		getChannel() const;
 

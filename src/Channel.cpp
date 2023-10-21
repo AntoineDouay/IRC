@@ -43,7 +43,7 @@ Channel::Channel(const string& name, const User& userCreator, string key):
 			throw exception();
 	}
 	_userList.push_back(userCreator);
-	_operatorName = userCreator.getUsername();
+	_operatorList.push_back(userCreator);
 
 	(void)_id;
 	(void)_key;
@@ -66,12 +66,38 @@ string Channel::getName(void) const {
 	return _name;
 }
 
-string Channel::getAdmin(void) const {
-	return _operatorName;
+const vector<User> &Channel::getAdmin(void) const {
+	return _operatorList;
 }
 
 const vector<User> &Channel::getUserList(void) const {
 	return _userList;
+}
+
+string 	Channel::getKey(void) const
+{
+	return _key;
+}
+unsigned int Channel::getMaxUser(void) const
+{
+	return _maxUser;
+}
+bool Channel::getInviteRestrictionOn(void) const
+{
+	return _inviteRestrictionOn;
+}
+bool Channel::getTopicRestrictionOn(void) const
+{
+	return _topicRestrictionOn;
+}
+	
+bool Channel::userIsOper(User &target)
+{
+	vector<User>::iterator it = _operatorList.begin();
+	for (; it != _operatorList.end(); it++)
+		if (it->getNickname() == target.getNickname())
+			return true;
+	return false;
 }
 
 void Channel::addUser(const User& who, const User& newUser, string key) {
@@ -89,6 +115,11 @@ void Channel::addUser(const User& who, const User& newUser, string key) {
 	(void)who; // TODO remove
 }
 
+void	Channel::addInvitedUser(const User& invited)
+{
+	_invitedUserList.push_back(invited);
+}
+
 vector<User>::iterator Channel::findUser(const User& user) {
 	vector<User>::iterator it;
 	for (it = _userList.begin(); it != _userList.end(); it++){
@@ -104,41 +135,124 @@ void Channel::deleteUser(User who, User targetUser) {
 }
 
 void Channel::setTopic(User who, string newTopic) {
-	_topic = newTopic;
-	(void)who; // TODO remove
+	if (userIsOper(who) || !_topicRestrictionOn)
+		_topic = newTopic;
 }
 
 const string Channel::getTopic(void) const {
 	return _topic;
 }
 
+void Channel::setChannelPassword(User who, string password)
+{
+	if (userIsOper(who))
+		_key = password;
+}
+
+void Channel::removeChannelPassword(User who)
+{
+	if (userIsOper(who))
+		_key = "";
+}
+
 void Channel::setInviteRestriction(User who) {
-	_inviteRestrictionOn = !_inviteRestrictionOn;
-	(void)who; // TODO remove
+	if (userIsOper(who))
+	{
+		if (_inviteRestrictionOn == false)
+			_inviteRestrictionOn = true;
+		else 
+			throw CustomErrorMessage("channel already have invite restriction on");
+	}
+	else 
+			throw CustomErrorMessage("user is not operator");
+}
+
+void Channel::removeInviteRestriction(User who) {
+		if (userIsOper(who))
+	{
+		if (_inviteRestrictionOn == true)
+		{
+			_inviteRestrictionOn = false;
+			_invitedUserList.clear();
+		}
+		else 
+			throw CustomErrorMessage("channel already have invite restriction off");
+	}
+	else 
+			throw CustomErrorMessage("user is not operator");
 }
 
 void Channel::setTopicRestriction(User who) {
-	_topicRestrictionOn = !_topicRestrictionOn;
-	(void)who; // TODO remove
+		if (userIsOper(who))
+	{
+		if (_topicRestrictionOn == false)
+			_topicRestrictionOn = true;
+		else 
+			throw CustomErrorMessage("channel already have topic restriction on");
+	}
+	else 
+			throw CustomErrorMessage("user is not operator");
 }
 
-void Channel::setOperator(User who, User target) {
-	(void)who; // TODO remove
-	if (who.getUsername() == _operatorName) {
+void Channel::removeTopicRestriction(User who) {
+		if (userIsOper(who))
+	{
+		if (_topicRestrictionOn == true)
+			_topicRestrictionOn = false;
+		else 
+			throw CustomErrorMessage("channel already have topic restriction off");
+	}
+	else 
+			throw CustomErrorMessage("user is not operator");
+}
+
+void Channel::setOperator(User &who, User &target) {
+
+	if (userIsOper(who)) {
 		for (vector<User>::iterator it = _userList.begin(); it != _userList.end(); it++){
-			if (it->getUsername() == target.getUsername()){
-				_operatorName = target.getUsername();
+			if (it->getNickname() == target.getNickname()){
+				_operatorList.push_back(target);
 				return;
 			}
 		}
-		throw CustomErrorMessage("Error: user is not in the channel"); // user is not in the channel
+		throw CustomErrorMessage("Error: user is not in the channel");
 	}
-	throw CustomErrorMessage(who.getNickname() + " is not the channel operator"); // who is not the channel operator
+	throw CustomErrorMessage(who.getNickname() + " is not a channel operator");
+}
+
+void Channel::removeOperator(User &who, User &target) {
+
+	if (userIsOper(who)) {
+		for (vector<User>::iterator it = _operatorList.begin(); it != _operatorList.end(); it++){
+			if (it->getNickname() == target.getNickname()){
+				_operatorList.erase(it);
+				return;
+			}
+		}
+		throw CustomErrorMessage("Error: user is already not a operator in the channel");
+	}
+	throw CustomErrorMessage(who.getNickname() + " is not a channel operator");
 }
 
 void Channel::setMaxUsers(User who, unsigned int sizeMax) {
-	_maxUser = sizeMax;
-	(void)who; // TODO remove
+	if (userIsOper(who))
+		_maxUser = sizeMax;
+}
+
+void Channel::removeMaxUsersRestriction(User who)
+{
+	if (userIsOper(who))
+		_maxUser = UINT_MAX;
+}
+
+bool Channel::isInChannel(const string &target) {
+	vector<User>::iterator it = _userList.begin();
+	for (; it != _userList.end(); it++) {
+		if (it->getNickname() == target) {
+			return true;
+		}
+	}
+	return false;
 }
 
 // ---------------------------------------------------- //
@@ -161,12 +275,15 @@ const char *Channel::CustomErrorMessage::what() const throw() {
 
 std::ostream & operator<<(std::ostream &o, const Channel &rhs) {
 	vector<User> userList = rhs.getUserList();
+	vector<User> operList = rhs.getAdmin();
 	o << "Chanel name: " << rhs.getName() << endl;
-	o << "Admin: " << rhs.getAdmin() << endl;
+	for (vector<User>::iterator it = operList.begin(); it != userList.end(); it++) {
+		o << it->getNickname() << ", ";
+	}
 	o << "Topic: " << rhs.getTopic() << endl;
 	o << "Users: ";
 	for (vector<User>::iterator it = userList.begin(); it != userList.end(); it++) {
-		o << it->getUsername() << ", ";
+		o << it->getNickname() << ", ";
 	}
 	return o;
 }
