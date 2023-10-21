@@ -57,6 +57,7 @@ SRC = main.cpp Server.cpp User.cpp Commands.cpp Channel.cpp \
 	Commands/WHOIS.cpp \
 	Commands/MODE.cpp \
 	Commands/OPER.cpp \
+	Commands/PRIVMSG.cpp \
 	Commands/INVITE.cpp \
 	Commands/KICK.cpp
 
