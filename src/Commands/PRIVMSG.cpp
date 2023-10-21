@@ -1,21 +1,21 @@
 #include "../../include/Commands.hpp"
 
-void sendFileViaDCC(int userSocket, const std::string &filename) {
+// void sendFileViaDCC(int userSocket, const std::string &filename) {
 
-    // Read the file and send it
-    std::ifstream file;
-    file.open(filename.c_str(), std::ios::binary); // Open the file in binary mode
-    if (!file.is_open()) {
-        std::cerr << "Failed to open file." << std::endl;
-        return;
-    }
+//     // Read the file and send it
+//     std::ifstream file;
+//     file.open(filename.c_str(), std::ios::binary); // Open the file in binary mode
+//     if (!file.is_open()) {
+//         std::cerr << "Failed to open file." << std::endl;
+//         return;
+//     }
 
-    char buffer[1024] = {0};
-    while (file) {
-        file.read(buffer, sizeof(buffer));
-        send(userSocket, buffer, file.gcount(), 0);
-    }
-}
+//     char buffer[1024] = {0};
+//     while (file) {
+//         file.read(buffer, sizeof(buffer));
+//         send(userSocket, buffer, file.gcount(), 0);
+//     }
+// }
 
 void	Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
 			const std::string &message,
@@ -40,26 +40,26 @@ void	Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
 		preMessage += nick + " :" + message + "\r\n";
 		send(user->getFD(), preMessage.c_str(), preMessage.size(), 0);
 
-		if (message.find("DCC SEND") != std::string::npos) {
-			std::istringstream iss(message);
-			std::vector<std::string> tokens;
-			std::istream_iterator<std::string> iter(iss);
-			std::istream_iterator<std::string> end;
-			while (iter != end) {
-				tokens.push_back(*iter);
-				std::cout << "Token: " << *iter << std::endl;
-				++iter;
-			}
-			if (tokens.size() >= 6) {
-				std::string filename = tokens[2];
-				std::string ip = tokens[3];
-				std::string port = tokens[4];
-				std::string filesize = tokens[5];
+		// if (message.find("DCC SEND") != std::string::npos) {
+		// 	std::istringstream iss(message);
+		// 	std::vector<std::string> tokens;
+		// 	std::istream_iterator<std::string> iter(iss);
+		// 	std::istream_iterator<std::string> end;
+		// 	while (iter != end) {
+		// 		tokens.push_back(*iter);
+		// 		std::cout << "Token: " << *iter << std::endl;
+		// 		++iter;
+		// 	}
+		// 	if (tokens.size() >= 6) {
+		// 		std::string filename = tokens[2];
+		// 		std::string ip = tokens[3];
+		// 		std::string port = tokens[4];
+		// 		std::string filesize = tokens[5];
 
-				sendFileViaDCC(user->getFD(), filename);
-				return;
-			}
-		}
+		// 		sendFileViaDCC(user->getFD(), filename);
+		// 		return;
+		// 	}
+		// }
 	}
 	else
 		Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
@@ -100,17 +100,17 @@ void	Commands::handleChannelMSG(Server *server, User *user,
 	Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
 }
 
-void handleDCC(Server *server, const std::string &nickname, const std::string &filename, const std::string &ip, const std::string &port, const std::string &filesize) {
-    // Your DCC handling logic here
-    // Example: print the received information
-	(void) server;
-    std::cout << "Received DCC SEND command:" << std::endl;
-    std::cout << "Nickname: " << nickname << std::endl;
-    std::cout << "Filename: " << filename << std::endl;
-    std::cout << "IP: " << ip << std::endl;
-    std::cout << "Port: " << port << std::endl;
-    std::cout << "Filesize: " << filesize << std::endl;
-}
+// void handleDCC(Server *server, const std::string &nickname, const std::string &filename, const std::string &ip, const std::string &port, const std::string &filesize) {
+//     // Your DCC handling logic here
+//     // Example: print the received information
+// 	(void) server;
+//     std::cout << "Received DCC SEND command:" << std::endl;
+//     std::cout << "Nickname: " << nickname << std::endl;
+//     std::cout << "Filename: " << filename << std::endl;
+//     std::cout << "IP: " << ip << std::endl;
+//     std::cout << "Port: " << port << std::endl;
+//     std::cout << "Filesize: " << filesize << std::endl;
+// }
 
 void	Commands::PRIVMSG()
 {
