@@ -115,9 +115,17 @@ void Channel::addUser(const User& who, const User& newUser, string key) {
 	(void)who; // TODO remove
 }
 
-void	Channel::addInvitedUser(const User& invited)
+void	Channel::addInvitedUser(User *invited)
 {
 	_invitedUserList.push_back(invited);
+}
+
+bool	Channel::isInvited(User *target)
+{
+	for(std::vector<User *>::iterator it = _invitedUserList.begin(); it != _invitedUserList.end(); it++)
+		if ((*it)->getNickname() == target->getNickname())
+			return true;
+	return false;
 }
 
 vector<User>::iterator Channel::findUser(const User& user) {

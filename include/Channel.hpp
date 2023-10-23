@@ -32,8 +32,9 @@ public :
 	bool userIsOper(User &target);
 
 	void addUser(const User& who, const User& newUser, string key);
-	void addInvitedUser (const User& invited);
 	void deleteUser(User who, User targetUser);
+	void addInvitedUser (User* invited);
+	bool isInvited (User *target);
 //	void inviteUser(User who, User targetUser);
 //	void kickUser(User who, User targetUser);
 	void setTopic(User who, string newTopic);
@@ -80,7 +81,7 @@ private:
 	vector<User> _operatorList;
 	unsigned int _maxUser;
 	vector<User> _userList;
-	vector<User> _invitedUserList;
+	vector<User *> _invitedUserList;
 
 	bool _inviteRestrictionOn;
 	bool _topicRestrictionOn;
