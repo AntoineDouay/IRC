@@ -16,6 +16,7 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #include <iostream>
 #include <string>

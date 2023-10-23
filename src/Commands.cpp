@@ -38,7 +38,7 @@ void	Commands::parse_cmd(const std::string &instruction)
 	if (trailingPos != std::string::npos)
 	{
 		value = instruction.substr(0, trailingPos - 1);
-		trailing = instruction.substr(trailingPos + 1, instruction.size() - trailingPos);
+		trailing = instruction.substr(trailingPos + 1, instruction.size() - trailingPos - 2);
 	}
 	else
 		value = instruction.substr(0, instruction.size());
@@ -61,7 +61,7 @@ void	Commands::parse_cmd(const std::string &instruction)
 	// for (size_t i = 0; i < _parameters.size(); i++)
 	// {
 	// 	std::cout << _parameters[i] << std::endl;
-	// 	for (int m = 0; m < _parameters[i][m]; m++)
+	// 	for (size_t m = 0; m < _parameters[i].size(); m++)
 	// 	{
 	// 		if (_parameters[i][m] == '\n')
 	// 			std::cout << "\\n" << std::endl;
