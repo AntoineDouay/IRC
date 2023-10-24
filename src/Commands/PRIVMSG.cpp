@@ -92,7 +92,7 @@ void Commands::handleBot(const std::string &message)
 
 		if (res == CURLE_OK)
 		{
-			std::string result = ":bot PRIVMSG " + _user->getNickname() + " :" + readBuffer + "\r\n";
+			std::string result = ":novel PRIVMSG " + _user->getNickname() + " :" + readBuffer + "\r\n";
 			send(_user->getFD(), result.c_str(), result.size(), 0);
 		}
 		curl_easy_cleanup(curl);
@@ -268,7 +268,7 @@ void Commands::PRIVMSG()
 				servername = recipent.substr(found + 1);
 		}
 		preMessage = ":" + _user->getNickname() + " PRIVMSG ";
-		if (nick == "bot")
+		if (nick == "novel")
 			handleBot(_parameters[1]);
 		else
 			handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
