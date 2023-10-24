@@ -128,6 +128,36 @@ void	Commands::reply(std::string str, ...)
 	send(_user->getFD(), _reply.c_str(), _reply.size(), 0);
 }
 
+void Commands::reply(std::vector<User> userList, std::string str, ...) {
+	va_list		vl;
+	va_start(vl, str);
+
+	std::string _reply;
+	int i = 1;
+	_reply.append(":");
+
+	while(str[i])
+	{
+		if (str[i] != '<')
+			_reply += str[i];
+		else
+		{
+			while (str[i] != '>')
+				i++;
+			_reply += va_arg(vl, char *);
+		}
+		i++;
+	}
+//	_reply.append("\n");
+//	cout << "|" << _reply << "|" << endl; // TODO only for test
+	vector<User>::iterator it = userList.begin();
+
+	for (; it != userList.end(); it++) {
+		cout << "it: " << it->getNickname() << " fd: " << it->getFD() << endl;
+		send(it->getFD(), _reply.c_str(), _reply.size(), 0);
+	}
+}
+
 // void	Commands::PASS()
 // {
 // 	if (_parameters.size() == 0)
