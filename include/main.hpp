@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <curl/curl.h>
+#include <stdarg.h>
 
 #include <iostream>
 #include <string>

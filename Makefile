@@ -22,7 +22,7 @@ NAME = ircserv
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
-DFLAGS = -MMD -lcurl
+DFLAGS = -MMD
 MKDIR = mkdir -p
 RM = rm -f
 MAKE_SILENT = make --no-print-directory
@@ -82,7 +82,7 @@ all : $(OBJ_DIR) $(NAME)
 
 $(NAME) : $(OBJ)
 	echo "$(YELLOW)Making CPP Exercise$(END)"
-	$(CXX) $(OBJ) -o $(NAME)
+	$(CXX) $(OBJ) -o $(NAME) -lcurl
 	echo "$(GREEN)Done$(END)"
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(HEAD) Makefile

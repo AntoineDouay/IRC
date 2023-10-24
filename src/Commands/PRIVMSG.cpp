@@ -16,6 +16,41 @@
 //         send(userSocket, buffer, file.gcount(), 0);
 //     }
 // }
+//
+void escapeSpecialChars(std::string &input) {
+    std::string output;
+    for (size_t i = 0; i < input.size(); i++) {
+	char c = input[i];
+        switch (c) {
+            case '\"':
+                output += "\\\"";
+                break;
+            case '\\':
+                output += "\\\\";
+                break;
+            case '\b':
+                output += "\\b";
+                break;
+            case '\f':
+                output += "\\f";
+                break;
+            case '\n':
+                output += "\\n";
+                break;
+            case '\r':
+                output += "\\r";
+                break;
+            case '\t':
+                output += "\\t";
+                break;
+            default:
+                output += c;
+                break;
+        }
+    }
+    input = output;
+}
+
 // Callback function to write the result to a string
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s)
 {
@@ -43,8 +78,11 @@ void Commands::handleBot(const std::string &message)
 	if (curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:5001/chat");
-		std::string data = "{\"message\": \"" + message + "\"}";
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+		std::string temp = message;
+		escapeSpecialChars(temp);
+		std::string data = "{\"message\": \"" + temp + "\"}";
+		//"{\"message\": \"Suddenly he fell through deep well\"}"
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
 		struct curl_slist *headers = NULL;
 		headers = curl_slist_append(headers, "Content-Type: application/json");
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
