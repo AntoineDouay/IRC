@@ -255,6 +255,21 @@ bool Channel::isInChannel(const string &target) {
 	return false;
 }
 
+void Channel::deleteUser(const string& nickTarget) {
+	vector<User>::iterator user = findUser(nickTarget);
+	_userList.erase(user);
+}
+
+vector<User>::iterator Channel::findUser(const string &user) {
+	vector<User>::iterator it = _userList.begin();
+	for (; it != _userList.end(); it++) {
+		if (it->getNickname() == user) {
+			return it;
+		}
+	}
+	return _userList.end();
+}
+
 // ---------------------------------------------------- //
 // -------------------- EXCEPTIONS -------------------- //
 // ---------------------------------------------------- //

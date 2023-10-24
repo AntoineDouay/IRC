@@ -34,6 +34,7 @@ public :
 	void addUser(const User& who, const User& newUser, string key);
 	void addInvitedUser (const User& invited);
 	void deleteUser(User who, User targetUser);
+	void deleteUser(const string& nickTarget);
 //	void inviteUser(User who, User targetUser);
 //	void kickUser(User who, User targetUser);
 	void setTopic(User who, string newTopic);
@@ -86,7 +87,7 @@ private:
 	bool _topicRestrictionOn;
 
 	vector<User>::iterator findUser(const User& user);
-
+	vector<User>::iterator findUser(const string& user);
 	Server				*_serv;
 };
 
