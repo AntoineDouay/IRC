@@ -273,7 +273,7 @@ void Commands::PRIVMSG()
 				servername = recipent.substr(found + 1);
 		}
 		preMessage = ":" + _user->getNickname() + " PRIVMSG ";
-		if (nick == "BOT")
+		if (nick == "bot")
 			handleBot(_parameters[1]);
 		else
 			handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
