@@ -82,7 +82,7 @@ void Commands::handleBot(const std::string &message)
 		escapeSpecialChars(temp);
 		std::string data = "{\"message\": \"" + temp + "\"}";
 		//"{\"message\": \"Suddenly he fell through deep well\"}"
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
 		struct curl_slist *headers = NULL;
 		headers = curl_slist_append(headers, "Content-Type: application/json");
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
