@@ -96,8 +96,9 @@ void Commands::handleBot(const std::string &message)
 		if (res == CURLE_OK)
 		{
 			std::cout << "-------CURL---------" << std::endl;
-			std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :" + readBuffer + "\r\n");
-			std::cout << jfdk314 << std::endl;
+			std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :" + readBuffer);
+			escapeSpecialChars(jfdk314);
+			jfdk314 += "\r\n";
 			send(_user->getFD(), jfdk314.c_str(), jfdk314.size(), 0);
 		}
 		curl_easy_cleanup(curl);
