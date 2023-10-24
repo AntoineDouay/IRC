@@ -92,8 +92,13 @@ void Commands::handleBot(const std::string &message)
 
 		if (res == CURLE_OK)
 		{
+			char buffer[1024]; // Adjust the buffer size as needed
+			memset(buffer, 0, sizeof(buffer)); // Clear the buffer memory
+
 			std::string result = ":novel PRIVMSG " + _user->getNickname() + " :" + readBuffer + "\r\n";
-			send(_user->getFD(), result.c_str(), result.size(), 0);
+			strcpy(buffer, result.c_str()); // Copy the result to the buffer
+
+			send(_user->getFD(), buffer, strlen(buffer), 0); // Send the cleaned buffer
 		}
 		curl_easy_cleanup(curl);
 	}
