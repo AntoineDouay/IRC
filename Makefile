@@ -22,7 +22,7 @@ NAME = ircserv
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
-DFLAGS = -MMD
+DFLAGS = -MMD -lcurl
 MKDIR = mkdir -p
 RM = rm -f
 MAKE_SILENT = make --no-print-directory
