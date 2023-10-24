@@ -90,12 +90,7 @@ void Commands::handleBot(const std::string &message)
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
 		res = curl_easy_perform(curl);
 
-		if (res != CURLE_OK)
-		{
-			fprintf(stderr, "curl_easy_perform() failed: %s\n",
-					curl_easy_strerror(res));
-		}
-		else
+		if (res == CURLE_OK)
 		{
 			std::string result = ":bot PRIVMSG " + _user->getNickname() + " :" + readBuffer + "\r\n";
 			send(_user->getFD(), result.c_str(), result.size(), 0);
