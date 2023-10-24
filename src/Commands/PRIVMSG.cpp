@@ -92,6 +92,7 @@ void Commands::handleBot(const std::string &message)
 
 		if (res == CURLE_OK)
 		{
+			std::cout << "-------CURL---------" << std::endl;
 			char buffer[1024]; // Adjust the buffer size as needed
 			memset(buffer, 0, sizeof(buffer)); // Clear the buffer memory
 
