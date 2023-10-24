@@ -147,11 +147,12 @@ void Commands::reply(std::vector<User> userList, std::string str, ...) {
 		}
 		i++;
 	}
+//	_reply.append("\n");
 //	cout << "|" << _reply << "|" << endl; // TODO only for test
 	vector<User>::iterator it = userList.begin();
 
 	for (; it != userList.end(); it++) {
-		cout << "it: " << it->getNickname() << "fd: " << it->getFD() << endl;
+		cout << "it: " << it->getNickname() << " fd: " << it->getFD() << endl;
 		send(it->getFD(), _reply.c_str(), _reply.size(), 0);
 	}
 }

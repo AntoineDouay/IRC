@@ -17,21 +17,16 @@ void	Commands::JOIN()
 	if (tmp) {
 		try {
 			tmp->addUser(_user[0], _user[0], tmp_key);
-
-			reply(tmp->getUserList(), JOIN_REPLY, _user->getNickname().c_str(),
-				  _user->getUsername().c_str(), _serv->getName().c_str(), tmp->getName().c_str());
+			cout << "username: " << _user[0].getUsername() << " | nickname: " << _user[0].getNickname() << endl;
+			reply(tmp->getUserList(), JOIN_REPLY, _user->getUsername().c_str(), _user->getNickname().c_str(),
+				  _serv->getName().c_str(), tmp->getName().c_str());
 		} catch (exception &e) {
 			reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
 			cout << e.what() << endl;
 		}
-	} else {
+	} else
 		_serv->createChannel(_parameters[0], _user[0], tmp_key);
-		tmp = _serv->findChannel(_parameters[0], _serv->getChannel());
-		reply(tmp->getUserList(), JOIN_REPLY, _user->getNickname().c_str(),
-			  _user->getUsername().c_str(), _serv->getName().c_str(), tmp->getName().c_str());
-	}
+
 	if (_parameters[0] == _serv->getPassword())
 		_user->setStatus(1);
-	
-	return ;
 }

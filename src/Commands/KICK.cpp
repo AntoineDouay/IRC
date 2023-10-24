@@ -9,6 +9,11 @@ void Commands::KICK() {
 
 	Channel *channelTarget = _serv->findChannel(_parameters[0], _serv->getChannel());
 
-	reply(channelTarget->getUserList(), KICK_REPLY, _user->getNickname().c_str(),
+	if (!channelTarget->isInChannel(_parameters[1])) {
+		reply(ERR_USERNOTINCHANNEL, _parameters[1].c_str(), _parameters[1].c_str(),"not in the channel");
+		return;
+	}
+	
+	reply(channelTarget->getUserList(), KICK_REPLY, _serv->getName().c_str(),
 		  _parameters[0].c_str(), _parameters[1].c_str(), _parameters[2].c_str());
 }
