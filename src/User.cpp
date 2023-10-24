@@ -7,7 +7,8 @@ User::User(int fd, struct sockaddr_in adress, Server * serv) : _fd(fd), _address
 	(void)_address;
 	_nickname = "";
 	_username = "";
-	_is_oper = false;
+	_last_ping = time(NULL);
+	_last_time_active = time(NULL);
 	(void)_serv;
 }
 
@@ -34,13 +35,6 @@ std::string	User::getHostName() const
 	return inet_ntoa(_address.sin_addr);
 }
 
-
-
-void	User::setIsOper()
-{
-	_is_oper = true;
-}
-
 void	User::setStatus(int status)
 {
 	_status = static_cast<Status>(status);
@@ -53,5 +47,24 @@ void	User::setNickname(std::string str)
 void	User::setUsername(std::string str)
 {
 	_username = str;
+}
 
+time_t	User::getLastActivity() const
+{
+	return _last_time_active;
+}
+
+time_t	User::getLastPing() const
+{
+	return _last_ping;
+}
+
+void 	User::setLastActivity()
+{
+	_last_time_active = time(NULL);
+}
+
+void 	User::setLastPing()
+{
+	_last_ping = time(NULL);
 }

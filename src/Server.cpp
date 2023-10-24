@@ -20,15 +20,18 @@ void	Server::init()
 		return ;
 	}
 
+	fcntl(_server_fd, F_SETFL, O_NONBLOCK);
+
 	struct sockaddr_in	address;
 	address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(_port);
+	memset(&(address.sin_zero), '\0', 8);
 
 	if (bind(_server_fd, (struct sockaddr*)&address, sizeof(address)) < 0)
 		return ;
 
-	if (listen(_server_fd, 10) < 0)
+	if (listen(_server_fd, address.sin_port) < 0)
 		return ;
 	
 	_p_fds.push_back(pollfd());
@@ -44,7 +47,7 @@ void	Server::run()
 {
 	while (42)
 	{
-		if (poll(&_p_fds[0], _p_fds.size(), 6000) == -1)
+		if (poll(&_p_fds[0], _p_fds.size(), 600) == -1)
 		return;
 
 		if (_p_fds[0].revents == POLLIN)
@@ -53,16 +56,15 @@ void	Server::run()
 		{
 			for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); ++it)
 				if((*it).revents == POLLIN)
-				{
 					receive(_users[(*it).fd]);
-				}
-
-			std::vector<User *> v_users = getUsers();
-			for (std::vector<User *>::iterator it = v_users.begin(); it != v_users.end(); it++)
-				if ((*it)->getStatus() == DELETE)
-					delUser(*it);
-
 		}
+
+		pingUser();
+
+		std::vector<User *> v_users = getUsers();
+		for (std::vector<User *>::iterator it = v_users.begin(); it != v_users.end(); it++)
+			if ((*it)->getStatus() == DELETE)
+				delUser(*it);
 	}
 }
 
@@ -92,6 +94,8 @@ void	Server::delUser(User * user)
 	if (it != _users.end())
 	{
 		_users.erase(it);
+		std::string msg(_server_name + ": you have been disconnected for inactivity\r\n");
+		send(user->getFD(), msg.c_str(), msg.size(), 0);
 		close(user->getFD());
 	}
 
@@ -104,8 +108,8 @@ void	Server::delUser(User * user)
 		}
 	}
 	close(user->getFD());
-
 	delete user;
+	printUserList();
 }
 
 void	Server::receive(User * user)
@@ -118,12 +122,13 @@ void	Server::receive(User * user)
 	if (n < 0)
 		return ; //error to manage
 
-	// if (!n)
-	// {
-	// 	user->setStatus(3); // normal shutdown of ending socket -> status = DELETE
-	// 	return ;
-	// }
-
+	if (!n)
+	{
+		user->setStatus(3); // normal shutdown of ending socket -> status = DELETE
+		return ;
+	}
+	user->setLastActivity();
+	user->setLastPing();
 	buffer[n] = '\0';
 	std::string buf = buffer;
 	std::string delimiter("\n");
@@ -137,6 +142,34 @@ void	Server::receive(User * user)
 		cmd.execute();
 		buf.erase(0 , pos + delimiter.size());
 	}
+}
+
+void	Server::pingUser()
+{
+	std::vector<User *> users = getUsers();
+
+	for (std::vector<User *>::iterator it = users.begin(); it != users.end(); it++)
+	{
+		if (time(NULL) - (*it)->getLastActivity() >= TIME_OUT)
+			(*it)->setStatus(3);
+		else if (time(NULL) - (*it)->getLastPing() >= SERV_PING)
+		{
+			std::string msg("PING :" + _server_name);
+			send((*it)->getFD(), msg.c_str(), msg.size(), 0);
+			(*it)->setLastPing();
+		}
+	}
+}
+
+void	Server::printUserList()
+{
+	std::map<int, User *>::iterator it = _users.begin();
+	std::cout << "--- User List ---\n";
+	for (;it != _users.end(); it++)
+	{
+		std::cout << it->second->getNickname() << std::endl;
+	}
+	std::cout << "-----------------\n";
 }
 
 std::string	Server::getPassword()
@@ -159,6 +192,17 @@ std::vector<User *>	Server::getUsers()
 		cli.push_back(it->second);
 
 	return (cli);
+}
+
+User *Server::getOneUser(std::string nickname)
+{
+	std::vector<User *>	cli = getUsers();
+
+	std::vector<User *>::iterator it = cli.begin();
+	for(; it != cli.end(); it++)
+		if ((*it)->getNickname() == nickname)
+			return *it;
+	return (NULL);
 }
 
 void Server::createChannel(const std::string &name, const User &who, std::string key) {

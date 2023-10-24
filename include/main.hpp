@@ -15,14 +15,19 @@
 #include <signal.h>
 #include <poll.h>
 #include <fcntl.h>
+#include <stdlib.h>
+#include <stdarg.h>
 
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <iterator>
 #include <vector>
 #include <map>
 #include <ctime>
 #include <climits>
+#include <fstream>
+
 
 #include "Server.hpp"
 #include "User.hpp"

@@ -41,11 +41,11 @@ class Commands{
 	// void	KILL();
 	// void	PART();
 	// void	TOPIC();
-	// void	INVITE();
+	void	INVITE();
 	// void	NAMES();
 	// void	NOTICE();
 	// void	LIST();
-	// void	PRIVMSG();
+	void	PRIVMSG();
 	// void	WALLOPS();
 	void	OPER();
 	void	QUIT();
@@ -58,6 +58,15 @@ class Commands{
 	void	reply(std::string str, ...);
 	void	reply(std::vector<User> userList, std::string str, ...);
 	void	kick_reply(std::string serverName, std::string channel, std::string target, std::string reason);
+
+	// Private msg helpers
+	void	handleSinglePrivMSG(Server *server, std::string &preMessage,
+				const std::string &message,
+				const std::string &nick, const std::string &username,
+				const std::string &hostname);
+	void	handleChannelMSG(Server *server, User *user,
+				const std::string &name, std::string &message);
+
 
 };
 
