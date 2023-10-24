@@ -17,38 +17,41 @@
 //     }
 // }
 //
-void escapeSpecialChars(std::string &input) {
-    std::string output;
-    for (size_t i = 0; i < input.size(); i++) {
-	char c = input[i];
-        switch (c) {
-            case '\"':
-                output += "\\\"";
-                break;
-            case '\\':
-                output += "\\\\";
-                break;
-            case '\b':
-                output += "\\b";
-                break;
-            case '\f':
-                output += "\\f";
-                break;
-            case '\n':
-                output += "\\n";
-                break;
-            case '\r':
-                output += "\\r";
-                break;
-            case '\t':
-                output += "\\t";
-                break;
-            default:
-                output += c;
-                break;
-        }
-    }
-    input = output;
+void escapeSpecialChars(std::string &input)
+{
+	std::string output;
+	for (size_t i = 0; i < input.size(); i++)
+	{
+		char c = input[i];
+		switch (c)
+		{
+		case '\"':
+			output += "\\\"";
+			break;
+		case '\\':
+			output += "\\\\";
+			break;
+		case '\b':
+			output += "\\b";
+			break;
+		case '\f':
+			output += "\\f";
+			break;
+		case '\n':
+			output += "\\n";
+			break;
+		case '\r':
+			output += "\\r";
+			break;
+		case '\t':
+			output += "\\t";
+			break;
+		default:
+			output += c;
+			break;
+		}
+	}
+	input = output;
 }
 
 // Callback function to write the result to a string
@@ -93,13 +96,9 @@ void Commands::handleBot(const std::string &message)
 		if (res == CURLE_OK)
 		{
 			std::cout << "-------CURL---------" << std::endl;
-			char buffer[1024]; // Adjust the buffer size as needed
-			memset(buffer, 0, sizeof(buffer)); // Clear the buffer memory
-
-			std::string result = ":novel PRIVMSG " + _user->getNickname() + " :" + readBuffer + "\r\n";
-			strcpy(buffer, result.c_str()); // Copy the result to the buffer
-
-			send(_user->getFD(), buffer, strlen(buffer), 0); // Send the cleaned buffer
+			std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :" + readBuffer + "\r\n");
+			std::cout << jfdk314 << std::endl;
+			send(_user->getFD(), jfdk314.c_str(), jfdk314.size(), 0);
 		}
 		curl_easy_cleanup(curl);
 	}
