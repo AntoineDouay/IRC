@@ -40,7 +40,7 @@ class Commands{
 
 	// void	KILL();
 	// void	PART();
-	// void	TOPIC();
+	void	TOPIC();
 	void	INVITE();
 	// void	NAMES();
 	// void	NOTICE();

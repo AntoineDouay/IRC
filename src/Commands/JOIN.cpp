@@ -17,11 +17,11 @@ void	Commands::JOIN()
 	if (tmp) {
 		try {
 			if (tmp->getInviteRestrictionOn())
-				return reply (ERR_INVITEONLYCHAN, tmp->getName().c_str(), "has invite only restriction");
-			
-			// need to check in invited userlist;
-			
+				if (!tmp->isInvited(_user))
+					return reply (ERR_INVITEONLYCHAN, tmp->getName().c_str(), "has invite only restriction");
+
 			tmp->addUser(_user[0], _user[0], tmp_key);
+
 			// cout << "username: " << _user[0].getUsername() << " | nickname: " << _user[0].getNickname() << endl;
 			reply(tmp->getUserList(), JOIN_REPLY, _user->getUsername().c_str(), _user->getNickname().c_str(),
 				  _serv->getName().c_str(), tmp->getName().c_str());
