@@ -131,11 +131,16 @@ void	Commands::reply(std::string str, ...)
 
 void Commands::reply(std::vector<User> userList, std::string str, ...) {
 	va_list		vl;
-	va_start(vl, str);
+		std::string nick(_user->getNickname());
 
-	std::string _reply;
-	int i = 1;
-	_reply.append(":");
+	if (nick == "")
+		nick = "*";
+
+	std::string	_reply(":" + _serv->getName() + " " + str.substr(0, 4) + nick + " ");
+	
+	int i = 4;
+
+	va_start(vl, str);
 
 	while(str[i])
 	{
@@ -154,7 +159,7 @@ void Commands::reply(std::vector<User> userList, std::string str, ...) {
 	vector<User>::iterator it = userList.begin();
 
 	for (; it != userList.end(); it++) {
-		cout << "it: " << it->getNickname() << " fd: " << it->getFD() << endl;
+		// cout << "it: " << it->getNickname() << " fd: " << it->getFD() << endl;
 		send(it->getFD(), _reply.c_str(), _reply.size(), 0);
 	}
 }

@@ -13,7 +13,6 @@ void	mode_i(User &user, Channel &chan, int sign)
 	{
 		std::cout << e.what() << std::endl;
 	}
-	//std::cout << chan.getInviteRestrictionOn() << std::endl;
 }
 
 void	mode_te(User &user, Channel &chan, int sign)
@@ -32,7 +31,7 @@ void	mode_te(User &user, Channel &chan, int sign)
 	//std::cout << chan.getTopicRestrictionOn() << std::endl;
 }
 
-void	mode_l(User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
+void	mode_l(Commands &cmd, User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
 {
 	if (parameters[2].size() == 0)
 		return;
@@ -59,7 +58,7 @@ void	mode_l(User &user, std::vector<std::string> &parameters, Channel &chan, int
 
 	if (sign)
 		chan.setMaxUsers(user, n);
-
+	cmd.reply(chan.getUserList(), RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), parameters[2].c_str());
 	//std::cout << chan.getMaxUser() << std::endl;
 }
 
@@ -160,7 +159,7 @@ void	Commands::MODE()
 		}
 		case 'l':
 		{
-			mode_l(*_user, _parameters, *(chan[i]), sign);
+			mode_l(*this ,*_user, _parameters, *(chan[i]), sign);
 			break;
 		};
 		default:

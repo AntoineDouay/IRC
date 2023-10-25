@@ -40,13 +40,13 @@ void	Commands::TOPIC()
 			return reply(ERR_CHANOPRIVSNEEDED, _parameters[0].c_str(), "need operator rights");
 	// std::cout << "pass +t not oper\n";
 
-	if (_parameters.size() < 2)
-		return reply(RPL_NOTOPIC, chan->getName().c_str(), chan->getTopic().c_str());
-	else
-		{
-			chan->setTopic(*_user, _parameters[1]);
-			return reply (RPL_TOPIC, chan->getName().c_str(), chan->getTopic().c_str());
-		}
+	if (_parameters.size() > 2)
+		chan->setTopic(*_user, _parameters[1]);
+
+	if (chan->getTopic().empty())
+		return reply(chan->getUserList(), RPL_NOTOPIC, chan->getName().c_str(), "no topic");
+		
+	return reply (chan->getUserList(), RPL_TOPIC, chan->getName().c_str(), chan->getTopic().c_str());
 
 }		
 

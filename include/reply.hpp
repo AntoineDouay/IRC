@@ -25,8 +25,11 @@
 # define RPL_YOUREOPER "381 :<info>\r\n"
 # define ERR_PASSWDMISMATCH	"464 :<reason>\r\n"
 
+//FOR MODE
 # define ERR_UNKNOWNMODE "472 <char> :<reason>\r\n"
-# define ERR_USERSDONTMATCH " 502 :<reason>\r\n" // MODE
+# define ERR_USERSDONTMATCH "502 :<reason>\r\n" 
+# define RPL_CHANNELMODEIS	"324 <channel> <mode> <mode_params>\r\n"
+
 
 # define ERR_BADCHANNELKEY "475 <channel> :Bad channel key\r\n"
 
