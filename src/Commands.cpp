@@ -19,6 +19,7 @@ void	Commands::init_func_map()
 	_func.insert(std::make_pair("NICK", &Commands::NICK));
 	_func.insert(std::make_pair("JOIN", &Commands::JOIN));
 	_func.insert(std::make_pair("PING", &Commands::PING));
+	_func.insert(std::make_pair("PONG", &Commands::PONG));
 	_func.insert(std::make_pair("WHOIS", &Commands::WHOIS));
 	_func.insert(std::make_pair("OPER", &Commands::OPER));
 	_func.insert(std::make_pair("PRIVMSG", &Commands::PRIVMSG));
