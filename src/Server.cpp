@@ -33,7 +33,7 @@ void	Server::init()
 
 	if (listen(_server_fd, address.sin_port) < 0)
 		return ;
-	
+
 	_p_fds.push_back(pollfd());
 	_p_fds.back().fd = _server_fd;
 	_p_fds.back().events = POLLIN;
@@ -76,7 +76,7 @@ void	Server::acceptUser()
 
 	if ((user_fd = accept(_p_fds[0].fd, (struct sockaddr *)&address, &len)) == -1)
 		return ;
-	
+
 	_users[user_fd] = new User(user_fd, address, this);
 
 	_p_fds.push_back(pollfd());
@@ -134,6 +134,17 @@ void	Server::receive(User * user)
 	std::string delimiter("\n");
 	size_t pos;
 
+	std::cout << "------PARSER: " << std::endl;
+	for (size_t m = 0; m < buf.size(); m++)
+	{
+		if (buf[m] == '\n')
+			std::cout << "\\n";
+		else if (buf[m] == '\r')
+			std::cout << "\\r";
+		else
+			std::cout << buf[m];
+	}
+	std::cout << std::endl;
 	while ((pos = buf.find(delimiter)) != std::string::npos)
 	{
 		std::string str = buf.substr(0, pos);
