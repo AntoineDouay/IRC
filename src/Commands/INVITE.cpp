@@ -59,7 +59,7 @@ void	Commands::INVITE()
 
 	if (chan->getInviteRestrictionOn())
 		if (!userIsOper)
-			return reply(ERR_CHANOPRIVSNEEDED, chan->getName().c_str(), "need operator rights");
+			return ;//reply(ERR_CHANOPRIVSNEEDED, chan->getName().c_str(), "need operator rights");
 
 	// std::cout << "oper err pass\n";
 	reply(RPL_INVITING, _parameters[0].c_str(), _parameters[1].c_str());

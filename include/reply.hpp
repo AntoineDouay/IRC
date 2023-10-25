@@ -49,9 +49,10 @@
 # define ERR_NOSUCHNICK "401 <nick> :<reason>\r\n"
 # define ERR_NOTONCHANNEL "442 <channel> :<reason>\r\n"
 # define ERR_USERONCHANNEL "443 <nick> <channel> :<reason>\r\n"
+# define ERR_NOPRIVILEGES "481 :<reason>\r\n"
 # define ERR_CHANOPRIVSNEEDED "482 <channel> :<reason>\r\n"
 # define RPL_INVITING "341 <nick> <channel>\r\n"
 
 //topic
 # define RPL_NOTOPIC "331 <channel> :<info>\r\n"
-# define RPL_TOPIC "332 <channel> :<topic>\r\n"
+# define RPL_TOPIC "332 <channel> :<topic>\n"

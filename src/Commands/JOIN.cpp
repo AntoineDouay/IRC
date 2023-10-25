@@ -30,7 +30,7 @@ void	Commands::JOIN()
 			for (; it != userList.end(); it++) {
 				send(it->getFD(), output.c_str(), output.size(), 0);
 			}
-		} catch (exception &e) {
+		} catch (std::exception &e) {
 			reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
 			cout << e.what() << endl;
 		}
