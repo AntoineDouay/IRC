@@ -58,21 +58,21 @@ void	Commands::parse_cmd(const std::string &instruction)
 	}
 	if (trailing.size() > 0)
 		_parameters.push_back(trailing);
-	// std::cout << "Parsing test --------------------------------";
-	// for (size_t i = 0; i < _parameters.size(); i++)
-	// {
-	// 	std::cout << _parameters[i] << std::endl;
-	// 	for (size_t m = 0; m < _parameters[i].size(); m++)
-	// 	{
-	// 		if (_parameters[i][m] == '\n')
-	// 			std::cout << "\\n" << std::endl;
-	// 		else if (_parameters[i][m] == '\r')
-	// 			std::cout << "\\r" << std::endl;
-	// 		else
-	// 			std::cout << _parameters[i][m] << std::endl;
-	// 	}
-	// 	std::cout << std::endl;
-	// }
+	std::cout << "Parsing test --------------------------------";
+	for (size_t i = 0; i < _parameters.size(); i++)
+	{
+		std::cout << _parameters[i] << std::endl;
+		for (size_t m = 0; m < _parameters[i].size(); m++)
+		{
+			if (_parameters[i][m] == '\n')
+				std::cout << "\\n" << std::endl;
+			else if (_parameters[i][m] == '\r')
+				std::cout << "\\r" << std::endl;
+			else
+				std::cout << _parameters[i][m] << std::endl;
+		}
+		std::cout << std::endl;
+	}
 }
 
 bool	Commands::hasCrlf(const std::string &instruction)
