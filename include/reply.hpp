@@ -6,8 +6,9 @@
 # define RPL_YOURHOST "002 :Your host is <servername>, running version <version>\r\n"
 # define RPL_CREATED "003 :This server was created <date>\r\n"
 # define RPL_MYINFO	"004 <server_name> <version> <user_modes> <chan_modes>\r\n"
+# define JOIN_REPLY ":<username>!<nickname>@<servername> JOIN <channel>\n"
+# define KICK_REPLY "606 KICK <channel> <target> <reason>\n"
 
-# define KICK_REPLY "606 KICK <channel> <target> <reason>"
 
 /*  ---- ERR ----- */
 
