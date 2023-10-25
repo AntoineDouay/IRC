@@ -7,6 +7,7 @@ User::User(int fd, struct sockaddr_in adress, Server * serv) : _fd(fd), _address
 	(void)_address;
 	_nickname = "";
 	_username = "";
+	_status = NO_PASSWORD;
 	_last_ping = time(NULL);
 	_last_time_active = time(NULL);
 	(void)_serv;

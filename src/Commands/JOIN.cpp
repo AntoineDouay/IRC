@@ -17,20 +17,14 @@ void	Commands::JOIN()
 	if (tmp) {
 		try {
 			if (tmp->getInviteRestrictionOn())
-				return reply (ERR_INVITEONLYCHAN, tmp->getName().c_str(), "has invite only restriction");
-			
-			// need to check in invited userlist;
-			
-			tmp->addUser(_user[0], _user[0], tmp_key);
-			string output = ":";
+				if (!tmp->isInvited(_user))
+					return reply (ERR_INVITEONLYCHAN, tmp->getName().c_str(), "has invite only restriction");
 
-			output.append(_user->getUsername() + "!" + _user->getNickname() + "@" + _serv->getName() + " JOIN " + tmp->getName() + "\r\n");
-			cout << "output: " << output << endl;
-			vector<User> userList = tmp->getUserList();
-			vector<User>::iterator it = userList.begin();
-			for (; it != userList.end(); it++) {
-				send(it->getFD(), output.c_str(), output.size(), 0);
-			}
+			tmp->addUser(_user[0], _user[0], tmp_key);
+
+			// cout << "username: " << _user[0].getUsername() << " | nickname: " << _user[0].getNickname() << endl;
+			reply(tmp->getUserList(), JOIN_REPLY, _user->getUsername().c_str(), _user->getNickname().c_str(),
+				  _serv->getName().c_str(), tmp->getName().c_str());
 		} catch (exception &e) {
 			reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
 			cout << e.what() << endl;
@@ -40,6 +34,4 @@ void	Commands::JOIN()
 
 	if (_parameters[0] == _serv->getPassword())
 		_user->setStatus(1);
-	
-	return ;
 }

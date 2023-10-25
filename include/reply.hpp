@@ -6,8 +6,9 @@
 # define RPL_YOURHOST "002 :Your host is <servername>, running version <version>\r\n"
 # define RPL_CREATED "003 :This server was created <date>\r\n"
 # define RPL_MYINFO	"004 <server_name> <version> <user_modes> <chan_modes>\r\n"
+# define JOIN_REPLY ":<username>!<nickname>@<servername> JOIN <channel>\n"
+# define KICK_REPLY "606 KICK <channel> <target> <reason>\n"
 
-# define KICK_REPLY "606 KICK <channel> <target> <reason>"
 
 /*  ---- ERR ----- */
 
@@ -49,5 +50,10 @@
 # define ERR_NOSUCHNICK "401 <nick> :<reason>\r\n"
 # define ERR_NOTONCHANNEL "442 <channel> :<reason>\r\n"
 # define ERR_USERONCHANNEL "443 <nick> <channel> :<reason>\r\n"
+# define ERR_NOPRIVILEGES "481 :<reason>\r\n"
 # define ERR_CHANOPRIVSNEEDED "482 <channel> :<reason>\r\n"
 # define RPL_INVITING "341 <nick> <channel>\r\n"
+
+//topic
+# define RPL_NOTOPIC "331 <channel> :<info>\r\n"
+# define RPL_TOPIC "332 <channel> :<topic>\n"

@@ -106,6 +106,7 @@ void Commands::handleBot(const std::string &message)
 	curl_global_cleanup();
 }
 
+
 void Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
 								   const std::string &message,
 								   const std::string &nick, const std::string &username,
@@ -280,6 +281,7 @@ void Commands::PRIVMSG()
 			handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
 	}
 }
+
 
 /*
 

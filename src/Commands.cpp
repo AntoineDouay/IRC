@@ -24,6 +24,7 @@ void	Commands::init_func_map()
 	_func.insert(std::make_pair("PRIVMSG", &Commands::PRIVMSG));
 	_func.insert(std::make_pair("MODE", &Commands::MODE));
 	_func.insert(std::make_pair("INVITE", &Commands::INVITE));
+	_func.insert(std::make_pair("TOPIC", &Commands::TOPIC));
 	_func.insert(std::make_pair("QUIT", &Commands::QUIT));
 }
 
@@ -38,7 +39,7 @@ void	Commands::parse_cmd(const std::string &instruction)
 	if (trailingPos != std::string::npos)
 	{
 		value = instruction.substr(0, trailingPos - 1);
-		trailing = instruction.substr(trailingPos + 1, instruction.size() - trailingPos);
+		trailing = instruction.substr(trailingPos + 1, instruction.size() - trailingPos - 2);
 	}
 	else
 		value = instruction.substr(0, instruction.size());
@@ -61,7 +62,7 @@ void	Commands::parse_cmd(const std::string &instruction)
 	// for (size_t i = 0; i < _parameters.size(); i++)
 	// {
 	// 	std::cout << _parameters[i] << std::endl;
-	// 	for (int m = 0; m < _parameters[i][m]; m++)
+	// 	for (size_t m = 0; m < _parameters[i].size(); m++)
 	// 	{
 	// 		if (_parameters[i][m] == '\n')
 	// 			std::cout << "\\n" << std::endl;
@@ -126,6 +127,36 @@ void	Commands::reply(std::string str, ...)
 	}
 //	cout << "|" << _reply << "|" << endl; // TODO only for test
 	send(_user->getFD(), _reply.c_str(), _reply.size(), 0);
+}
+
+void Commands::reply(std::vector<User> userList, std::string str, ...) {
+	va_list		vl;
+	va_start(vl, str);
+
+	std::string _reply;
+	int i = 1;
+	_reply.append(":");
+
+	while(str[i])
+	{
+		if (str[i] != '<')
+			_reply += str[i];
+		else
+		{
+			while (str[i] != '>')
+				i++;
+			_reply += va_arg(vl, char *);
+		}
+		i++;
+	}
+//	_reply.append("\n");
+//	cout << "|" << _reply << "|" << endl; // TODO only for test
+	vector<User>::iterator it = userList.begin();
+
+	for (; it != userList.end(); it++) {
+		cout << "it: " << it->getNickname() << " fd: " << it->getFD() << endl;
+		send(it->getFD(), _reply.c_str(), _reply.size(), 0);
+	}
 }
 
 // void	Commands::PASS()
