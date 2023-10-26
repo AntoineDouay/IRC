@@ -6,7 +6,7 @@ void	Commands::PONG()
     // // if (_parameters.size() == 0)
     // //     return reply (ERR_NOORIGIN, "need server_name as parameter");
 
-    // std::string msg = ":";
+	// std::string msg = ":";
     // if (_parameters.size() == 0)
     //     msg += _user->getNickname() + " PING :\r\n";
     // else

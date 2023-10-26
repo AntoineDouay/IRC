@@ -33,7 +33,7 @@ void	Server::init()
 
 	if (listen(_server_fd, address.sin_port) < 0)
 		return ;
-	
+
 	_p_fds.push_back(pollfd());
 	_p_fds.back().fd = _server_fd;
 	_p_fds.back().events = POLLIN;
@@ -50,17 +50,16 @@ void	Server::run()
 		if (poll(&_p_fds[0], _p_fds.size(), 600) == -1)
 		return;
 
-		if (_p_fds[0].revents == POLLIN)
-			acceptUser();
-		else
+		for (size_t i = 0; i < _p_fds.size(); i++)
 		{
-			for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); ++it)
-				if((*it).revents == POLLIN)
-					receive(_users[(*it).fd]);
+			if (_p_fds[i].revents & POLLIN) {
+				if (_p_fds[i].fd == _server_fd)
+					acceptUser();
+				else
+					receive(_users[_p_fds[i].fd]);
+			}
 		}
-
 		pingUser();
-
 		std::vector<User *> v_users = getUsers();
 		for (std::vector<User *>::iterator it = v_users.begin(); it != v_users.end(); it++)
 			if ((*it)->getStatus() == DELETE)
@@ -76,7 +75,7 @@ void	Server::acceptUser()
 
 	if ((user_fd = accept(_p_fds[0].fd, (struct sockaddr *)&address, &len)) == -1)
 		return ;
-	
+
 	_users[user_fd] = new User(user_fd, address, this);
 
 	_p_fds.push_back(pollfd());
@@ -114,9 +113,9 @@ void	Server::delUser(User * user)
 
 void	Server::receive(User * user)
 {
-	char buffer[1024];
+	char buffer[1024] = {0};
 
-
+	memset(buffer, 0, 1024);
 	int n = recv(user->getFD(), buffer, sizeof(buffer), 0);
 
 	if (n < 0)
@@ -131,6 +130,17 @@ void	Server::receive(User * user)
 	user->setLastPing();
 	buffer[n] = '\0';
 	std::string buf = buffer;
+	std::cout << "----BUFFER-----" << std::endl;
+	for (size_t i = 0; i < buf.size(); i++) {
+		if (buf[i] == '\n')
+			std::cout << "\\n";
+		else if (buf[i] == '\r')
+			std::cout << "\\r";
+		else
+			std::cout << buf[i];
+	}
+	std::cout << endl;
+	// std::cout << buf << std::endl;
 	std::string delimiter("\n");
 	size_t pos;
 
@@ -154,7 +164,7 @@ void	Server::pingUser()
 			(*it)->setStatus(3);
 		else if (time(NULL) - (*it)->getLastPing() >= SERV_PING)
 		{
-			std::string msg("PING :" + _server_name);
+			std::string msg("PING :" + _server_name + "\r\n");
 			send((*it)->getFD(), msg.c_str(), msg.size(), 0);
 			(*it)->setLastPing();
 		}
