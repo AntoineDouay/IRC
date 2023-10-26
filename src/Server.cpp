@@ -33,6 +33,7 @@ void	Server::init()
 
 	if (listen(_server_fd, address.sin_port) < 0)
 		return ;
+
 	
 	_p_fds.push_back(pollfd());
 	_p_fds.back().fd = _server_fd;
@@ -76,8 +77,8 @@ void	Server::acceptUser()
 
 	if ((user_fd = accept(_p_fds[0].fd, (struct sockaddr *)&address, &len)) == -1)
 		return ;
-	
-	_users[user_fd] = new User(user_fd, address, this);
+
+	_users[user_fd] = new User(user_fd, inet_ntoa(address.sin_addr), this);
 
 	_p_fds.push_back(pollfd());
 	_p_fds.back().fd = user_fd;
@@ -235,4 +236,10 @@ User *Server::findUser(const string& targetUser, vector<User *> userList) {
 	}
 	return NULL;
 }
+
+int	Server::getFD()
+{
+	return _server_fd;
+}
+
 

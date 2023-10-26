@@ -33,7 +33,7 @@ class Commands{
 
 	void	MODE();
 	void	PING();
-	//void	PONG();
+	void	PONG();
 	void	JOIN();
 
 	void	KICK();

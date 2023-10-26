@@ -19,6 +19,7 @@ void	Commands::init_func_map()
 	_func.insert(std::make_pair("NICK", &Commands::NICK));
 	_func.insert(std::make_pair("JOIN", &Commands::JOIN));
 	_func.insert(std::make_pair("PING", &Commands::PING));
+	_func.insert(std::make_pair("PONG", &Commands::PONG));
 	_func.insert(std::make_pair("WHOIS", &Commands::WHOIS));
 	_func.insert(std::make_pair("OPER", &Commands::OPER));
 	_func.insert(std::make_pair("PRIVMSG", &Commands::PRIVMSG));
@@ -130,15 +131,12 @@ void	Commands::reply(std::string str, ...)
 }
 
 void Commands::reply(std::vector<User> userList, std::string str, ...) {
-	va_list		vl;
-		std::string nick(_user->getNickname());
-
-	if (nick == "")
-		nick = "*";
-
-	std::string	_reply(":" + _serv->getName() + " " + str.substr(0, 4) + nick + " ");
 	
-	int i = 4;
+	va_list		vl;
+	
+	std::string	_reply;
+	
+	int i = 1;
 
 	va_start(vl, str);
 
@@ -160,7 +158,8 @@ void Commands::reply(std::vector<User> userList, std::string str, ...) {
 
 	for (; it != userList.end(); it++) {
 		// cout << "it: " << it->getNickname() << " fd: " << it->getFD() << endl;
-		send(it->getFD(), _reply.c_str(), _reply.size(), 0);
+		if (it->getFD() != _user->getFD())
+			send(it->getFD(), _reply.c_str(), _reply.size(), 0);
 	}
 }
 

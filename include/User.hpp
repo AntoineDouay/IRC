@@ -20,10 +20,10 @@ class User{
 	private :
 
 	int					_fd;
-	struct sockaddr_in	_address;
 
 	std::string			_nickname;
 	std::string			_username;
+	std::string			_hostname;
 
 	time_t				_last_ping;
 	time_t				_last_time_active;
@@ -34,7 +34,7 @@ class User{
 
 	public :
 
-	User(int fd, struct sockaddr_in adress, Server * serv);
+	User(int fd, std::string hostname, Server * serv);
 
 	int			getFD() const;
 	Status		getStatus() const;

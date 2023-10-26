@@ -151,106 +151,69 @@ const string Channel::getTopic(void) const {
 	return _topic;
 }
 
-void Channel::setChannelPassword(User who, string password)
+void Channel::setChannelPassword(std::string password)
 {
-	if (userIsOper(who))
-		_key = password;
+	_key = password;
 }
 
-void Channel::removeChannelPassword(User who)
+void Channel::removeChannelPassword()
 {
-	if (userIsOper(who))
-		_key = "";
+	_key = "";
 }
 
-void Channel::setInviteRestriction(User who) {
-	if (userIsOper(who))
-	{
-		if (_inviteRestrictionOn == false)
-			_inviteRestrictionOn = true;
-		else 
-			throw CustomErrorMessage("channel already have invite restriction on");
-	}
+void Channel::setInviteRestriction() {
+	if (_inviteRestrictionOn == false)
+		_inviteRestrictionOn = true;
 	else 
-			throw CustomErrorMessage("user is not operator");
+		throw CustomErrorMessage("channel already have invite restriction on");
+
 }
 
-void Channel::removeInviteRestriction(User who) {
-		if (userIsOper(who))
+void Channel::removeInviteRestriction() {
+
+	if (_inviteRestrictionOn == true)
 	{
-		if (_inviteRestrictionOn == true)
-		{
-			_inviteRestrictionOn = false;
-			_invitedUserList.clear();
+		_inviteRestrictionOn = false;
+		_invitedUserList.clear();
+	}
+}
+
+void Channel::setTopicRestriction() {
+	if (_topicRestrictionOn == false)
+		_topicRestrictionOn = true;
+}
+
+void Channel::removeTopicRestriction() {
+	if (_topicRestrictionOn == true)
+		_topicRestrictionOn = false;
+}
+
+void Channel::setOperator(User &target) {
+
+	for (vector<User>::iterator it = _userList.begin(); it != _userList.end(); it++){
+		if (it->getNickname() == target.getNickname()){
+			_operatorList.push_back(target);
+			return;
 		}
-		else 
-			throw CustomErrorMessage("channel already have invite restriction off");
 	}
-	else 
-			throw CustomErrorMessage("user is not operator");
-}
+} // ERR_USERNOTINCHANNEL
 
-void Channel::setTopicRestriction(User who) {
-		if (userIsOper(who))
-	{
-		if (_topicRestrictionOn == false)
-			_topicRestrictionOn = true;
-		else 
-			throw CustomErrorMessage("channel already have topic restriction on");
-	}
-	else 
-			throw CustomErrorMessage("user is not operator");
-}
-
-void Channel::removeTopicRestriction(User who) {
-		if (userIsOper(who))
-	{
-		if (_topicRestrictionOn == true)
-			_topicRestrictionOn = false;
-		else 
-			throw CustomErrorMessage("channel already have topic restriction off");
-	}
-	else 
-			throw CustomErrorMessage("user is not operator");
-}
-
-void Channel::setOperator(User &who, User &target) {
-
-	if (userIsOper(who)) {
-		for (vector<User>::iterator it = _userList.begin(); it != _userList.end(); it++){
-			if (it->getNickname() == target.getNickname()){
-				_operatorList.push_back(target);
-				return;
-			}
+void Channel::removeOperator(User &target) {
+	for (vector<User>::iterator it = _operatorList.begin(); it != _operatorList.end(); it++){
+		if (it->getNickname() == target.getNickname()){
+			_operatorList.erase(it);
+			return;
 		}
-		throw CustomErrorMessage("Error: user is not in the channel");
 	}
-	throw CustomErrorMessage(who.getNickname() + " is not a channel operator");
 }
 
-void Channel::removeOperator(User &who, User &target) {
-
-	if (userIsOper(who)) {
-		for (vector<User>::iterator it = _operatorList.begin(); it != _operatorList.end(); it++){
-			if (it->getNickname() == target.getNickname()){
-				_operatorList.erase(it);
-				return;
-			}
-		}
-		throw CustomErrorMessage("Error: user is already not a operator in the channel");
-	}
-	throw CustomErrorMessage(who.getNickname() + " is not a channel operator");
+void Channel::setMaxUsers(unsigned int sizeMax) {
+	_maxUser = sizeMax;
 }
 
-void Channel::setMaxUsers(User who, unsigned int sizeMax) {
-	if (userIsOper(who))
-		_maxUser = sizeMax;
-}
-
-void Channel::removeMaxUsersRestriction(User who)
+void Channel::removeMaxUsersRestriction()
 {
-	if (userIsOper(who))
-		_maxUser = UINT_MAX;
+	_maxUser = UINT_MAX;
 }
 
 bool Channel::isInChannel(const string &target) {
