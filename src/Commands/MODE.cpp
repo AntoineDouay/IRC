@@ -123,21 +123,20 @@ void	Commands::MODE()
 	if (_parameters.size() < 2)
 		return reply(ERR_NEEDMOREPARAMS);
 
-	// if (_parameters[0] !=_user->getNickname())
-	// 	return reply (ERR_USERSDONTMATCH, "the nickname is not yours"); 
-
 	std::vector<Channel *> chan = _serv->getChannel();
 
 	size_t i = 0;
 	for (; i < chan.size(); i++)
 		if (_parameters[0] == chan[i]->getName())
 			break ;
-	if (i == chan.size()) //pas trouver l'err
+
+	if (i == chan.size())
 		return ;
 
 	if (!chan[i]->userIsOper(*_user))
 		return reply(ERR_CHANOPRIVSNEEDED, chan[i]->getName().c_str(), "you need op rights");
-
+		//kick the user don't know why
+		
 	if (_parameters[1].size() != 0 && (_parameters[1].at(0) != '+' && _parameters[1].at(0) != '-'))
 		return ; //same
 

@@ -13,6 +13,7 @@
 # define TOPIC_CHANGE "::<nickname>!<username>@:<hostname> TOPIC <channel> <topic>\n"
 # define MODE_CHANGE "::<nickname>!<username>@:<hostname> MODE <channel> <mode>\n"
 # define MODE_CHANGE2 "::<nickname>!<username>@:<hostname> MODE <channel> <mode> <param>\n"
+# define NICK_CHANGE "::<nickname>!<username>@:<hostname> NICK <nick>" 
 
 /*  ---- ERR ----- */
 
@@ -59,7 +60,6 @@
 # define ERR_NOTONCHANNEL "442 <channel> :<reason>\r\n"
 # define ERR_USERONCHANNEL "443 <nick> <channel> :<reason>\r\n"
 # define ERR_NOPRIVILEGES "481 :<reason>\r\n"
-# define ERR_CHANOPRIVSNEEDED "482 <channel> :<reason>\r\n"
 # define RPL_INVITING "341 <nick> <channel>\r\n"
 
 //topic

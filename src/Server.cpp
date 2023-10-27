@@ -145,21 +145,21 @@ void	Server::receive(User * user)
 	}
 }
 
-void	Server::pingUser()
+void    Server::pingUser()
 {
-	std::vector<User *> users = getUsers();
+    std::vector<User *> users = getUsers();
 
-	for (std::vector<User *>::iterator it = users.begin(); it != users.end(); it++)
-	{
-		if (time(NULL) - (*it)->getLastActivity() >= TIME_OUT)
-			(*it)->setStatus(3);
-		else if (time(NULL) - (*it)->getLastPing() >= SERV_PING)
-		{
-			std::string msg("PING :" + _server_name);
-			send((*it)->getFD(), msg.c_str(), msg.size(), 0);
-			(*it)->setLastPing();
-		}
-	}
+    for (std::vector<User *>::iterator it = users.begin(); it != users.end(); it++)
+    {
+        if (time(NULL) - (*it)->getLastActivity() >= TIME_OUT)
+            (*it)->setStatus(3);
+        else if (time(NULL) - (*it)->getLastPing() >= SERV_PING)
+        {
+            std::string msg("PING :" + _server_name + "\r\n");
+            send((*it)->getFD(), msg.c_str(), msg.size(), 0);
+            (*it)->setLastPing();
+        }
+    }
 }
 
 void	Server::printUserList()
