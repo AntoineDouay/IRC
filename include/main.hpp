@@ -16,7 +16,7 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <curl/curl.h>
+//#include <curl/curl.h>
 #include <stdarg.h>
 
 #include <iostream>

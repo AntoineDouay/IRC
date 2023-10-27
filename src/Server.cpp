@@ -206,7 +206,7 @@ User *Server::getOneUser(std::string nickname)
 	return (NULL);
 }
 
-void Server::createChannel(const std::string &name, const User &who, std::string key) {
+void Server::createChannel(const std::string &name, User * who, std::string key) {
 	_channels.push_back(new Channel(name, who, key));
 //	for (vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++){
 //		cout << "chan: " << it[0]->getName() << endl;

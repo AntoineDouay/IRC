@@ -21,4 +21,6 @@ void Commands::KICK() {
 	reply(channelTarget->getUserList(), KICK_REPLY,
 		  _parameters[0].c_str(), _parameters[1].c_str(), _parameters[2].c_str());
 	channelTarget->deleteUser(_parameters[1]);
+	User * u = _serv->getOneUser(_parameters[1]);
+	u->removeChannel(channelTarget);
 }

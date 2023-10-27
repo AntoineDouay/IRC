@@ -20,20 +20,17 @@ void	Commands::JOIN()
 				if (!tmp->isInvited(_user))
 					return reply (ERR_INVITEONLYCHAN, tmp->getName().c_str(), "has invite only restriction");
 
-			tmp->addUser(_user[0], _user[0], tmp_key);
-
+			tmp->addUser(_user[0], _user, tmp_key);
+			_user->addChannel(tmp);
 			// cout << "username: " << _user[0].getUsername() << " | nickname: " << _user[0].getNickname() << endl;
-			// std::string msg(":" + _user->getNickname() + "!" + _user->getUsername() + "@"
-			// 	+ _user->getHostName() + " JOIN " + tmp->getName());
-			// send(_user->getFD(), msg.c_str(), msg.size(), 0);
-			reply(tmp->getUserList(),JOIN_WELCOME, _user->getNickname().c_str(), _user->getUsername().c_str(),
+			reply(tmp->getUserList(), true, JOIN_WELCOME, _user->getNickname().c_str(), _user->getUsername().c_str(),
 				  _serv->getName().c_str(), tmp->getName().c_str());
 		} catch (exception &e) {
 			reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
 			cout << e.what() << endl;
 		}
 	} else
-		_serv->createChannel(_parameters[0], _user[0], tmp_key);
+		_serv->createChannel(_parameters[0], _user, tmp_key);
 
 	// if (_parameters[0] == _serv->getPassword())
 	// 	_user->setStatus(1);

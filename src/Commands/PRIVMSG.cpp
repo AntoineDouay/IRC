@@ -69,42 +69,42 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s)
 	return newLength;
 }
 
-void Commands::handleBot(const std::string &message)
-{
-	CURL *curl;
-	CURLcode res;
-	std::string readBuffer;
+// void Commands::handleBot(const std::string &message)
+// {
+// 	CURL *curl;
+// 	CURLcode res;
+// 	std::string readBuffer;
 
-	curl_global_init(CURL_GLOBAL_ALL);
-	curl = curl_easy_init();
+// 	curl_global_init(CURL_GLOBAL_ALL);
+// 	curl = curl_easy_init();
 
-	if (curl)
-	{
-		curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:5001/chat");
-		std::string temp = message;
-		escapeSpecialChars(temp);
-		std::string data = "{\"message\": \"" + temp + "\"}";
-		//"{\"message\": \"Suddenly he fell through deep well\"}"
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
-		struct curl_slist *headers = NULL;
-		headers = curl_slist_append(headers, "Content-Type: application/json");
-		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-		res = curl_easy_perform(curl);
+// 	if (curl)
+// 	{
+// 		curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:5001/chat");
+// 		std::string temp = message;
+// 		escapeSpecialChars(temp);
+// 		std::string data = "{\"message\": \"" + temp + "\"}";
+// 		//"{\"message\": \"Suddenly he fell through deep well\"}"
+// 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+// 		struct curl_slist *headers = NULL;
+// 		headers = curl_slist_append(headers, "Content-Type: application/json");
+// 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+// 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+// 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+// 		res = curl_easy_perform(curl);
 
-		if (res == CURLE_OK)
-		{
-			std::cout << "-------CURL---------" << std::endl;
-			std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :" + readBuffer);
-			escapeSpecialChars(jfdk314);
-			jfdk314 += "\r\n";
-			send(_user->getFD(), jfdk314.c_str(), jfdk314.size(), 0);
-		}
-		curl_easy_cleanup(curl);
-	}
-	curl_global_cleanup();
-}
+// 		if (res == CURLE_OK)
+// 		{
+// 			std::cout << "-------CURL---------" << std::endl;
+// 			std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :" + readBuffer);
+// 			escapeSpecialChars(jfdk314);
+// 			jfdk314 += "\r\n";
+// 			send(_user->getFD(), jfdk314.c_str(), jfdk314.size(), 0);
+// 		}
+// 		curl_easy_cleanup(curl);
+// 	}
+// 	curl_global_cleanup();
+// }
 
 
 void Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
@@ -166,18 +166,18 @@ void Commands::handleChannelMSG(Server *server, User *user,
 		if (channels[i]->getName() == name)
 		{
 			bool isMyChan = false;
-			const std::vector<User> users = channels[i]->getUserList();
+			const std::vector<User *> users = channels[i]->getUserList();
 			for (size_t d = 0; d < users.size(); d++)
 			{
-				if (user->getNickname() == users[d].getNickname())
+				if (user->getNickname() == users[d]->getNickname())
 					isMyChan = true;
 			}
 			for (size_t d = 0; isMyChan && d < users.size(); d++)
 			{
-				if (user->getNickname() != users[d].getNickname())
+				if (user->getNickname() != users[d]->getNickname())
 				{
 					std::string finalMessage = ":" + user->getNickname() + "!" + user->getUsername() + "@" + user->getHostName() + " PRIVMSG " + name + " :" + message + "\r\n";
-					send(users[d].getFD(), finalMessage.c_str(), finalMessage.size(), 0);
+					send(users[d]->getFD(), finalMessage.c_str(), finalMessage.size(), 0);
 				}
 			}
 			if (!isMyChan)
@@ -275,10 +275,10 @@ void Commands::PRIVMSG()
 				servername = recipent.substr(found + 1);
 		}
 		preMessage = ":" + _user->getNickname() + " PRIVMSG ";
-		if (nick == "novel")
-			handleBot(_parameters[1]);
-		else
-			handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
+		// if (nick == "novel")
+		// 	handleBot(_parameters[1]);
+		// else
+		handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
 	}
 }
 

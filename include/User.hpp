@@ -14,6 +14,7 @@ enum Status{
 };
 
 class Server;
+class Channel;
 
 class User{
 
@@ -32,6 +33,7 @@ class User{
 
 	Server				*_serv;
 
+	std::vector<Channel *>	_channels;
 	public :
 
 	User(int fd, std::string hostname, Server * serv);
@@ -43,7 +45,10 @@ class User{
 	std::string	getHostName() const;
 	time_t		getLastActivity() const;
 	time_t		getLastPing() const;
+	std::vector<Channel *>	getChannel() const; 
 
+	void	addChannel(Channel * chan);
+	void	removeChannel(Channel * chan);
 	void	setLastPing();
 	void	setLastActivity();
 	void	setStatus(int status);

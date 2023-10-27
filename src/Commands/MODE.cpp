@@ -10,7 +10,7 @@ void	mode_i(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 	else
 		chan.removeInviteRestriction();
 	cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");
-	cmd.reply(chan.getUserList(),MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
+	cmd.reply(chan.getUserList(), false, MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
 				  serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str());
 }
 
@@ -24,7 +24,7 @@ void	mode_te(Server &serv, Commands &cmd,  User &user, std::vector<std::string> 
 	else
 		chan.removeTopicRestriction();
 	cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");	
-	cmd.reply(chan.getUserList(),MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
+	cmd.reply(chan.getUserList(), false, MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
 				  serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str());
 	//std::cout << chan.getTopicRestrictionOn() << std::endl;
 }
@@ -41,7 +41,7 @@ void	mode_l(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 	{
 		chan.removeMaxUsersRestriction();
 		cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");
-		cmd.reply(chan.getUserList(),MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
+		cmd.reply(chan.getUserList(), false, MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
 				serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str());
 	//	std::cout << chan.getMaxUser() << std::endl;
 		return ;
@@ -62,7 +62,7 @@ void	mode_l(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 	if (sign)
 		chan.setMaxUsers(n);
 	cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), parameters[2].c_str());
-	cmd.reply(chan.getUserList(),MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
+	cmd.reply(chan.getUserList(), false, MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
 				serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str());
 	//std::cout << chan.getMaxUser() << std::endl;
 }
@@ -82,7 +82,7 @@ void	mode_k(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 	else
 		chan.removeChannelPassword();
 	cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");
-	cmd.reply(chan.getUserList(),MODE_CHANGE2, user.getNickname().c_str(), user.getUsername().c_str(),
+	cmd.reply(chan.getUserList(), false, MODE_CHANGE2, user.getNickname().c_str(), user.getUsername().c_str(),
 				serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str(), parameters[2].c_str());
 	
 	//std::cout << chan.getKey() << std::endl;
@@ -97,18 +97,18 @@ void	mode_o(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 		return;
 	User *target = serv.getOneUser(parameters[2]);
 
-	if (chan.isInChannel(parameters[2]))
-		cmd.reply(ERR_USERNOTINCHANNEL, parameters[2].c_str(), chan.getName().c_str(), "not in the channel");
+	if (!chan.isInChannel(parameters[2]))
+		return cmd.reply(ERR_USERNOTINCHANNEL, parameters[2].c_str(), chan.getName().c_str(), "not in the channel");
 
 	if (target == NULL)
 		return ;
 
 	if (sign)
-		chan.setOperator(*target);
+		chan.setOperator(target);
 	else
-		chan.removeOperator(*target);
+		chan.removeOperator(target);
 	cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");
-	cmd.reply(chan.getUserList(),MODE_CHANGE2, user.getNickname().c_str(), user.getUsername().c_str(),
+	cmd.reply(chan.getUserList(), false, MODE_CHANGE2, user.getNickname().c_str(), user.getUsername().c_str(),
 				serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str(), parameters[2].c_str());
 	// std::vector<User> operList = chan.getAdmin();
 	// std::vector<User>::iterator it = operList.begin();
