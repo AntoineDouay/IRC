@@ -13,7 +13,7 @@ class Channel {
 
 public :
 //	Channel(void);
-	Channel(const string& name, const User& userCreator, string key);
+	Channel(const string& name, User * userCreator, string key);
 //	Channel(Channel const &src);
 	~Channel(void);
 
@@ -25,14 +25,14 @@ public :
 	bool getInviteRestrictionOn(void) const;
 	bool getTopicRestrictionOn(void) const;
 	
-	const vector<User> &getAdmin(void) const;
-	const vector<User> &getUserList(void) const;
+	const vector<User *> getAdmin(void) const;
+	const vector<User *> getUserList(void) const;
 	const string getTopic(void) const;
 
 	bool userIsOper(User &target);
 
-	void addUser(const User& who, const User& newUser, string key);
-	void deleteUser(User who, User targetUser);
+	void addUser(const User& who, User * newUser, string key);
+	void deleteUser(User who, User * targetUser);
 
 	void addInvitedUser (User* invited);
 	bool isInvited (User *target);
@@ -52,8 +52,8 @@ public :
 	void setChannelPassword(string password); // function for -k
 	void removeChannelPassword(); // function for -k
 
-	void setOperator(User &target); // function for +o
-	void removeOperator(User &target); // function -o
+	void setOperator(User * target); // function for +o
+	void removeOperator(User * target); // function -o
 
 	void setMaxUsers(unsigned int sizeMax); // function for +l
 	void removeMaxUsersRestriction(); // function for -l
@@ -90,16 +90,16 @@ private:
 	string _name;
 	string _key;
 	string _topic;
-	vector<User> _operatorList;
+	vector<User *> _operatorList;
 	unsigned int _maxUser;
-	vector<User> _userList;
+	vector<User *> _userList;
 	vector<User *> _invitedUserList;
 
 	bool _inviteRestrictionOn;
 	bool _topicRestrictionOn;
 
-	vector<User>::iterator findUser(const User& user);
-	vector<User>::iterator findUser(const string& user);
+	vector<User *>::iterator findUser(User * user);
+	vector<User *>::iterator findUser(const string& user);
 	Server				*_serv;
 };
 

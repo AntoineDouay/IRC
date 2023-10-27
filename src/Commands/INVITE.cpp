@@ -33,9 +33,9 @@ void	Commands::INVITE()
 	if (itt == users.end())
 		return reply(ERR_NOSUCHNICK, _parameters[0].c_str(), "this nickname is not in use");
 
-	std::vector<User> userList = chan->getUserList();
-	for (std::vector<User>::iterator it = userList.begin(); it != userList.end(); it++)
-		if (it->getNickname() == _user->getNickname())
+	std::vector<User *> userList = chan->getUserList();
+	for (std::vector<User* >::iterator it = userList.begin(); it != userList.end(); it++)
+		if ((*it)->getNickname() == _user->getNickname())
 			userOnChan = true;
 
 	if (!userOnChan)
@@ -43,8 +43,8 @@ void	Commands::INVITE()
 	
 	// std::cout << "user err pass\n";
 
-	for (std::vector<User>::iterator it = userList.begin(); it != userList.end(); it++)
-		if (it->getNickname() == _parameters[0])
+	for (std::vector<User *>::iterator it = userList.begin(); it != userList.end(); it++)
+		if ((*it)->getNickname() == _parameters[0])
 			targetOnChan = true;
 
 	if (targetOnChan)
@@ -52,9 +52,9 @@ void	Commands::INVITE()
 	
 	// std::cout << "target err pass\n";
 
-	std::vector<User> operList = chan->getAdmin();
-	for (std::vector<User>::iterator it = operList.begin(); it != operList.end(); it++)
-		if (it->getNickname() == _user->getNickname())
+	std::vector<User *> operList = chan->getAdmin();
+	for (std::vector<User *>::iterator it = operList.begin(); it != operList.end(); it++)
+		if ((*it)->getNickname() == _user->getNickname())
 			userIsOper = true;
 
 	if (chan->getInviteRestrictionOn())

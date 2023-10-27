@@ -126,11 +126,11 @@ void	Commands::reply(std::string str, ...)
 		}
 		i++;
 	}
-	std::cout << "|" << _reply << "|" << endl; // TODO only for test
+	//std::cout << "|" << _reply << "|" << endl; // TODO only for test
 	send(_user->getFD(), _reply.c_str(), _reply.size(), 0);
 }
 
-void Commands::reply(std::vector<User> userList, std::string str, ...) {
+void Commands::reply(std::vector<User *> userList, bool sendToMe, std::string str, ...) {
 	
 	va_list		vl;
 	
@@ -154,12 +154,15 @@ void Commands::reply(std::vector<User> userList, std::string str, ...) {
 	}
 //	_reply.append("\n");
 //	cout << "|" << _reply << "|" << endl; // TODO only for test
-	vector<User>::iterator it = userList.begin();
+	vector<User *>::iterator it = userList.begin();
 
 	for (; it != userList.end(); it++) {
-		// cout << "it: " << it->getNickname() << " fd: " << it->getFD() << endl;
-		if (it->getFD() != _user->getFD())
-			send(it->getFD(), _reply.c_str(), _reply.size(), 0);
+		if ((*it)->getFD() != _user->getFD() || sendToMe)
+		{
+			// std::cout << _reply;
+			// cout << "it: " << (*it)->getNickname() << " fd: " << (*it)->getFD() << endl;
+			send((*it)->getFD(), _reply.c_str(), _reply.size(), 0);
+		}
 	}
 }
 

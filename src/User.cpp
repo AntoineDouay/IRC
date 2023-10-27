@@ -60,6 +60,24 @@ time_t	User::getLastPing() const
 	return _last_ping;
 }
 
+std::vector<Channel *>	User::getChannel() const
+{
+	return _channels;	
+}
+
+void	User::addChannel(Channel * chan)
+{
+	_channels.push_back(chan);
+}
+
+void	User::removeChannel(Channel * chan)
+{
+	std::vector<Channel *>::iterator it = _channels.begin();
+	for (; it != _channels.end(); it++)
+		if ((*it) == chan)
+			_channels.erase(it);
+}
+
 void 	User::setLastActivity()
 {
 	_last_time_active = time(NULL);

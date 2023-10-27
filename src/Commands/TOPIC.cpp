@@ -17,17 +17,17 @@ void	Commands::TOPIC()
 	}
 	if (chan == NULL)
 		return ;
-	std::vector<User> userList = chan->getUserList();
-	for (std::vector<User>::iterator it = userList.begin(); it != userList.end(); it++)
-		if (it->getNickname() == _user->getNickname())
+	std::vector<User *> userList = chan->getUserList();
+	for (std::vector<User *>::iterator it = userList.begin(); it != userList.end(); it++)
+		if ((*it)->getNickname() == _user->getNickname())
 			userOnChan = true;
 
 	if (!userOnChan)
 		return reply(ERR_NOTONCHANNEL, chan->getName().c_str(), "is not in the channel");
 
-	std::vector<User> operList = chan->getAdmin();
-	for (std::vector<User>::iterator it = operList.begin(); it != operList.end(); it++)
-		if (it->getNickname() == _user->getNickname())
+	std::vector<User *> operList = chan->getAdmin();
+	for (std::vector<User *>::iterator it = operList.begin(); it != operList.end(); it++)
+		if ((*it)->getNickname() == _user->getNickname())
 			userIsOper = true;
 
 	// std::cout << "pass err user is oper chan\n";
@@ -46,6 +46,6 @@ void	Commands::TOPIC()
 
 	reply(RPL_TOPIC, chan->getName().c_str(), chan->getTopic().c_str());
 	//send msg to all user of the channel (not numeric replies)
-	reply(chan->getUserList(), TOPIC_CHANGE, _user->getNickname().c_str(), _user->getUsername().c_str(),
+	reply(chan->getUserList(), false, TOPIC_CHANGE, _user->getNickname().c_str(), _user->getUsername().c_str(),
 		_serv->getName().c_str(), chan->getName().c_str(), _parameters[1].c_str());
 }

@@ -6,7 +6,7 @@
 #    By: adouay <adouay@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/29 15:20:33 by adouay            #+#    #+#              #
-#    Updated: 2023/10/26 13:12:11 by adouay           ###   ########.fr        #
+#    Updated: 2023/10/27 15:03:09 by adouay           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,9 +84,9 @@ all : $(OBJ_DIR) $(NAME)
 
 $(NAME) : $(OBJ)
 	echo "$(YELLOW)Making CPP Exercise$(END)"
-	$(CXX) $(OBJ) -o $(NAME) -lcurl
+	$(CXX) $(OBJ) -o $(NAME)
 	echo "$(GREEN)Done$(END)"
-
+# -lcurl after (NAME)
 $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(HEAD) Makefile
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(DFLAGS) -c $< -o $@

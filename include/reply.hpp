@@ -13,7 +13,7 @@
 # define TOPIC_CHANGE "::<nickname>!<username>@:<hostname> TOPIC <channel> <topic>\n"
 # define MODE_CHANGE "::<nickname>!<username>@:<hostname> MODE <channel> <mode>\n"
 # define MODE_CHANGE2 "::<nickname>!<username>@:<hostname> MODE <channel> <mode> <param>\n"
-# define NICK_CHANGE "::<nickname>!<username>@:<hostname> NICK <nick>" 
+# define NICK_CHANGE "::<nickname>!<username>@:<hostname> NICK <nick>\n" 
 
 /*  ---- ERR ----- */
 
