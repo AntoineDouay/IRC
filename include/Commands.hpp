@@ -66,6 +66,7 @@ class Commands{
 				const std::string &hostname);
 	void	handleChannelMSG(Server *server, User *user,
 				const std::string &name, std::string &message);
+	void	handleBot(const std::string &message);
 
 
 };

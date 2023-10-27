@@ -16,33 +16,113 @@
 //         send(userSocket, buffer, file.gcount(), 0);
 //     }
 // }
-
-// std::string	operChar(Channel *chan, User *user)
-// {
-// 	std::vector<User> operators = chan->getAdmin();
-
-// 	for(std::vector<User>::iterator it = operators.begin(); it != operators.end(); it++)
-// 		if (it->getNickname() == user->getNickname())
-// 			return "@";
-// 	return "";
-// }
-
-void	Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
-			const std::string &message,
-			const std::string &nick, const std::string &username,
-			const std::string &hostname)
+//
+void escapeSpecialChars(std::string &input)
 {
-	std::vector<User *>	users = server->getUsers();
-	User 				*user = 0;
+	std::string output;
+	for (size_t i = 0; i < input.size(); i++)
+	{
+		char c = input[i];
+		switch (c)
+		{
+		case '\"':
+			output += "\\\"";
+			break;
+		case '\\':
+			output += "\\\\";
+			break;
+		case '\b':
+			output += "\\b";
+			break;
+		case '\f':
+			output += "\\f";
+			break;
+		case '\n':
+			output += "\\n";
+			break;
+		case '\r':
+			output += "\\r";
+			break;
+		case '\t':
+			output += "\\t";
+			break;
+		default:
+			output += c;
+			break;
+		}
+	}
+	input = output;
+}
+
+// Callback function to write the result to a string
+size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s)
+{
+	size_t newLength = size * nmemb;
+	try
+	{
+		s->append((char *)contents, newLength);
+	}
+	catch (std::bad_alloc &e)
+	{
+		return 0;
+	}
+	return newLength;
+}
+
+void Commands::handleBot(const std::string &message)
+{
+	CURL *curl;
+	CURLcode res;
+	std::string readBuffer;
+
+	curl_global_init(CURL_GLOBAL_ALL);
+	curl = curl_easy_init();
+
+	if (curl)
+	{
+		curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:5001/chat");
+		std::string temp = message;
+		escapeSpecialChars(temp);
+		std::string data = "{\"message\": \"" + temp + "\"}";
+		//"{\"message\": \"Suddenly he fell through deep well\"}"
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+		struct curl_slist *headers = NULL;
+		headers = curl_slist_append(headers, "Content-Type: application/json");
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		res = curl_easy_perform(curl);
+
+		if (res == CURLE_OK)
+		{
+			std::cout << "-------CURL---------" << std::endl;
+			std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :" + readBuffer);
+			escapeSpecialChars(jfdk314);
+			jfdk314 += "\r\n";
+			send(_user->getFD(), jfdk314.c_str(), jfdk314.size(), 0);
+		}
+		curl_easy_cleanup(curl);
+	}
+	curl_global_cleanup();
+}
+
+
+void Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
+								   const std::string &message,
+								   const std::string &nick, const std::string &username,
+								   const std::string &hostname)
+{
+	std::vector<User *> users = server->getUsers();
+	User *user = 0;
 
 	for (size_t i = 0; i < users.size(); i++)
 	{
 		if (nick.size() > 0 && nick != users[i]->getNickname())
-			continue ;
+			continue;
 		if (username.size() > 0 && username != users[i]->getUsername())
-			continue ;
+			continue;
 		if (hostname.size() > 0 && hostname != users[i]->getHostName())
-			continue ;
+			continue;
 		user = users[i];
 	}
 	if (user)
@@ -75,17 +155,17 @@ void	Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
 		Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
 }
 
-void	Commands::handleChannelMSG(Server *server, User *user,
-			const std::string &name, std::string &message)
+void Commands::handleChannelMSG(Server *server, User *user,
+								const std::string &name, std::string &message)
 {
-	std::vector<Channel *>	channels = server->getChannel();
+	std::vector<Channel *> channels = server->getChannel();
 
 	for (size_t i = 0; i < channels.size(); i++)
 	{
 		std::cout << channels[i]->getName() << std::endl;
 		if (channels[i]->getName() == name)
 		{
-			bool					isMyChan = false;
+			bool isMyChan = false;
 			const std::vector<User> users = channels[i]->getUserList();
 			for (size_t d = 0; d < users.size(); d++)
 			{
@@ -96,15 +176,13 @@ void	Commands::handleChannelMSG(Server *server, User *user,
 			{
 				if (user->getNickname() != users[d].getNickname())
 				{
-					std::string finalMessage = ":" + user->getNickname()
-						+ "!" + user->getUsername() + "@" + user->getHostName()
-						+ " PRIVMSG " + name + " :" + message + "\r\n";
+					std::string finalMessage = ":" + user->getNickname() + "!" + user->getUsername() + "@" + user->getHostName() + " PRIVMSG " + name + " :" + message + "\r\n";
 					send(users[d].getFD(), finalMessage.c_str(), finalMessage.size(), 0);
 				}
 			}
 			if (!isMyChan)
 				Commands::reply(ERR_CANNOTSENDTOCHAN, name.c_str());
-			return ;
+			return;
 		}
 	}
 	Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
@@ -122,75 +200,71 @@ void	Commands::handleChannelMSG(Server *server, User *user,
 //     std::cout << "Filesize: " << filesize << std::endl;
 // }
 
-void	Commands::PRIVMSG()
+void Commands::PRIVMSG()
 {
-	bool		isChannel	= false;
-	bool		isRegex		= false;
+	bool isChannel = false;
+	bool isRegex = false;
 	std::string recipent;
-	std::string	channel		= "";
-	std::string	nick		= "";
-	std::string	username	= "";
-	std::string	hostname	= "";
-	std::string	servername	= "";
-	std::string preMessage	= "";
-	std::size_t	found;
+	std::string channel = "";
+	std::string nick = "";
+	std::string username = "";
+	std::string hostname = "";
+	std::string servername = "";
+	std::string preMessage = "";
+	std::size_t found;
 
 	if (_parameters.size() == 0)
 	{
 		Commands::reply(ERR_NORECIPIENT, _command.c_str());
-		return ;
+		return;
 	}
 	if (_parameters.size() == 1)
 	{
 		Commands::reply(ERR_NOTEXTTOSEND);
-		return ;
+		return;
 	}
 	recipent = _parameters[0];
 	if (recipent.size() == 0)
-		return ;
-	//check if it's channel
+		return;
+	// check if it's channel
 	found = recipent.find("*");
 
-	if (recipent.size() > 0 && recipent[0] == '#'
-		&& found == std::string::npos)
+	if (recipent.size() > 0 && recipent[0] == '#' && found == std::string::npos)
 	{
 		isChannel = true;
 		handleChannelMSG(_serv, _user, recipent, _parameters[1]);
-		return ;
+		return;
 	}
-	if ((recipent[0] == '#' || recipent[0] == '$')
-		&& found != std::string::npos)
+	if ((recipent[0] == '#' || recipent[0] == '$') && found != std::string::npos)
 	{
 		isRegex = true;
-		//Handle regex here
+		// Handle regex here
 	}
 	if (!isChannel && !isRegex)
 	{
-		//nickname parse
+		// nickname parse
 		found = recipent.find("!");
 		if (found != std::string::npos)
 			nick = recipent.substr(0, found);
-		else if (recipent.find("!") == std::string::npos
-			&& recipent.find("@") == std::string::npos
-			&& recipent.find("%") == std::string::npos)
+		else if (recipent.find("!") == std::string::npos && recipent.find("@") == std::string::npos && recipent.find("%") == std::string::npos)
 			nick = recipent;
-		//username parse
-		if (recipent.find("@") != std::string::npos
-			|| recipent.find("%") != std::string::npos)
+		// username parse
+		if (recipent.find("@") != std::string::npos || recipent.find("%") != std::string::npos)
 		{
 			found = recipent.find("!");
 			if (found != std::string::npos)
-				username = recipent.substr(found + 1, \
-					std::min(recipent.find("%"), \
-					recipent.find("@")) - found - 1);
+				username = recipent.substr(found + 1,
+										   std::min(recipent.find("%"),
+													recipent.find("@")) -
+											   found - 1);
 			else
 				username = recipent.substr(0, std::min(recipent.find("%"), recipent.find("@")));
 		}
-		//hostname parse
+		// hostname parse
 		found = recipent.find("@");
 		if (found != std::string::npos)
 			hostname = recipent.substr(found + 1);
-		//servername parse
+		// servername parse
 		found = recipent.find("%");
 		if (found != std::string::npos)
 		{
@@ -201,7 +275,10 @@ void	Commands::PRIVMSG()
 				servername = recipent.substr(found + 1);
 		}
 		preMessage = ":" + _user->getNickname() + " PRIVMSG ";
-		handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
+		if (nick == "novel")
+			handleBot(_parameters[1]);
+		else
+			handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
 	}
 }
 

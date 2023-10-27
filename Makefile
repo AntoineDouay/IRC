@@ -84,7 +84,7 @@ all : $(OBJ_DIR) $(NAME)
 
 $(NAME) : $(OBJ)
 	echo "$(YELLOW)Making CPP Exercise$(END)"
-	$(CXX) $(OBJ) -o $(NAME)
+	$(CXX) $(OBJ) -o $(NAME) -lcurl
 	echo "$(GREEN)Done$(END)"
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp $(HEAD) Makefile
