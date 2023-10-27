@@ -43,20 +43,20 @@ public :
 //	void kickUser(User who, User targetUser);
 	void setTopic(User who, string newTopic);
 
-	void setInviteRestriction(User who); // function for +i
-	void removeInviteRestriction(User who); // function for -i
+	void setInviteRestriction(); // function for +i
+	void removeInviteRestriction(); // function for -i
 
-	void setTopicRestriction(User who); // function for +t
-	void removeTopicRestriction(User who); // function for -t
+	void setTopicRestriction(); // function for +t
+	void removeTopicRestriction(); // function for -t
 
-	void setChannelPassword(User who, string password); // function for -k
-	void removeChannelPassword(User who); // function for -k
+	void setChannelPassword(string password); // function for -k
+	void removeChannelPassword(); // function for -k
 
-	void setOperator(User &who, User &target); // function for +o
-	void removeOperator(User &who, User &target); // function -o
+	void setOperator(User &target); // function for +o
+	void removeOperator(User &target); // function -o
 
-	void setMaxUsers(User who, unsigned int sizeMax); // function for +l
-	void removeMaxUsersRestriction(User who); // function for -l
+	void setMaxUsers(unsigned int sizeMax); // function for +l
+	void removeMaxUsersRestriction(); // function for -l
 
 //     void setInviteMod(User who, User target); // function for -i
 //     void setTopicRestricton(User who, bool isOperatorOnly); // function for -t
@@ -66,7 +66,16 @@ public :
 
 	bool isInChannel(const string &target);
 
-  class CustomErrorMessage : public exception {
+  class notOpeError : public exception {
+	public:
+		notOpeError(string msg);
+		~notOpeError() throw();
+		const char *what() const throw();
+	private:
+		string _msg;	
+	};
+
+	class CustomErrorMessage : public exception {
 	public:
 		CustomErrorMessage(string msg);
 		~CustomErrorMessage() throw();
@@ -75,7 +84,6 @@ public :
 		string _msg;	
 	};
 
-	void	removePassword(); // -k
 
 private:
 	int _id;

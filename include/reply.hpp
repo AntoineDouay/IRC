@@ -6,9 +6,14 @@
 # define RPL_YOURHOST "002 :Your host is <servername>, running version <version>\r\n"
 # define RPL_CREATED "003 :This server was created <date>\r\n"
 # define RPL_MYINFO	"004 <server_name> <version> <user_modes> <chan_modes>\r\n"
-# define JOIN_REPLY ":<username>!<nickname>@<servername> JOIN <channel>\n"
 # define KICK_REPLY "606 KICK <channel> <target> <reason>\n"
 
+//global channel msg
+# define JOIN_WELCOME "::<nickname>!<username>@:<hostname> JOIN <channel>\n"
+# define TOPIC_CHANGE "::<nickname>!<username>@:<hostname> TOPIC <channel> <topic>\n"
+# define MODE_CHANGE "::<nickname>!<username>@:<hostname> MODE <channel> <mode>\n"
+# define MODE_CHANGE2 "::<nickname>!<username>@:<hostname> MODE <channel> <mode> <param>\n"
+# define NICK_CHANGE "::<nickname>!<username>@:<hostname> NICK <nick>" 
 
 /*  ---- ERR ----- */
 
@@ -25,8 +30,12 @@
 # define RPL_YOUREOPER "381 :<info>\r\n"
 # define ERR_PASSWDMISMATCH	"464 :<reason>\r\n"
 
+//FOR MODE
 # define ERR_UNKNOWNMODE "472 <char> :<reason>\r\n"
-# define ERR_USERSDONTMATCH " 502 :<reason>\r\n" // MODE
+# define ERR_USERSDONTMATCH "502 :<reason>\r\n" 
+
+# define RPL_CHANNELMODEIS	"324 <channel> <mode> <mode_params>\r\n"
+# define RPL_INVITELIST "346 <channel> <invitemask>\r\n"
 
 # define ERR_BADCHANNELKEY "475 <channel> :Bad channel key\r\n"
 
@@ -51,7 +60,6 @@
 # define ERR_NOTONCHANNEL "442 <channel> :<reason>\r\n"
 # define ERR_USERONCHANNEL "443 <nick> <channel> :<reason>\r\n"
 # define ERR_NOPRIVILEGES "481 :<reason>\r\n"
-# define ERR_CHANOPRIVSNEEDED "482 <channel> :<reason>\r\n"
 # define RPL_INVITING "341 <nick> <channel>\r\n"
 
 //topic

@@ -22,7 +22,6 @@ void	Commands::TOPIC()
 		if (it->getNickname() == _user->getNickname())
 			userOnChan = true;
 
-	// std::cout << "pass err user on chan\n";
 	if (!userOnChan)
 		return reply(ERR_NOTONCHANNEL, chan->getName().c_str(), "is not in the channel");
 
@@ -38,16 +37,15 @@ void	Commands::TOPIC()
 	if (chan->getTopicRestrictionOn())
 		if (!userIsOper)
 			return reply(ERR_CHANOPRIVSNEEDED, _parameters[0].c_str(), "need operator rights");
-	// std::cout << "pass +t not oper\n";
 
-	if (_parameters.size() < 2)
-		return reply(RPL_NOTOPIC, chan->getName().c_str(), chan->getTopic().c_str());
-	else
-		{
-			chan->setTopic(*_user, _parameters[1]);
-			return reply (RPL_TOPIC, chan->getName().c_str(), chan->getTopic().c_str());
-		}
+	if (_parameters.size() > 1)
+		chan->setTopic(*_user, _parameters[1]);
 
-}		
+	if (chan->getTopic().empty())
+		return reply(RPL_NOTOPIC, chan->getName().c_str(), "no topic");
 
-//         ERR_NOCHANMODES
+	reply(RPL_TOPIC, chan->getName().c_str(), chan->getTopic().c_str());
+	//send msg to all user of the channel (not numeric replies)
+	reply(chan->getUserList(), TOPIC_CHANGE, _user->getNickname().c_str(), _user->getUsername().c_str(),
+		_serv->getName().c_str(), chan->getName().c_str(), _parameters[1].c_str());
+}

@@ -1,12 +1,12 @@
 
 #include "../include/User.hpp"
 
-User::User(int fd, struct sockaddr_in adress, Server * serv) : _fd(fd), _address(adress), _serv(serv)
+User::User(int fd, std::string hostname, Server * serv) : _fd(fd), _serv(serv)
 {
 	(void)_fd;
-	(void)_address;
 	_nickname = "";
 	_username = "";
+	_hostname = hostname;
 	_status = NO_PASSWORD;
 	_last_ping = time(NULL);
 	_last_time_active = time(NULL);
@@ -33,7 +33,7 @@ std::string	User::getUsername() const
 }
 std::string	User::getHostName() const
 {
-	return inet_ntoa(_address.sin_addr);
+	return _hostname;
 }
 
 void	User::setStatus(int status)

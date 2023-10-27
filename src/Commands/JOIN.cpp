@@ -23,7 +23,10 @@ void	Commands::JOIN()
 			tmp->addUser(_user[0], _user[0], tmp_key);
 
 			// cout << "username: " << _user[0].getUsername() << " | nickname: " << _user[0].getNickname() << endl;
-			reply(tmp->getUserList(), JOIN_REPLY, _user->getUsername().c_str(), _user->getNickname().c_str(),
+			// std::string msg(":" + _user->getNickname() + "!" + _user->getUsername() + "@"
+			// 	+ _user->getHostName() + " JOIN " + tmp->getName());
+			// send(_user->getFD(), msg.c_str(), msg.size(), 0);
+			reply(tmp->getUserList(),JOIN_WELCOME, _user->getNickname().c_str(), _user->getUsername().c_str(),
 				  _serv->getName().c_str(), tmp->getName().c_str());
 		} catch (exception &e) {
 			reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
@@ -32,6 +35,9 @@ void	Commands::JOIN()
 	} else
 		_serv->createChannel(_parameters[0], _user[0], tmp_key);
 
-	if (_parameters[0] == _serv->getPassword())
-		_user->setStatus(1);
+	// if (_parameters[0] == _serv->getPassword())
+	// 	_user->setStatus(1);
 }
+
+// reply(JOIN_REPLY, _user->getNickname().c_str(), _user->getUsername().c_str(),
+// 				  _user->getHostName().c_str(), tmp->getName().c_str());
