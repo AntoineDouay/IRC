@@ -101,18 +101,22 @@ bool Channel::userIsOper(User &target)
 	return false;
 }
 
-void Channel::addUser(const User& who, User * newUser, string key) {
+int Channel::addUser(const User& who, User * newUser, string key) {
 	// cout << "Channel::addUser called for user: " << newUser.getNickname() << endl; //TODO it's only for test
 	if (_key != "" && key != _key)
-		throw CustomErrorMessage("Bad key");
+		return 0;
+		// throw CustomErrorMessage("Bad key");
 	if (_maxUser <= _userList.size())
-		throw CustomErrorMessage(_name + " channel is full"); // channel is full
+		return 1;
+		// throw CustomErrorMessage(_name + " channel is full"); // channel is full
 	for (vector<User *>::iterator it = _userList.begin(); it != _userList.end(); it++){
 		if ((*it)->getNickname() == newUser->getNickname()){
-			throw CustomErrorMessage("User already exist");
+			return 2;
+			// throw CustomErrorMessage("User already exist");
 		}
 	}
 	_userList.push_back(newUser);
+	return -1;
 	(void)who; // TODO remove
 }
 
@@ -165,9 +169,6 @@ void Channel::removeChannelPassword()
 void Channel::setInviteRestriction() {
 	if (_inviteRestrictionOn == false)
 		_inviteRestrictionOn = true;
-	else 
-		throw CustomErrorMessage("channel already have invite restriction on");
-
 }
 
 void Channel::removeInviteRestriction() {

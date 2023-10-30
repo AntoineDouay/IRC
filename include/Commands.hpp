@@ -39,7 +39,7 @@ class Commands{
 	void	KICK();
 
 	// void	KILL();
-	// void	PART();
+	void	PART();
 	void	TOPIC();
 	void	INVITE();
 	// void	NAMES();

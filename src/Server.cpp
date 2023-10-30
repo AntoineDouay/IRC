@@ -7,18 +7,15 @@ Server::Server(int port, std::string pssw) : _password(pssw), _port(port)
 	_server_name = "ft_irc43";
 }
 
-void	Server::init()
+int	Server::init()
 {
 	int opt = 1;
 
 	if ((_server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-		return ;
+		return 1;
 
 	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
-	{
-		std::cout << "pas cool\n";
-		return ;
-	}
+		return 1;
 
 	fcntl(_server_fd, F_SETFL, O_NONBLOCK);
 
@@ -29,10 +26,10 @@ void	Server::init()
 	memset(&(address.sin_zero), '\0', 8);
 
 	if (bind(_server_fd, (struct sockaddr*)&address, sizeof(address)) < 0)
-		return ;
+		return 1;
 
 	if (listen(_server_fd, address.sin_port) < 0)
-		return ;
+		return 1;
 
 	
 	_p_fds.push_back(pollfd());
@@ -41,7 +38,7 @@ void	Server::init()
 
 	std::cout << "socket server listening \n";
 
-	return ;
+	return 0;
 }
 
 void	Server::run()

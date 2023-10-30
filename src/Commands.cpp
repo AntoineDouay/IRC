@@ -13,6 +13,7 @@ Commands::Commands(std::string cmd, Server * serv, User * client)
 void	Commands::init_func_map()
 {
 	_func.insert(std::make_pair("JOIN", &Commands::JOIN));
+	_func.insert(std::make_pair("PART", &Commands::PART));
 	_func.insert(std::make_pair("KICK", &Commands::KICK));
 	_func.insert(std::make_pair("PASS", &Commands::PASS));
 	_func.insert(std::make_pair("USER", &Commands::USER));
@@ -223,7 +224,10 @@ void	Commands::QUIT()
 	if (_parameters.size() > 0)
 		str += _parameters[0];
 	_user->setStatus(3);
-	send (_user->getFD(), str.c_str(), str.size(), 0); //nul
+
+	std::vector<Channel *>chan = _user->getChannel();
+	for(std::vector<Channel *>::iterator it = chan.begin(); it != chan.end(); it++)
+		(*it)->deleteUser(_user->getNickname());
 }
 
 // void	Commands::PASS()
