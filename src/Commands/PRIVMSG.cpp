@@ -26,25 +26,25 @@ void escapeSpecialChars(std::string &input)
 		switch (c)
 		{
 		case '\"':
-			output += "\\\"";
+			// output += "\\\"";
 			break;
 		case '\\':
-			output += "\\\\";
+			// output += "\\\\";
 			break;
 		case '\b':
-			output += "\\b";
+			// output += "\\b";
 			break;
 		case '\f':
-			output += "\\f";
+			// output += "\\f";
 			break;
 		case '\n':
-			output += "\\n";
+			// output += "\\n";
 			break;
 		case '\r':
-			output += "\\r";
+			// output += "\\r";
 			break;
 		case '\t':
-			output += "\\t";
+			// output += "\\t";
 			break;
 		default:
 			output += c;
