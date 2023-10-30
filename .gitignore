@@ -35,3 +35,6 @@ ircserv
 # IDE setup
 .vscode
 .idea
+
+# BOT server
+node/node_modules/

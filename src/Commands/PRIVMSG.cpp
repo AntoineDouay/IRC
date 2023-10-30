@@ -69,42 +69,34 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *s)
 	return newLength;
 }
 
-// void Commands::handleBot(const std::string &message)
-// {
-// 	CURL *curl;
-// 	CURLcode res;
-// 	std::string readBuffer;
+void Commands::handleBot(const std::string &message)
+{
+	int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (clientSocket == -1) {
+        perror("Error creating socket");
+    }
 
-// 	curl_global_init(CURL_GLOBAL_ALL);
-// 	curl = curl_easy_init();
+    sockaddr_in serverAddress;
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_port = htons(4000); // Port where your Node.js server is running
+    serverAddress.sin_addr.s_addr = INADDR_ANY;
 
-// 	if (curl)
-// 	{
-// 		curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:5001/chat");
-// 		std::string temp = message;
-// 		escapeSpecialChars(temp);
-// 		std::string data = "{\"message\": \"" + temp + "\"}";
-// 		//"{\"message\": \"Suddenly he fell through deep well\"}"
-// 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
-// 		struct curl_slist *headers = NULL;
-// 		headers = curl_slist_append(headers, "Content-Type: application/json");
-// 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-// 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-// 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-// 		res = curl_easy_perform(curl);
+    if (connect(clientSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
+        perror("Error connecting to the server");
+    }
 
-// 		if (res == CURLE_OK)
-// 		{
-// 			std::cout << "-------CURL---------" << std::endl;
-// 			std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :" + readBuffer);
-// 			escapeSpecialChars(jfdk314);
-// 			jfdk314 += "\r\n";
-// 			send(_user->getFD(), jfdk314.c_str(), jfdk314.size(), 0);
-// 		}
-// 		curl_easy_cleanup(curl);
-// 	}
-// 	curl_global_cleanup();
-// }
+    send(clientSocket, message.c_str(), strlen(message.c_str()), 0);
+
+    char buffer[1024] = {0};
+    recv(clientSocket, buffer, sizeof(buffer), 0);
+
+    std::cout << "Server response: " << buffer << std::endl;
+	std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :" + buffer);
+	escapeSpecialChars(jfdk314);
+	jfdk314 += "\r\n";
+	send(_user->getFD(), jfdk314.c_str(), jfdk314.size(), 0);
+    close(clientSocket);
+}
 
 
 void Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
@@ -275,10 +267,10 @@ void Commands::PRIVMSG()
 				servername = recipent.substr(found + 1);
 		}
 		preMessage = ":" + _user->getNickname() + " PRIVMSG ";
-		// if (nick == "novel")
-		// 	handleBot(_parameters[1]);
-		// else
-		handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
+		if (nick == "novel")
+			handleBot(_parameters[1]);
+		else
+			handleSinglePrivMSG(_serv, preMessage, _parameters[1], nick, username, hostname);
 	}
 }
 
