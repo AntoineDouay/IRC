@@ -6,14 +6,16 @@
 # define RPL_YOURHOST "002 :Your host is <servername>, running version <version>\r\n"
 # define RPL_CREATED "003 :This server was created <date>\r\n"
 # define RPL_MYINFO	"004 <server_name> <version> <user_modes> <chan_modes>\r\n"
-# define KICK_REPLY "606 KICK <channel> <target> <reason>\n"
 
 //global channel msg
+
+# define KICK_REPLY "::<nickname>!<username>@:<hostname> KICK <channel> <target> <reason>\n"
 # define JOIN_WELCOME "::<nickname>!<username>@:<hostname> JOIN <channel>\n"
 # define TOPIC_CHANGE "::<nickname>!<username>@:<hostname> TOPIC <channel> <topic>\n"
 # define MODE_CHANGE "::<nickname>!<username>@:<hostname> MODE <channel> <mode>\n"
 # define MODE_CHANGE2 "::<nickname>!<username>@:<hostname> MODE <channel> <mode> <param>\n"
 # define NICK_CHANGE "::<nickname>!<username>@:<hostname> NICK <nick>\n" 
+# define PART_CHANGE "::<nickname>!<username>@:<hostname> PART <channel>\n" 
 
 /*  ---- ERR ----- */
 
@@ -29,6 +31,8 @@
 
 # define RPL_YOUREOPER "381 :<info>\r\n"
 # define ERR_PASSWDMISMATCH	"464 :<reason>\r\n"
+
+# define ERR_CHANNELISFULL "471 <channel> channel full\r\n"
 
 //FOR MODE
 # define ERR_UNKNOWNMODE "472 <char> :<reason>\r\n"

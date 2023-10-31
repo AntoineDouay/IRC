@@ -31,7 +31,7 @@ class Server{
 
 	Server(int port, std::string pssw);
 
-	void	init();
+	int	init();
 	void	run();
 	void	clean();
 
@@ -53,8 +53,9 @@ class Server{
 	std::vector<Channel *>		getChannel() const;
 	void						delChannel(Channel * chan);
 
-	void createChannel(std::string const &name, User * who, std::string key);
+	void	createChannel(std::string const &name, User * who, std::string key);
 	Channel *findChannel(std::string target, std::vector<Channel *> list) const;
+	void	delChannel(Channel * chan, User * user);
 };
 
 #endif

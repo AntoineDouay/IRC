@@ -7,18 +7,15 @@ Server::Server(int port, std::string pssw) : _password(pssw), _port(port)
 	_server_name = "ft_irc43";
 }
 
-void	Server::init()
+int	Server::init()
 {
 	int opt = 1;
 
 	if ((_server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-		return ;
+		return 1;
 
 	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
-	{
-		std::cout << "pas cool\n";
-		return ;
-	}
+		return 1;
 
 	fcntl(_server_fd, F_SETFL, O_NONBLOCK);
 
@@ -29,11 +26,10 @@ void	Server::init()
 	memset(&(address.sin_zero), '\0', 8);
 
 	if (bind(_server_fd, (struct sockaddr*)&address, sizeof(address)) < 0)
-		return ;
+		return 1;
 
 	if (listen(_server_fd, address.sin_port) < 0)
-		return ;
-
+		return 1;
 
 	_p_fds.push_back(pollfd());
 	_p_fds.back().fd = _server_fd;
@@ -41,7 +37,7 @@ void	Server::init()
 
 	std::cout << "socket server listening \n";
 
-	return ;
+	return 0;
 }
 
 void	Server::run()
@@ -49,14 +45,15 @@ void	Server::run()
 	if (poll(&_p_fds[0], _p_fds.size(), 600) == -1)
 	return;
 
-	if (_p_fds[0].revents == POLLIN)
-		acceptUser();
-	else
-	{
-		for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); ++it)
-			if((*it).revents == POLLIN)
-				receive(_users[(*it).fd]);
-	}
+	for (size_t i = 0; i < _p_fds.size(); i++)
+		{
+			if (_p_fds[i].revents & POLLIN) {
+				if (_p_fds[i].fd == _server_fd)
+					acceptUser();
+				else
+					receive(_users[_p_fds[i].fd]);
+			}
+		}
 
 	pingUser();
 
@@ -70,10 +67,18 @@ void	Server::run()
 void	Server::acceptUser()
 {
 	int 					user_fd;
-	socklen_t				len;
+	socklen_t				len = 0;
 	struct sockaddr_in		address;
 
+
 	len = sizeof(address);
+
+	address.sin_family = 0;
+	address.sin_port = 0;
+	address.sin_port = 0;
+	memset(&(address.sin_zero), '\0', 8);
+
+
 	if ((user_fd = accept(_p_fds[0].fd, (struct sockaddr *)&address, &len)) == -1)
 		return ;
 
@@ -210,6 +215,19 @@ void Server::createChannel(const std::string &name, User * who, std::string key)
 //	for (vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++){
 //		cout << "chan: " << it[0]->getName() << endl;
 //	}
+}
+
+void Server::delChannel(Channel * chan, User * user)
+{
+	std::vector<Channel *>::iterator it = _channels.begin();
+	user->removeChannel(chan);
+	for(;it != _channels.end(); it++)
+		if ((*it) == chan)
+		{
+			_channels.erase(it);
+			break ;
+		}
+	delete chan;
 }
 
 Channel *Server::findChannel(std::string target, std::vector<Channel *> list) const {

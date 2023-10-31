@@ -75,7 +75,10 @@ void	User::removeChannel(Channel * chan)
 	std::vector<Channel *>::iterator it = _channels.begin();
 	for (; it != _channels.end(); it++)
 		if ((*it) == chan)
+		{
 			_channels.erase(it);
+			break;
+		}
 }
 
 void 	User::setLastActivity()

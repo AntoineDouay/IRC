@@ -47,5 +47,5 @@ void	Commands::TOPIC()
 	reply(RPL_TOPIC, chan->getName().c_str(), chan->getTopic().c_str());
 	//send msg to all user of the channel (not numeric replies)
 	reply(chan->getUserList(), false, TOPIC_CHANGE, _user->getNickname().c_str(), _user->getUsername().c_str(),
-		_serv->getName().c_str(), chan->getName().c_str(), _parameters[1].c_str());
+		_serv->getName().c_str(), chan->getName().c_str(), chan->getTopic().c_str());
 }

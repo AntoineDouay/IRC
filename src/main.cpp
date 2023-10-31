@@ -16,14 +16,21 @@ int main (int argc, char **argv)
 		std::cout << "usage is : ./ircserv [port] [password]\n";
 		return 1;
 	}
-    // sigIntHandler.sa_handler = signalHandler;
-    // sigemptyset(&sigIntHandler.sa_mask);
-    // sigIntHandler.sa_flags = 0;
-    // sigaction(SIGINT, &sigIntHandler, 0);
+  std::string psswrd(argv[2]);
+	if (!psswrd.size())
+	{
+		std::cout << "need a password\n";
+		return 1;
+	}
+
 	std::signal(SIGINT, &signalHandler);
 	int port = atoi(argv[1]);
 	Server serv(port, argv[2]);
-	serv.init();
+	if (serv.init())
+	{
+		std::cout << "Error : problem in the init of the tcp serv\n";
+		return 1;
+	}
 	while (!gShutdown) {
 		serv.run();
 	}
