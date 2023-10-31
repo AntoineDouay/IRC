@@ -10,7 +10,7 @@ class Commands;
 class Channel;
 
 # define TIME_OUT	300000 // 3min
-# define SERV_PING		30 // ping every seconds	
+# define SERV_PING		30 // ping every seconds
 
 class Server{
 
@@ -26,13 +26,14 @@ class Server{
 
 	int			_server_fd;
 	std::string	_server_name;
-  
+
 	public :
 
 	Server(int port, std::string pssw);
 
 	void	init();
 	void	run();
+	void	clean();
 
 	void	acceptUser();
 	void	delUser(User * User);
@@ -45,11 +46,12 @@ class Server{
 	std::string				getName();
 	std::vector<User *>		getUsers();
 	int						getFD();
-  
+
 	User 					*getOneUser(std::string nickname);
 	User *					findUser(const std::string& targetUser, std::vector<User *> userList);
 
 	std::vector<Channel *>		getChannel() const;
+	void						delChannel(Channel * chan);
 
 	void createChannel(std::string const &name, User * who, std::string key);
 	Channel *findChannel(std::string target, std::vector<Channel *> list) const;
