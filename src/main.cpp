@@ -28,22 +28,15 @@ int main (int argc, char **argv)
 	Server serv(port, argv[2]);
 	try {
 		serv.init();
+		while (!gShutdown)
+			serv.run();
 	}
 	catch (const std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
 		return (1);
 	}
-	while (!gShutdown) {
-		try {
-			serv.run();
-		}
-		catch (const std::exception &e)
-		{
-			std::cerr << e.what() << std::endl;
-			return (1);
-		}
-	}
+
 	serv.clean();
 	return 0;
 }

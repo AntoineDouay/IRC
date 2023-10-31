@@ -1,22 +1,6 @@
 #include "../../include/Commands.hpp"
 
-// void sendFileViaDCC(int userSocket, const std::string &filename) {
 
-//     // Read the file and send it
-//     std::ifstream file;
-//     file.open(filename.c_str(), std::ios::binary); // Open the file in binary mode
-//     if (!file.is_open()) {
-//         std::cerr << "Failed to open file." << std::endl;
-//         return;
-//     }
-
-//     char buffer[1024] = {0};
-//     while (file) {
-//         file.read(buffer, sizeof(buffer));
-//         send(userSocket, buffer, file.gcount(), 0);
-//     }
-// }
-//
 void escapeSpecialChars(std::string &input)
 {
 	std::string output;
@@ -25,30 +9,23 @@ void escapeSpecialChars(std::string &input)
 		char c = input[i];
 		switch (c)
 		{
-		case '\"':
-			// output += "\\\"";
-			break;
-		case '\\':
-			// output += "\\\\";
-			break;
-		case '\b':
-			// output += "\\b";
-			break;
-		case '\f':
-			// output += "\\f";
-			break;
-		case '\n':
-			// output += "\\n";
-			break;
-		case '\r':
-			// output += "\\r";
-			break;
-		case '\t':
-			// output += "\\t";
-			break;
-		default:
-			output += c;
-			break;
+			case '\"':
+				break;
+			case '\\':
+				break;
+			case '\b':
+				break;
+			case '\f':
+				break;
+			case '\n':
+				break;
+			case '\r':
+				break;
+			case '\t':
+				break;
+			default:
+				output += c;
+				break;
 		}
 	}
 	input = output;
@@ -121,27 +98,6 @@ void Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
 	{
 		preMessage += nick + " :" + message + "\r\n";
 		send(user->getFD(), preMessage.c_str(), preMessage.size(), 0);
-
-		// if (message.find("DCC SEND") != std::string::npos) {
-		// 	std::istringstream iss(message);
-		// 	std::vector<std::string> tokens;
-		// 	std::istream_iterator<std::string> iter(iss);
-		// 	std::istream_iterator<std::string> end;
-		// 	while (iter != end) {
-		// 		tokens.push_back(*iter);
-		// 		std::cout << "Token: " << *iter << std::endl;
-		// 		++iter;
-		// 	}
-		// 	if (tokens.size() >= 6) {
-		// 		std::string filename = tokens[2];
-		// 		std::string ip = tokens[3];
-		// 		std::string port = tokens[4];
-		// 		std::string filesize = tokens[5];
-
-		// 		sendFileViaDCC(user->getFD(), filename);
-		// 		return;
-		// 	}
-		// }
 	}
 	else
 		Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
@@ -179,18 +135,6 @@ void Commands::handleChannelMSG(Server *server, User *user,
 	}
 	Commands::reply(ERR_NORECIPIENT, "PRIVMSG");
 }
-
-// void handleDCC(Server *server, const std::string &nickname, const std::string &filename, const std::string &ip, const std::string &port, const std::string &filesize) {
-//     // Your DCC handling logic here
-//     // Example: print the received information
-// 	(void) server;
-//     std::cout << "Received DCC SEND command:" << std::endl;
-//     std::cout << "Nickname: " << nickname << std::endl;
-//     std::cout << "Filename: " << filename << std::endl;
-//     std::cout << "IP: " << ip << std::endl;
-//     std::cout << "Port: " << port << std::endl;
-//     std::cout << "Filesize: " << filesize << std::endl;
-// }
 
 void Commands::PRIVMSG()
 {
@@ -274,11 +218,3 @@ void Commands::PRIVMSG()
 	}
 }
 
-
-/*
-
-CAP LS
-PASS aaa
-NICK migi
-USER migi migi localhost :Migi Dali
-*/

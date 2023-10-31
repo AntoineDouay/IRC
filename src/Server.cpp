@@ -41,17 +41,19 @@ void	Server::init()
 void	Server::run()
 {
 	if (poll(&_p_fds[0], _p_fds.size(), 600) == -1)
-		throw std::runtime_error("Poll error");
-
+	{
+		gShutdown = true;
+		return ;
+	}
 	for (size_t i = 0; i < _p_fds.size(); i++)
-		{
-			if (_p_fds[i].revents & POLLIN) {
-				if (_p_fds[i].fd == _server_fd)
-					acceptUser();
-				else
-					receive(_users[_p_fds[i].fd]);
-			}
+	{
+		if (_p_fds[i].revents & POLLIN) {
+			if (_p_fds[i].fd == _server_fd)
+				acceptUser();
+			else
+				receive(_users[_p_fds[i].fd]);
 		}
+	}
 
 	pingUser();
 
