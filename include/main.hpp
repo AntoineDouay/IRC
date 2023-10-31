@@ -12,7 +12,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
-#include <signal.h>
 #include <poll.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -28,6 +27,7 @@
 #include <ctime>
 #include <climits>
 #include <fstream>
+#include <csignal>
 
 
 #include "Server.hpp"
@@ -35,5 +35,7 @@
 #include "Commands.hpp"
 #include "Channel.hpp"
 #include "reply.hpp"
+
+extern bool	gShutdown;
 
 #endif

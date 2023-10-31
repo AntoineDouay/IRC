@@ -31,7 +31,6 @@ int	Server::init()
 	if (listen(_server_fd, address.sin_port) < 0)
 		return 1;
 
-
 	_p_fds.push_back(pollfd());
 	_p_fds.back().fd = _server_fd;
 	_p_fds.back().events = POLLIN;
@@ -43,12 +42,10 @@ int	Server::init()
 
 void	Server::run()
 {
-	while (42)
-	{
-		if (poll(&_p_fds[0], _p_fds.size(), 600) == -1)
-		return;
+	if (poll(&_p_fds[0], _p_fds.size(), 600) == -1)
+	return;
 
-		for (size_t i = 0; i < _p_fds.size(); i++)
+	for (size_t i = 0; i < _p_fds.size(); i++)
 		{
 			if (_p_fds[i].revents & POLLIN) {
 				if (_p_fds[i].fd == _server_fd)
@@ -58,13 +55,13 @@ void	Server::run()
 			}
 		}
 
-		pingUser();
+	pingUser();
 
-		std::vector<User *> v_users = getUsers();
-		for (std::vector<User *>::iterator it = v_users.begin(); it != v_users.end(); it++)
-			if ((*it)->getStatus() == DELETE)
-				delUser(*it);
-	}
+	std::vector<User *> v_users = getUsers();
+	for (std::vector<User *>::iterator it = v_users.begin(); it != v_users.end(); it++)
+		if ((*it)->getStatus() == DELETE)
+			delUser(*it);
+
 }
 
 void	Server::acceptUser()
@@ -73,10 +70,14 @@ void	Server::acceptUser()
 	socklen_t				len = 0;
 	struct sockaddr_in		address;
 
+
+	len = sizeof(address);
+
 	address.sin_family = 0;
 	address.sin_port = 0;
 	address.sin_port = 0;
 	memset(&(address.sin_zero), '\0', 8);
+
 
 	if ((user_fd = accept(_p_fds[0].fd, (struct sockaddr *)&address, &len)) == -1)
 		return ;
@@ -258,4 +259,24 @@ int	Server::getFD()
 	return _server_fd;
 }
 
+void	Server::clean()
+{
+	std::cout << "Cleaning the server" << std::endl;
+	std::vector<User *> v_users = getUsers();
+	for (std::vector<User *>::iterator it = v_users.begin(); it != v_users.end(); it++)
+		delUser(*it);
+	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
+		delete (*it);
+}
 
+void Server::delChannel(Channel * chan)
+{
+    std::vector<Channel *>::iterator it = _channels.begin();
+    for(;it != _channels.end(); it++)
+        if ((*it) == chan)
+        {
+            _channels.erase(it);
+            break ;
+        }
+    delete chan;
+}
