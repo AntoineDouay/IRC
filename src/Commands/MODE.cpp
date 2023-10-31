@@ -31,12 +31,6 @@ void	mode_te(Server &serv, Commands &cmd,  User &user, std::vector<std::string> 
 
 void	mode_l(Server &serv, Commands &cmd, User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
 {
-	(void)cmd;
-	(void)parameters;
-
-	if (parameters[2].size() == 0)
-		return;
-
 	if (!sign)
 	{
 		chan.removeMaxUsersRestriction();

@@ -226,8 +226,27 @@ void	Commands::QUIT()
 	_user->setStatus(3);
 
 	std::vector<Channel *>chan = _user->getChannel();
+	std::vector<Channel *>empty;
+	if (chan.empty())
+		cout << "nick" << endl;
 	for(std::vector<Channel *>::iterator it = chan.begin(); it != chan.end(); it++)
+	{
 		(*it)->deleteUser(_user->getNickname());
+		try {
+			if ((*it)->getUserList().size() == 0)
+				empty.push_back(*it);
+		} catch (std::exception &e) {
+			cout << e.what() << endl;
+		}
+		// if ((*it)->getUserList().empty())
+		// 	empty.push_back(*it);
+		
+	}
+	for (vector<Channel *>::iterator it = empty.end(); it != empty.begin(); it--){
+		_serv->delChannel(*it, _user);
+	}
+	
+	
 }
 
 // void	Commands::PASS()

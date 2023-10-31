@@ -70,8 +70,13 @@ void	Server::run()
 void	Server::acceptUser()
 {
 	int 					user_fd;
-	socklen_t				len;
+	socklen_t				len = 0;
 	struct sockaddr_in		address;
+
+	address.sin_family = 0;
+	address.sin_port = 0;
+	address.sin_port = 0;
+	memset(&(address.sin_zero), '\0', 8);
 
 	if ((user_fd = accept(_p_fds[0].fd, (struct sockaddr *)&address, &len)) == -1)
 		return ;
@@ -209,6 +214,19 @@ void Server::createChannel(const std::string &name, User * who, std::string key)
 //	for (vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++){
 //		cout << "chan: " << it[0]->getName() << endl;
 //	}
+}
+
+void Server::delChannel(Channel * chan, User * user)
+{
+	std::vector<Channel *>::iterator it = _channels.begin();
+	user->removeChannel(chan);
+	for(;it != _channels.end(); it++)
+		if ((*it) == chan)
+		{
+			_channels.erase(it);
+			break ;
+		}
+	delete chan;
 }
 
 Channel *Server::findChannel(std::string target, std::vector<Channel *> list) const {
