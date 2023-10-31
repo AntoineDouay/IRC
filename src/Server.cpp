@@ -31,7 +31,7 @@ int	Server::init()
 	if (listen(_server_fd, address.sin_port) < 0)
 		return 1;
 
-	
+
 	_p_fds.push_back(pollfd());
 	_p_fds.back().fd = _server_fd;
 	_p_fds.back().events = POLLIN;
@@ -48,13 +48,14 @@ void	Server::run()
 		if (poll(&_p_fds[0], _p_fds.size(), 600) == -1)
 		return;
 
-		if (_p_fds[0].revents == POLLIN)
-			acceptUser();
-		else
+		for (size_t i = 0; i < _p_fds.size(); i++)
 		{
-			for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); ++it)
-				if((*it).revents == POLLIN)
-					receive(_users[(*it).fd]);
+			if (_p_fds[i].revents & POLLIN) {
+				if (_p_fds[i].fd == _server_fd)
+					acceptUser();
+				else
+					receive(_users[_p_fds[i].fd]);
+			}
 		}
 
 		pingUser();
