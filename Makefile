@@ -6,7 +6,7 @@
 #    By: adouay <adouay@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/29 15:20:33 by adouay            #+#    #+#              #
-#    Updated: 2023/10/27 15:03:09 by adouay           ###   ########.fr        #
+#    Updated: 2023/10/30 15:57:24 by adouay           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,7 @@ SRC = main.cpp Server.cpp User.cpp Commands.cpp Channel.cpp \
 	Commands/USER.cpp \
 	Commands/NICK.cpp \
 	Commands/JOIN.cpp \
+	Commands/PART.cpp \
 	Commands/PING.cpp \
 	Commands/PONG.cpp \
 	Commands/WHOIS.cpp \

@@ -31,12 +31,6 @@ void	mode_te(Server &serv, Commands &cmd,  User &user, std::vector<std::string> 
 
 void	mode_l(Server &serv, Commands &cmd, User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
 {
-	(void)cmd;
-	(void)parameters;
-
-	if (parameters[2].size() == 0)
-		return;
-
 	if (!sign)
 	{
 		chan.removeMaxUsersRestriction();
@@ -69,21 +63,26 @@ void	mode_l(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 
 void	mode_k(Server &serv, Commands &cmd, User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
 {
-	(void)parameters;
-	(void)cmd;
-
 	if (parameters.size() < 3)
-		return;
-	if (parameters[2].size() == 0)
-		return;
+		return ;
 
 	if (sign)
+	{
 		chan.setChannelPassword(parameters[2]);
-	else
-		chan.removeChannelPassword();
-	cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");
-	cmd.reply(chan.getUserList(), false, MODE_CHANGE2, user.getNickname().c_str(), user.getUsername().c_str(),
+		cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");
+		cmd.reply(chan.getUserList(), false, MODE_CHANGE2, user.getNickname().c_str(), user.getUsername().c_str(),
 				serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str(), parameters[2].c_str());
+		return;
+	}
+	else if (!sign && parameters[2] == chan.getKey())
+	{
+		chan.removeChannelPassword();
+		cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");
+		cmd.reply(chan.getUserList(), false, MODE_CHANGE2, user.getNickname().c_str(), user.getUsername().c_str(),
+				serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str(), parameters[2].c_str());
+		return;
+	}
+
 	
 	//std::cout << chan.getKey() << std::endl;
 }

@@ -24,11 +24,11 @@ IRC in cpp98
     - [ ] MODE change the channel's mode
       - [x] i: Set Invite only
       - [x] i: Remove Invite only
-      - [ ] t: Set TOPIC command restriction
-      - [ ] t: Remove TOPIC command restriction
-      - [x] k: Set channel key
+      - [x] t: Set TOPIC command restriction
+      - [x] t: Remove TOPIC command restriction
+      - [ ] k: Set channel key
       - [ ] k: Remove channel key
       - [x] o: Give operator privilege
       - [x] o: Remove operator privilege
-      - [ ] l: Set user limit
-      - [ ] l: Remove user limit
+      - [x] l: Set user limit
+      - [x] l: Remove user limit

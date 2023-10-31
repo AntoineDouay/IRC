@@ -17,10 +17,8 @@ void Commands::KICK() {
 		reply(ERR_USERNOTINCHANNEL, _parameters[1].c_str(), _parameters[1].c_str(),"not in the channel");
 		return;
 	}
-
-	reply(channelTarget->getUserList(), KICK_REPLY,
-		  _parameters[0].c_str(), _parameters[1].c_str(), _parameters[2].c_str());
+	reply(channelTarget->getUserList(), true, KICK_REPLY, _user->getNickname().c_str(),_user->getUsername().c_str(), _user->getHostName().c_str(), _parameters[0].c_str(), _parameters[1].c_str(), _parameters[2].c_str());
 	channelTarget->deleteUser(_parameters[1]);
-	User * u = _serv->getOneUser(_parameters[1]);
-	u->removeChannel(channelTarget);
+	if (channelTarget->getUserList().empty())
+		_serv->delChannel(channelTarget, _user);
 }

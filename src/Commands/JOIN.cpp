@@ -5,6 +5,7 @@ void	Commands::JOIN()
 {
 	Channel *tmp = _serv->findChannel(_parameters[0], _serv->getChannel());
 	string	tmp_key;
+	int errValue = -1;
 	if (_parameters.size() == 0)
 		return reply (ERR_NEEDMOREPARAMS, _command.c_str());
 
@@ -15,20 +16,34 @@ void	Commands::JOIN()
 	// for (std::vector<std::string>::iterator it  = _parameters.begin(); it != _parameters.end(); it++) // TODO only for test
 	// 	std::cout << *it << std::endl;
 	if (tmp) {
-		try {
+		// try {
 			if (tmp->getInviteRestrictionOn())
 				if (!tmp->isInvited(_user))
 					return reply (ERR_INVITEONLYCHAN, tmp->getName().c_str(), "has invite only restriction");
 
-			tmp->addUser(_user[0], _user, tmp_key);
-			_user->addChannel(tmp);
-			// cout << "username: " << _user[0].getUsername() << " | nickname: " << _user[0].getNickname() << endl;
-			reply(tmp->getUserList(), true, JOIN_WELCOME, _user->getNickname().c_str(), _user->getUsername().c_str(),
+			errValue = tmp->addUser(_user[0], _user, tmp_key);
+			switch (errValue)
+			{
+			case 0:
+				reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
+				break;
+			case 1:
+				reply(ERR_CHANNELISFULL, _parameters[0].c_str());
+				break;
+			case 2:
+				cerr << "User already in " << _parameters[0] << " channel\n";
+				break;
+			default:
+				_user->addChannel(tmp);
+				// cout << "username: " << _user[0].getUsername() << " | nickname: " << _user[0].getNickname() << endl;
+				reply(tmp->getUserList(), true, JOIN_WELCOME, _user->getNickname().c_str(), _user->getUsername().c_str(),
 				  _serv->getName().c_str(), tmp->getName().c_str());
-		} catch (exception &e) {
-			reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
-			cout << e.what() << endl;
-		}
+				break;
+			}		
+		// } catch (exception &e) {
+		// 	reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
+		// 	cout << e.what() << endl;
+		// }
 	} else
 		_serv->createChannel(_parameters[0], _user, tmp_key);
 

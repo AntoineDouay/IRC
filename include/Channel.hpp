@@ -31,7 +31,7 @@ public :
 
 	bool userIsOper(User &target);
 
-	void addUser(const User& who, User * newUser, string key);
+	int addUser(const User& who, User * newUser, string key);
 	void deleteUser(User who, User * targetUser);
 
 	void addInvitedUser (User* invited);
