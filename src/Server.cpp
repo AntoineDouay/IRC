@@ -7,15 +7,15 @@ Server::Server(int port, std::string pssw) : _password(pssw), _port(port)
 	_server_name = "ft_irc43";
 }
 
-int	Server::init()
+void	Server::init()
 {
 	int opt = 1;
 
 	if ((_server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-		return 1;
+		throw std::runtime_error("Socket error");
 
 	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
-		return 1;
+		throw std::runtime_error("setsockopt error");
 
 	fcntl(_server_fd, F_SETFL, O_NONBLOCK);
 
@@ -26,24 +26,22 @@ int	Server::init()
 	memset(&(address.sin_zero), '\0', 8);
 
 	if (bind(_server_fd, (struct sockaddr*)&address, sizeof(address)) < 0)
-		return 1;
+		throw std::runtime_error("bind error");
 
 	if (listen(_server_fd, address.sin_port) < 0)
-		return 1;
+		throw std::runtime_error("port error");
 
 	_p_fds.push_back(pollfd());
 	_p_fds.back().fd = _server_fd;
 	_p_fds.back().events = POLLIN;
 
 	std::cout << "socket server listening \n";
-
-	return 0;
 }
 
 void	Server::run()
 {
 	if (poll(&_p_fds[0], _p_fds.size(), 600) == -1)
-	return;
+		throw std::runtime_error("Poll error");
 
 	for (size_t i = 0; i < _p_fds.size(); i++)
 		{

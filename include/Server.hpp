@@ -31,7 +31,7 @@ class Server{
 
 	Server(int port, std::string pssw);
 
-	int	init();
+	void	init();
 	void	run();
 	void	clean();
 
