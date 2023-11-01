@@ -8,7 +8,7 @@ const server = net.createServer((socket) => {
   socket.on('data', async (data) => {
     const receivedData = data.toString();
     console.log('Received data:', receivedData);
-	const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlhRcWdMaWlCaUhEVkxGTk9BeXl6MiIsIm5jIjoiZ1lSRExMNEx0amZoSExWNmRzNjRtIiwiaWF0IjoxNjk4MDk4MDQyLCJleHAiOjE3MDA2OTAwNDJ9.-wRNCjpwlqbFlOvUEKOCehO2YEMb9sE1tgYSzfE-pWI"
+	const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijh4aTBLT001XzU0Vk9OT2hmTFMxRCIsIm5jIjoiVk1LSWFhU2kyWjg2OUd1WWpZOVU2IiwiaWF0IjoxNjk4ODQ3MzU2LCJleHAiOjE3MDE0MzkzNTZ9.u94C3gR3dQcs8Nt1h1b1mMe2BJgxOAP4wp7eAnYVuTk"
     const res = await axios.post("https://api.novelai.net/ai/generate", {
         "input": receivedData,
         "model": "euterpe-v2",
