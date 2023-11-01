@@ -120,11 +120,12 @@ void	Commands::MODE()
 	int sign = -1; // 0 - | 1 +;
 
 	if (_parameters.size() < 2)
-		return reply(ERR_NEEDMOREPARAMS);
+		return reply(ERR_NEEDMOREPARAMS, _command.c_str());
 
 	std::vector<Channel *> chan = _serv->getChannel();
 
 	size_t i = 0;
+
 	for (; i < chan.size(); i++)
 		if (_parameters[0] == chan[i]->getName())
 			break ;
@@ -134,8 +135,8 @@ void	Commands::MODE()
 
 	if (!chan[i]->userIsOper(*_user))
 		return reply(ERR_CHANOPRIVSNEEDED, chan[i]->getName().c_str(), "you need op rights");
-		//kick the user don't know why
-		
+
+
 	if (_parameters[1].size() != 0 && (_parameters[1].at(0) != '+' && _parameters[1].at(0) != '-'))
 		return ; //same
 
@@ -146,7 +147,7 @@ void	Commands::MODE()
 
 	if (_parameters[1].size() < 2)
 		return ; //...
-
+	
 	switch (_parameters[1].at(1))
 	{
 		case 'i':
@@ -175,6 +176,7 @@ void	Commands::MODE()
 			break;
 		};
 		default:
-			return reply (ERR_UNKNOWNMODE, _parameters[1].at(2), "unknow mode");
+			std::cout << "error unknow mode\n";
+			return reply (ERR_UNKNOWNMODE, _parameters[1].c_str(), "unknow mode");
 	}
 }

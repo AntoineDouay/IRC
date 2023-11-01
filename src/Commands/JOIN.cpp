@@ -1,9 +1,58 @@
 
 #include "../../include/Commands.hpp"
 
+vector<string> getChanList(vector<string> channList, string param, unsigned long *end, unsigned long *start){
+		unsigned long int len;
+
+		len = *end - *start;
+		std::string tmp = param.substr(*start, len);
+		cout << "tmp: " << tmp << endl;
+		*start = *end + 1;
+		*end = param.find(',', *start);
+		channList.push_back(tmp);
+		return channList;
+}
+
 void	Commands::JOIN()
 {
-	Channel *tmp = _serv->findChannel(_parameters[0], _serv->getChannel());
+	vector<string> channelList;
+	unsigned long int end;
+	unsigned long int start = 0;
+	// unsigned long int len;
+	end = _parameters[0].find(',');
+	// channelList = getChanList(channelList, _parameters[0], &end, &start);
+	cout << "WHILE START\n";
+	while (end != std::string::npos)
+	{
+		channelList = getChanList(channelList, _parameters[0], &end, &start);
+		if (end == std::string::npos) {
+			channelList = getChanList(channelList, _parameters[0], &end, &start);
+			break;
+		}
+		// len = end - start;
+		// std::string tmp = _parameters[0].substr(start, len);
+		// cout << "tmp: " << tmp << endl;
+		// start = end + 1;
+		// end = _parameters[0].find(',', start);
+		// channelList.push_back(tmp);
+	}
+	if (channelList.empty())
+		channelList.push_back(_parameters[0]);
+	cout << "WHILE END\n";
+	for (unsigned long i = 0; i < channelList.size(); i++){
+		cout << channelList[i] << endl;
+	}
+	cout << "FOR END" << endl;
+
+	// std::string str;
+	// if (_parameters[0].find(',') != std::string::npos)
+	// 	str = _parameters[0].substr(0, _parameters[0].find(','));
+	// else
+	// 	str = _parameters[0];
+
+	vector<string>::iterator str = channelList.begin();
+	for(; str != channelList.end(); str++) {
+	Channel *tmp = _serv->findChannel(*str, _serv->getChannel());
 	string	tmp_key;
 	int errValue = -1;
 	if (_parameters.size() == 0)
@@ -25,13 +74,13 @@ void	Commands::JOIN()
 			switch (errValue)
 			{
 			case 0:
-				reply(ERR_BADCHANNELKEY, _parameters[0].c_str());
+				reply(ERR_BADCHANNELKEY, (*str).c_str());
 				break;
 			case 1:
-				reply(ERR_CHANNELISFULL, _parameters[0].c_str());
+				reply(ERR_CHANNELISFULL, (*str).c_str());
 				break;
 			case 2:
-				cerr << "User already in " << _parameters[0] << " channel\n";
+				cerr << "User already in " << *str << " channel\n";
 				break;
 			default:
 				_user->addChannel(tmp);
@@ -45,8 +94,8 @@ void	Commands::JOIN()
 		// 	cout << e.what() << endl;
 		// }
 	} else
-		_serv->createChannel(_parameters[0], _user, tmp_key);
-
+		_serv->createChannel(*str, _user, tmp_key);
+	}
 	// if (_parameters[0] == _serv->getPassword())
 	// 	_user->setStatus(1);
 }
