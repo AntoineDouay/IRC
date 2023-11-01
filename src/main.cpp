@@ -10,7 +10,6 @@ static void	signalHandler(int signal)
 
 int main (int argc, char **argv)
 {
-	// struct sigaction sigIntHandler;
 	if (argc != 3)
 	{
 		std::cerr << "usage is : ./ircserv [port] [password]" << std::endl;
