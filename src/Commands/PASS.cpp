@@ -12,6 +12,8 @@ void	Commands::PASS()
 
 	if (_parameters[0] == _serv->getPassword())
 		_user->setStatus(1);
+	else
+		_user->setStatus(3);
 	
 	return ;
 }
