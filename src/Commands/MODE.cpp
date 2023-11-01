@@ -148,6 +148,11 @@ void	Commands::MODE()
 	if (_parameters[1].size() < 2)
 		return ; //...
 	
+	if (_parameters[1].size() > 2){
+		std::cout << "error unknow mode\n";
+		return reply (ERR_UNKNOWNMODE, _parameters[1].c_str(), "unknow mode");
+	}
+	
 	switch (_parameters[1].at(1))
 	{
 		case 'i':
