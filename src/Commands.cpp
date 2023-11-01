@@ -227,8 +227,6 @@ void	Commands::QUIT()
 
 	std::vector<Channel *>chan = _user->getChannel();
 	std::vector<Channel *>empty;
-	if (chan.empty())
-		cout << "nick" << endl;
 	for(std::vector<Channel *>::iterator it = chan.begin(); it != chan.end(); it++)
 	{
 		(*it)->deleteUser(_user->getNickname());
@@ -242,7 +240,9 @@ void	Commands::QUIT()
 		// 	empty.push_back(*it);
 		
 	}
-	for (vector<Channel *>::iterator it = empty.end(); it != empty.begin(); it--){
+	int cntr = 0;
+	for (vector<Channel *>::iterator it = empty.end()-1; it != empty.begin()-1; it--){
+		cout << cntr++<<endl;
 		_serv->delChannel(*it, _user);
 	}
 	
