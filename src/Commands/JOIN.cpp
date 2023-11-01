@@ -21,7 +21,7 @@ void	Commands::JOIN()
 	// unsigned long int len;
 	end = _parameters[0].find(',');
 	// channelList = getChanList(channelList, _parameters[0], &end, &start);
-	cout << "WHILE START\n";
+	// cout << "WHILE START\n";
 	while (end != std::string::npos)
 	{
 		channelList = getChanList(channelList, _parameters[0], &end, &start);
