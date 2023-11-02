@@ -114,7 +114,7 @@ void	Server::delUser(User * user)
 	}
 	close(user->getFD());
 	delete user;
-	printUserList();
+	// printUserList();
 }
 
 void	Server::receive(User * user)
