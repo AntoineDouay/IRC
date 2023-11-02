@@ -48,10 +48,13 @@ void	Server::run()
 	for (size_t i = 0; i < _p_fds.size(); i++)
 	{
 		if (_p_fds[i].revents & POLLIN) {
-			if (_p_fds[i].fd == _server_fd)
+			if (_p_fds[i].fd == _server_fd){
+				std::cout << "accept\n";
 				acceptUser();
-			else
+			}else{
+				std::cout << "receive\n";
 				receive(_users[_p_fds[i].fd]);
+			}
 		}
 	}
 
@@ -104,6 +107,20 @@ void	Server::delUser(User * user)
 		close(user->getFD());
 	}
 
+	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
+	{
+		std::vector<User *> channelMembers = (*it)->getUserList();
+		for (std::vector<User *>::iterator uIt = channelMembers.begin(); uIt != channelMembers.end(); uIt++)
+		{
+			if (user == (*uIt))
+			{
+				std::cout << "I'm removed from " << (*it)->getName() << std::endl;
+				(*it)->deleteUser(user);
+				std::cout << "New size " << (*it)->getUserList().size();
+			}
+		}
+	}	
+
 	for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); it++)
 	{
 		if (it->fd == user->getFD())
@@ -125,10 +142,14 @@ void	Server::receive(User * user)
 	int n = recv(user->getFD(), buffer, sizeof(buffer), 0);
 
 	if (n < 0)
+	{
+		std::cout << "signal received\n";
 		return ; // what to do ??
+	}
 
 	if (!n)
 	{
+		std::cout << "sig 2\n";
 		user->setStatus(3);
 		return ;
 	}

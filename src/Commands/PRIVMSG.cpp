@@ -112,6 +112,8 @@ void Commands::handleSinglePrivMSG(Server *server, std::string &preMessage,
 void Commands::handleChannelMSG(Server *server, User *user,
 								const std::string &name, std::string &message)
 {
+	(void)message;
+	(void)user;
 	std::vector<Channel *> channels = server->getChannel();
 
 	for (size_t i = 0; i < channels.size(); i++)
@@ -120,6 +122,7 @@ void Commands::handleChannelMSG(Server *server, User *user,
 		{
 			bool isMyChan = false;
 			const std::vector<User *> users = channels[i]->getUserList();
+			std::cout << "Users size: " << users.size() << std::endl;
 			for (size_t d = 0; d < users.size(); d++)
 			{
 				if (user->getNickname() == users[d]->getNickname())
