@@ -116,7 +116,6 @@ void Commands::handleChannelMSG(Server *server, User *user,
 
 	for (size_t i = 0; i < channels.size(); i++)
 	{
-		std::cout << channels[i]->getName() << std::endl;
 		if (channels[i]->getName() == name)
 		{
 			bool isMyChan = false;

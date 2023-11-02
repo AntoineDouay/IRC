@@ -125,11 +125,11 @@ void	Server::receive(User * user)
 	int n = recv(user->getFD(), buffer, sizeof(buffer), 0);
 
 	if (n < 0)
-		return ; //error to manage
+		return ; // what to do ??
 
 	if (!n)
 	{
-		user->setStatus(3); // normal shutdown of ending socket -> status = DELETE
+		user->setStatus(3);
 		return ;
 	}
 	user->setLastActivity();
@@ -212,9 +212,6 @@ User *Server::getOneUser(std::string nickname)
 
 void Server::createChannel(const std::string &name, User * who, std::string key) {
 	_channels.push_back(new Channel(name, who, key));
-//	for (vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++){
-//		cout << "chan: " << it[0]->getName() << endl;
-//	}
 }
 
 void Server::delChannel(Channel * chan, User * user)
@@ -244,7 +241,6 @@ std::vector<Channel *> Server::getChannel() const {
 }
 
 User *Server::findUser(const string& targetUser, vector<User *> userList) {
-//	vector<User *> tmp = getUsers();
 	vector<User *>::iterator it = userList.begin();
 
 	for (;it != userList.end(); it++) {

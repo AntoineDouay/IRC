@@ -2,8 +2,7 @@
 #include <ostream>
 
 void Commands::KICK() {
-	for (std::vector<std::string>::iterator it  = _parameters.begin(); it != _parameters.end(); it++) // TODO only for test
-		std::cout << "1: " << *it << std::endl;
+
 	if (_parameters.size() == 3) {
 		if (_parameters[2].at(0) == ':')
 			_parameters[2].erase(0, 1);

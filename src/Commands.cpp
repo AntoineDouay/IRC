@@ -13,7 +13,6 @@ Commands::Commands(std::string cmd, Server * serv, User * client)
 void	Commands::init_func_map()
 {
 	_func.insert(std::make_pair("JOIN", &Commands::JOIN));
-	_func.insert(std::make_pair("PART", &Commands::PART));
 	_func.insert(std::make_pair("KICK", &Commands::KICK));
 	_func.insert(std::make_pair("PASS", &Commands::PASS));
 	_func.insert(std::make_pair("USER", &Commands::USER));
@@ -21,8 +20,6 @@ void	Commands::init_func_map()
 	_func.insert(std::make_pair("JOIN", &Commands::JOIN));
 	_func.insert(std::make_pair("PING", &Commands::PING));
 	_func.insert(std::make_pair("PONG", &Commands::PONG));
-	_func.insert(std::make_pair("WHOIS", &Commands::WHOIS));
-	_func.insert(std::make_pair("OPER", &Commands::OPER));
 	_func.insert(std::make_pair("PRIVMSG", &Commands::PRIVMSG));
 	_func.insert(std::make_pair("MODE", &Commands::MODE));
 	_func.insert(std::make_pair("INVITE", &Commands::INVITE));
@@ -60,21 +57,6 @@ void	Commands::parse_cmd(const std::string &instruction)
 	}
 	if (trailing.size() > 0)
 		_parameters.push_back(trailing);
-	// std::cout << "Parsing test --------------------------------";
-	// for (size_t i = 0; i < _parameters.size(); i++)
-	// {
-	// 	std::cout << _parameters[i] << std::endl;
-	// 	for (size_t m = 0; m < _parameters[i].size(); m++)
-	// 	{
-	// 		if (_parameters[i][m] == '\n')
-	// 			std::cout << "\\n" << std::endl;
-	// 		else if (_parameters[i][m] == '\r')
-	// 			std::cout << "\\r" << std::endl;
-	// 		else
-	// 			std::cout << _parameters[i][m] << std::endl;
-	// 	}
-	// 	std::cout << std::endl;
-	// }
 }
 
 bool	Commands::hasCrlf(const std::string &instruction)
@@ -127,7 +109,6 @@ void	Commands::reply(std::string str, ...)
 		}
 		i++;
 	}
-	//std::cout << "|" << _reply << "|" << endl; // TODO only for test
 	send(_user->getFD(), _reply.c_str(), _reply.size(), 0);
 }
 
@@ -153,69 +134,14 @@ void Commands::reply(std::vector<User *> userList, bool sendToMe, std::string st
 		}
 		i++;
 	}
-//	_reply.append("\n");
-//	cout << "|" << _reply << "|" << endl; // TODO only for test
+
 	vector<User *>::iterator it = userList.begin();
 
 	for (; it != userList.end(); it++) {
 		if ((*it)->getFD() != _user->getFD() || sendToMe)
-		{
-			// std::cout << _reply;
-			// cout << "it: " << (*it)->getNickname() << " fd: " << (*it)->getFD() << endl;
 			send((*it)->getFD(), _reply.c_str(), _reply.size(), 0);
-		}
 	}
 }
-
-// void	Commands::PASS()
-// {
-// 	if (_parameters.size() == 0)
-// 		return reply (ERR_NEEDMOREPARAMS, _command.c_str());
-// 	if (_user->getStatus() != NO_PASSWORD)
-// 		return reply (ERR_ALREADYREGISTERED);
-// 	// std::cout << _parameters[0] << std::endl;
-// 	// std::cout << _serv->getPassword() << std::endl;
-
-// 	if (_parameters[0] == _serv->getPassword())
-// 		_user->setStatus(1);
-
-// 	return ;
-// }
-
-// void	Commands::USER()
-// {
-// 	if (_parameters.size() == 0)
-// 		return reply (ERR_NEEDMOREPARAMS);
-// 	if (_user->getStatus() != REGISTER)
-// 		return reply (ERR_ALREADYREGISTERED);
-
-// 	_user->setUsername(_parameters[0]);
-// 	if (_user->getNickname() != "" && _user->getStatus() != NO_PASSWORD)
-// 	{
-// 		reply(RPL_WELCOME, _user->getNickname().c_str(), _user->getUsername().c_str(), _user->getHostName().c_str());
-// 		//send welcome rply
-// 	}
-// }
-
-// void	Commands::NICK()
-// {
-// 	if (_parameters.size() == 0)
-// 		return reply (ERR_NONICKNAMEGIVEN);
-
-// 	std::vector<User *> u = _serv->getUsers();
-
-// 	for (size_t i = 0; i < u.size(); i++)
-// 		if (_parameters[0] == u[i]->getNickname())
-// 			return reply (ERR_NICKNAMEINUSE, _parameters[0].c_str());
-
-// 	_user->setNickname(_parameters[0]);
-// 	if (_user->getUsername() != "" && _user->getStatus() != NO_PASSWORD)
-// 	{
-// 		reply(RPL_WELCOME, _user->getNickname().c_str(), _user->getUsername().c_str(), _user->getHostName().c_str());
-// 		//send welcome rply
-
-// 	}
-// }
 
 void	Commands::QUIT()
 {
@@ -236,52 +162,11 @@ void	Commands::QUIT()
 		} catch (std::exception &e) {
 			cout << e.what() << endl;
 		}
-		// if ((*it)->getUserList().empty())
-		// 	empty.push_back(*it);
-		
 	}
-	int cntr = 0;
+	
 	for (vector<Channel *>::iterator it = empty.end()-1; it != empty.begin()-1; it--){
-		cout << cntr++<<endl;
 		_serv->delChannel(*it, _user);
 	}
 	
 	
 }
-
-// void	Commands::PASS()
-// {
-// 	std::vector<std::string> &parameters = _command.getParameters();
-// 	if (parameters.size() != 1)
-// 		return ;
-// 	if (parameters[0] != _serv->getPassword())
-// 		return ;
-// 	_user->setStatus(1);
-// }
-// void	Commands::USER()
-// {
-// 	std::vector<std::string> &parameters = _command.getParameters();
-
-// 	if (parameters.size() < 1)
-// 		return ;
-// 	_client->setUsername(parameters[0]);
-// 	if (_client->getNickname() != "" && _client->getStatus() != NO_PASSWORD)
-// 	{
-// 		send (_client->getFD(), RPL_WELCOME, 80, 0);
-// 		//send welcome rply
-// 	}
-// }
-// void	Commands::NICK()
-// {
-// 	std::vector<std::string> &parameters = _command.getParameters();
-
-// 	if (parameters.size() != 1)
-// 		return ;
-// 	_client->setNickname(parameters[0]);
-// 	if (_client->getUsername() != "" && _client->getStatus() != NO_PASSWORD)
-// 	{
-// 		send (_client->getFD(), RPL_WELCOME, 80, 0);
-// 		//send welcome rply
-// 	}
-// }
-

@@ -18,7 +18,7 @@ void	Commands::INVITE()
 			chan = *it;
 	}
 	if (chan == NULL)
-		return ; // RPL_AWAY ?
+		return ;
 
 	std::vector<User *> users = _serv->getUsers();
 	std::vector<User *>::iterator itt = users.begin();
@@ -40,8 +40,6 @@ void	Commands::INVITE()
 
 	if (!userOnChan)
 		return reply(ERR_NOTONCHANNEL, chan->getName().c_str(), "cannot invite if your not in the channel");
-	
-	// std::cout << "user err pass\n";
 
 	for (std::vector<User *>::iterator it = userList.begin(); it != userList.end(); it++)
 		if ((*it)->getNickname() == _parameters[0])
@@ -49,8 +47,6 @@ void	Commands::INVITE()
 
 	if (targetOnChan)
 		return reply(ERR_USERONCHANNEL, _parameters[0].c_str(), chan->getName().c_str(), "already on the channel");
-	
-	// std::cout << "target err pass\n";
 
 	std::vector<User *> operList = chan->getAdmin();
 	for (std::vector<User *>::iterator it = operList.begin(); it != operList.end(); it++)
@@ -59,9 +55,8 @@ void	Commands::INVITE()
 
 	if (chan->getInviteRestrictionOn())
 		if (!userIsOper)
-			return ;//reply(ERR_CHANOPRIVSNEEDED, chan->getName().c_str(), "need operator rights");
+			return reply(ERR_CHANOPRIVSNEEDED, chan->getName().c_str(), "need operator rights");
 
-	// std::cout << "oper err pass\n";
 	reply(RPL_INVITING, _parameters[0].c_str(), _parameters[1].c_str());
 	std::string msg(_user->getNickname() + " has invited you on " + chan->getName() + "!\n");
 	chan->addInvitedUser(target);

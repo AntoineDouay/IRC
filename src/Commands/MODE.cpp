@@ -3,8 +3,7 @@
 
 void	mode_i(Server &serv, Commands &cmd, User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
 {
-	(void)cmd;
-	(void)parameters;
+
 	if (sign)
 		chan.setInviteRestriction();
 	else
@@ -16,9 +15,6 @@ void	mode_i(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 
 void	mode_te(Server &serv, Commands &cmd,  User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
 {
-	(void)cmd;
-	(void)parameters;
-
 	if (sign)
 		chan.setTopicRestriction();
 	else
@@ -26,7 +22,7 @@ void	mode_te(Server &serv, Commands &cmd,  User &user, std::vector<std::string> 
 	cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");	
 	cmd.reply(chan.getUserList(), false, MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
 				  serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str());
-	//std::cout << chan.getTopicRestrictionOn() << std::endl;
+
 }
 
 void	mode_l(Server &serv, Commands &cmd, User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
@@ -37,7 +33,6 @@ void	mode_l(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 		cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");
 		cmd.reply(chan.getUserList(), false, MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
 				serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str());
-	//	std::cout << chan.getMaxUser() << std::endl;
 		return ;
 	}
 	if (parameters.size() < 3)
@@ -49,16 +44,14 @@ void	mode_l(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 	ss >> n;
 
 	if(ss.fail())
-	{
-		// std::cout << "maxuser parameters is not a unsigned int\n";
 		return ;
-	}
+
 	if (sign)
 		chan.setMaxUsers(n);
 	cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), parameters[2].c_str());
 	cmd.reply(chan.getUserList(), false, MODE_CHANGE, user.getNickname().c_str(), user.getUsername().c_str(),
 				serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str());
-	//std::cout << chan.getMaxUser() << std::endl;
+
 }
 
 void	mode_k(Server &serv, Commands &cmd, User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
@@ -83,15 +76,10 @@ void	mode_k(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 		return;
 	}
 
-	
-	//std::cout << chan.getKey() << std::endl;
 }
 
 void	mode_o(Server &serv, Commands &cmd, User &user, std::vector<std::string> &parameters, Channel &chan, int sign)
 {
-	(void)cmd;
-	(void)parameters;
-
 	if (parameters.size() < 3)
 		return;
 	User *target = serv.getOneUser(parameters[2]);
@@ -109,10 +97,6 @@ void	mode_o(Server &serv, Commands &cmd, User &user, std::vector<std::string> &p
 	cmd.reply(RPL_CHANNELMODEIS, chan.getName().c_str(), parameters[1].c_str(), "");
 	cmd.reply(chan.getUserList(), false, MODE_CHANGE2, user.getNickname().c_str(), user.getUsername().c_str(),
 				serv.getName().c_str(), chan.getName().c_str(), parameters[1].c_str(), parameters[2].c_str());
-	// std::vector<User> operList = chan.getAdmin();
-	// std::vector<User>::iterator it = operList.begin();
-	// for (; it != operList.end(); it++)
-	// 	std::cout << "ope : " <<  it->getNickname() << std::endl;
 }
 
 void	Commands::MODE()
@@ -138,21 +122,18 @@ void	Commands::MODE()
 
 
 	if (_parameters[1].size() != 0 && (_parameters[1].at(0) != '+' && _parameters[1].at(0) != '-'))
-		return ; //same
+		return ;
 
 	if (_parameters[1].at(0) == '+')
 		sign = 1;
 	if (_parameters[1].at(0) == '-')
 		sign = 0;
 
-	if (_parameters[1].size() < 2)
-		return ; //...
-	
 	if (_parameters[1].size() > 2){
 		std::cout << "error unknow mode\n";
 		return reply (ERR_UNKNOWNMODE, _parameters[1].c_str(), "unknow mode");
 	}
-	
+
 	switch (_parameters[1].at(1))
 	{
 		case 'i':
@@ -181,7 +162,6 @@ void	Commands::MODE()
 			break;
 		};
 		default:
-			std::cout << "error unknow mode\n";
 			return reply (ERR_UNKNOWNMODE, _parameters[1].c_str(), "unknow mode");
 	}
 }

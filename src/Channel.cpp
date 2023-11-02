@@ -2,21 +2,6 @@
 #include <cstdio>
 #include <exception>
 
-/*
-Channel::Channel(const std::string& name,  User& userCreator, Server &serv)
-{
-	_name = name;
-	_key = "";
-	_topic = "";
-	_userList.push_back(&userCreator);
-	_serv = &serv;
-}
-*/
-
-//Channel::Channel(void) {
-//
-//}
-
 Channel::Channel(const string& name, User * userCreator, string key):
 		_name(name),
 		_key(key),
@@ -24,9 +9,6 @@ Channel::Channel(const string& name, User * userCreator, string key):
 		_inviteRestrictionOn(false),
 		_topicRestrictionOn(false)
 {
-	// cout << "Channel constructor called" << endl; // TODO Only for test
-	/* Channels names are strings (beginning with a '&', '#', '+' or '!'
-	   character) of length up to fifty (50) characters. RFC2812-1.3 */
 	if ( _name.length() <= 0 && 51 <= _name.length() ){
 		throw std::exception();
 	}
@@ -45,23 +27,14 @@ Channel::Channel(const string& name, User * userCreator, string key):
 	_userList.push_back(userCreator);
 	_operatorList.push_back(userCreator);
 	userCreator->addChannel(this);
-
 	(void)_id;
-	(void)_key;
 	(void)_serv;
 }
 
-//Channel::Channel(Channel const &src) {
-//
-//}
 
 Channel::~Channel(void) {
 
 }
-
-//Channel &Channel::operator=(Channel const &rhs) {
-//
-//}
 
 string Channel::getName(void) const {
 	return _name;
@@ -101,23 +74,21 @@ bool Channel::userIsOper(User &target)
 	return false;
 }
 
-int Channel::addUser(const User& who, User * newUser, string key) {
-	// cout << "Channel::addUser called for user: " << newUser.getNickname() << endl; //TODO it's only for test
+int Channel::addUser(User * newUser, string key) {
+
 	if (_key != "" && key != _key)
 		return 0;
-		// throw CustomErrorMessage("Bad key");
+
 	if (_maxUser <= _userList.size())
 		return 1;
-		// throw CustomErrorMessage(_name + " channel is full"); // channel is full
+
 	for (vector<User *>::iterator it = _userList.begin(); it != _userList.end(); it++){
 		if ((*it)->getNickname() == newUser->getNickname()){
 			return 2;
-			// throw CustomErrorMessage("User already exist");
 		}
 	}
 	_userList.push_back(newUser);
 	return -1;
-	(void)who; // TODO remove
 }
 
 void	Channel::addInvitedUser(User *invited)
@@ -142,9 +113,8 @@ vector<User *>::iterator Channel::findUser(User * user) {
 	return it;
 }
 
-void Channel::deleteUser(User who, User * targetUser) {
+void Channel::deleteUser(User * targetUser) {
 	_userList.erase(findUser(targetUser));
-	(void)who; // TODO remove
 }
 
 void Channel::setTopic(User who, string newTopic) {
@@ -198,7 +168,7 @@ void Channel::setOperator(User * target) {
 			return;
 		}
 	}
-} // ERR_USERNOTINCHANNEL
+}
 
 void Channel::removeOperator(User * target) {
 	for (vector<User *>::iterator it = _operatorList.begin(); it != _operatorList.end(); it++){
