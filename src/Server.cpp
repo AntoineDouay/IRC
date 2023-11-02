@@ -263,6 +263,7 @@ void	Server::clean()
 		delUser(*it);
 	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); it++)
 		delete (*it);
+	close(_server_fd);
 }
 
 void Server::delChannel(Channel * chan)

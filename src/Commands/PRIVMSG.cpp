@@ -50,7 +50,10 @@ void Commands::handleBot(const std::string &message)
 {
 	int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1) {
-        perror("Error creating socket");
+		std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :Error creating socket");
+		jfdk314 += "\r\n";
+		send(_user->getFD(), jfdk314.c_str(), jfdk314.size(), 0);
+		return ;
     }
 
     sockaddr_in serverAddress;
@@ -59,7 +62,10 @@ void Commands::handleBot(const std::string &message)
     serverAddress.sin_addr.s_addr = INADDR_ANY;
 
     if (connect(clientSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
-        perror("Error connecting to the server");
+		std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :Error connecting to the server");
+		jfdk314 += "\r\n";
+		send(_user->getFD(), jfdk314.c_str(), jfdk314.size(), 0);
+		return ;
     }
 
     send(clientSocket, message.c_str(), strlen(message.c_str()), 0);
