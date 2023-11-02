@@ -30,9 +30,6 @@ void	Commands::TOPIC()
 		if ((*it)->getNickname() == _user->getNickname())
 			userIsOper = true;
 
-	// std::cout << "pass err user is oper chan\n";
-	// std::cout << "|" << chan->getName() << "|" << "\n";
-	// std::cout << "|" << _parameters[0] << "|" << "\n";
 
 	if (chan->getTopicRestrictionOn())
 		if (!userIsOper)
@@ -45,7 +42,6 @@ void	Commands::TOPIC()
 		return reply(RPL_NOTOPIC, chan->getName().c_str(), "no topic");
 
 	reply(RPL_TOPIC, chan->getName().c_str(), chan->getTopic().c_str());
-	//send msg to all user of the channel (not numeric replies)
 	reply(chan->getUserList(), false, TOPIC_CHANGE, _user->getNickname().c_str(), _user->getUsername().c_str(),
 		_serv->getName().c_str(), chan->getName().c_str(), chan->getTopic().c_str());
 }

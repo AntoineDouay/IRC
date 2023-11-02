@@ -9,7 +9,7 @@ class User;
 class Commands;
 class Channel;
 
-# define TIME_OUT	300000 // 3min
+# define TIME_OUT	300000
 # define SERV_PING		30 // ping every seconds
 
 class Server{
