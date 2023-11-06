@@ -34,7 +34,7 @@ public :
 	bool isInvited (User *target);
   
 	void deleteUser(const string& nickTarget);
-  
+
 	void setTopic(User who, string newTopic);
 
 	void setInviteRestriction(); // function for +i

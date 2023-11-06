@@ -119,7 +119,7 @@ void	Server::delUser(User * user)
 				std::cout << "New size " << (*it)->getUserList().size();
 			}
 		}
-	}	
+	}
 
 	for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); it++)
 	{
@@ -131,7 +131,6 @@ void	Server::delUser(User * user)
 	}
 	close(user->getFD());
 	delete user;
-	// printUserList();
 }
 
 void	Server::receive(User * user)
