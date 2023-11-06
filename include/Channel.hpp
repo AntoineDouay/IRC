@@ -80,7 +80,10 @@ private:
 
 	vector<User *>::iterator findUser(User * user);
 	vector<User *>::iterator findUser(const string& user);
-	Server				*_serv;
+	vector<User *>::iterator findOpeUser(const string &user);
+	vector<User *>::iterator findInviteUser(const string &user);
+
+		Server				*_serv;
 };
 
 #endif

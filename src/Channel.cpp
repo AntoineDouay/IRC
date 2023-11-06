@@ -195,6 +195,12 @@ bool Channel::isInChannel(const string &target) {
 void Channel::deleteUser(const string& nickTarget) {
 	vector<User *>::iterator user = findUser(nickTarget);
 	_userList.erase(user);
+	user = findOpeUser(nickTarget);
+	if (user != _operatorList.end())
+		_operatorList.erase(user);
+	user = findInviteUser(nickTarget);
+	if (user != _invitedUserList.end())
+		_invitedUserList.erase(user);
 }
 
 vector<User *>::iterator Channel::findUser(const string &user) {
@@ -205,6 +211,26 @@ vector<User *>::iterator Channel::findUser(const string &user) {
 		}
 	}
 	return _userList.end();
+}
+
+vector<User *>::iterator Channel::findOpeUser(const string &user) {
+	vector<User *>::iterator it = _operatorList.begin();
+	for (; it != _operatorList.end(); it++) {
+		if ((*it)->getNickname() == user) {
+			return it;
+		}
+	}
+	return _operatorList.end();
+}
+
+vector<User *>::iterator Channel::findInviteUser(const string &user) {
+	vector<User *>::iterator it = _invitedUserList.begin();
+	for (; it != _invitedUserList.end(); it++) {
+		if ((*it)->getNickname() == user) {
+			return it;
+		}
+	}
+	return _invitedUserList.end();
 }
 
 // ---------------------------------------------------- //
