@@ -150,21 +150,4 @@ void	Commands::QUIT()
 	if (_parameters.size() > 0)
 		str += _parameters[0];
 	_user->setStatus(3);
-
-	// std::vector<Channel *>chan = _user->getChannel();
-	// std::vector<Channel *>empty;
-	// for(std::vector<Channel *>::iterator it = chan.begin(); it != chan.end(); it++)
-	// {
-	// 	(*it)->deleteUser(_user->getNickname());
-	// 	try {
-	// 		if ((*it)->getUserList().size() == 0)
-	// 			empty.push_back(*it);
-	// 	} catch (std::exception &e) {
-	// 		cout << e.what() << endl;
-	// 	}
-	// }
-	
-	// for (vector<Channel *>::iterator it = empty.end()-1; it != empty.begin()-1; it--){
-	// 	_serv->delChannel(*it, _user);
-	// }
 }

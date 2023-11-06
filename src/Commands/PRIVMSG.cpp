@@ -73,7 +73,6 @@ void Commands::handleBot(const std::string &message)
     char buffer[1024] = {0};
     recv(clientSocket, buffer, sizeof(buffer), 0);
 
-    std::cout << "Server response: " << buffer << std::endl;
 	std::string jfdk314(":novel PRIVMSG " + _user->getNickname() + " :" + buffer);
 	escapeSpecialChars(jfdk314);
 	jfdk314 += "\r\n";
@@ -122,7 +121,6 @@ void Commands::handleChannelMSG(Server *server, User *user,
 		{
 			bool isMyChan = false;
 			const std::vector<User *> users = channels[i]->getUserList();
-			std::cout << "Users size: " << users.size() << std::endl;
 			for (size_t d = 0; d < users.size(); d++)
 			{
 				if (user->getNickname() == users[d]->getNickname())

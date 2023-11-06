@@ -40,8 +40,6 @@ class Server{
 	void	receive(User * User);
 	void	pingUser();
 
-	void	printUserList();
-
 	std::string				getPassword();
 	std::string				getName();
 	std::vector<User *>		getUsers();

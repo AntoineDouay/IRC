@@ -49,10 +49,8 @@ void	Server::run()
 	{
 		if (_p_fds[i].revents & POLLIN) {
 			if (_p_fds[i].fd == _server_fd){
-				std::cout << "accept\n";
 				acceptUser();
 			}else{
-				std::cout << "receive\n";
 				receive(_users[_p_fds[i].fd]);
 			}
 		}
@@ -114,11 +112,7 @@ void	Server::delUser(User * user)
 		for (std::vector<User *>::iterator uIt = channelMembers.begin(); uIt != channelMembers.end(); uIt++)
 		{
 			if (user == (*uIt))
-			{
-				std::cout << "I'm removed from " << (*it)->getName() << std::endl;
 				(*it)->deleteUser(user);
-				std::cout << "New size " << (*it)->getUserList().size();
-			}
 		}
 		if ((*it)->getUserList().size() == 0)
 				empty.push_back(*it);
@@ -146,14 +140,10 @@ void	Server::receive(User * user)
 	int n = recv(user->getFD(), buffer, sizeof(buffer), 0);
 
 	if (n < 0)
-	{
-		std::cout << "signal received\n";
-		return ; // what to do ??
-	}
+		return ;
 
 	if (!n)
 	{
-		std::cout << "sig 2\n";
 		user->setStatus(3);
 		return ;
 	}
@@ -189,17 +179,6 @@ void    Server::pingUser()
             (*it)->setLastPing();
         }
     }
-}
-
-void	Server::printUserList()
-{
-	std::map<int, User *>::iterator it = _users.begin();
-	std::cout << "--- User List ---\n";
-	for (;it != _users.end(); it++)
-	{
-		std::cout << it->second->getNickname() << std::endl;
-	}
-	std::cout << "-----------------\n";
 }
 
 std::string	Server::getPassword()
@@ -282,7 +261,7 @@ int	Server::getFD()
 
 void	Server::clean()
 {
-	std::cout << "Cleaning the server" << std::endl;
+	std::cout << "\nCleaning the server" << std::endl;
 	std::vector<User *> v_users = getUsers();
 	for (std::vector<User *>::iterator it = v_users.begin(); it != v_users.end(); it++)
 		delUser(*it);

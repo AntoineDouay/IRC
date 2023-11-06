@@ -26,6 +26,5 @@ void	Commands::NICK()
 		reply(RPL_CREATED, "17/10/23");
 		reply(RPL_MYINFO,  _serv->getName().c_str(), "1.29", "user mode: none,", "chan mode: itkol");
 		_user->setStatus(2);
-		// _serv->printUserList();
 	}
 }
