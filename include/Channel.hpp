@@ -2,6 +2,7 @@
 # define CHANNEL_H
 
 # include "main.hpp"
+//# include "Commands.hpp"
 #include <exception>
 
 using namespace std;
@@ -34,7 +35,7 @@ public :
 	bool isInvited (User *target);
   
 	void deleteUser(const string& nickTarget);
-  
+
 	void setTopic(User who, string newTopic);
 
 	void setInviteRestriction(); // function for +i
@@ -79,7 +80,10 @@ private:
 
 	vector<User *>::iterator findUser(User * user);
 	vector<User *>::iterator findUser(const string& user);
-	Server				*_serv;
+	vector<User *>::iterator findOpeUser(const string &user);
+	vector<User *>::iterator findInviteUser(const string &user);
+
+		Server				*_serv;
 };
 
 #endif

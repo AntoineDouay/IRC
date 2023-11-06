@@ -98,11 +98,12 @@ void	Server::acceptUser()
 void	Server::delUser(User * user)
 {
 	std::map<int, User *>::iterator it = _users.find(user->getFD());
+	std::vector<Channel *>empty;
 
 	if (it != _users.end())
 	{
 		_users.erase(it);
-		std::string msg(_server_name + ": you have been disconnected for inactivity\r\n");
+		std::string msg(_server_name + ": you have been disconnected\r\n");
 		send(user->getFD(), msg.c_str(), msg.size(), 0);
 		close(user->getFD());
 	}
@@ -119,7 +120,9 @@ void	Server::delUser(User * user)
 				std::cout << "New size " << (*it)->getUserList().size();
 			}
 		}
-	}	
+		if ((*it)->getUserList().size() == 0)
+				empty.push_back(*it);
+	}
 
 	for (std::vector<pollfd>::iterator it = _p_fds.begin(); it != _p_fds.end(); it++)
 	{
@@ -130,14 +133,15 @@ void	Server::delUser(User * user)
 		}
 	}
 	close(user->getFD());
+	for (vector<Channel *>::iterator it = empty.end()-1; it != empty.begin()-1; it--){
+		delChannel(*it, user);
+	}
 	delete user;
-	// printUserList();
 }
 
 void	Server::receive(User * user)
 {
 	char buffer[1024];
-
 
 	int n = recv(user->getFD(), buffer, sizeof(buffer), 0);
 
@@ -158,15 +162,15 @@ void	Server::receive(User * user)
 	buffer[n] = '\0';
 	std::string buf = buffer;
 	std::string delimiter("\n");
+	user->setCommand(user->getCommand() + buf);
 	size_t pos;
-
-	while ((pos = buf.find(delimiter)) != std::string::npos)
+	while ((pos = user->getCommand().find(delimiter)) != std::string::npos)
 	{
-		std::string str = buf.substr(0, pos);
+		std::string str = user->getCommand().substr(0, pos);
 		std::cout << str << std::endl;
 		Commands cmd(str, this, user);
 		cmd.execute();
-		buf.erase(0 , pos + delimiter.size());
+		user->setCommand(user->getCommand().erase(0 , pos + delimiter.size()));
 	}
 }
 

@@ -90,3 +90,15 @@ void 	User::setLastPing()
 {
 	_last_ping = time(NULL);
 }
+
+std::string User::getCommand() const {
+	return _command;
+}
+
+void User::setCommand(const std::string& str) {
+	_command = str;
+}
+
+void User::cleanCommand() {
+	_command = "";
+}
