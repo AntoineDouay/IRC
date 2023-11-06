@@ -9,17 +9,11 @@ Channel::Channel(const string& name, User * userCreator, string key):
 		_inviteRestrictionOn(false),
 		_topicRestrictionOn(false)
 {
-	if ( _name.length() <= 0 && 51 <= _name.length() ){
+	if ( name.length() <= 0 || 51 <= name.length() ){
 		throw std::exception();
 	}
 	switch (_name[0]) {
-		case '&':
-			break;
 		case '#':
-			break;
-		case '+':
-			break;
-		case '!':
 			break;
 		default:
 			throw exception();

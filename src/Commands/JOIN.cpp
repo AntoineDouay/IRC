@@ -69,7 +69,12 @@ void	Commands::JOIN()
 					break;
 			}		
 		}
-		else
-			_serv->createChannel(*str, _user, tmp_key);
+		else {
+			try {
+				_serv->createChannel(*str, _user, tmp_key);
+			} catch (exception &e) {
+				reply(ERR_NOSUCHCHANNEL, _parameters[0].c_str(), "invalid channel name");
+			}
+		}
 	}
 }
