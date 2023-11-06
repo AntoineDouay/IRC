@@ -143,7 +143,6 @@ void	Server::receive(User * user)
 {
 	char buffer[1024];
 
-
 	int n = recv(user->getFD(), buffer, sizeof(buffer), 0);
 
 	if (n < 0)
@@ -163,15 +162,15 @@ void	Server::receive(User * user)
 	buffer[n] = '\0';
 	std::string buf = buffer;
 	std::string delimiter("\n");
+	user->setCommand(user->getCommand() + buf);
 	size_t pos;
-
-	while ((pos = buf.find(delimiter)) != std::string::npos)
+	while ((pos = user->getCommand().find(delimiter)) != std::string::npos)
 	{
-		std::string str = buf.substr(0, pos);
+		std::string str = user->getCommand().substr(0, pos);
 		std::cout << str << std::endl;
 		Commands cmd(str, this, user);
 		cmd.execute();
-		buf.erase(0 , pos + delimiter.size());
+		user->setCommand(user->getCommand().erase(0 , pos + delimiter.size()));
 	}
 }
 

@@ -25,6 +25,7 @@ class User{
 	std::string			_nickname;
 	std::string			_username;
 	std::string			_hostname;
+	std::string			_command;
 
 	time_t				_last_ping;
 	time_t				_last_time_active;
@@ -43,6 +44,7 @@ class User{
 	std::string	getUsername() const;
 	std::string	getNickname() const;
 	std::string	getHostName() const;
+	std::string getCommand() const;
 	time_t		getLastActivity() const;
 	time_t		getLastPing() const;
 	std::vector<Channel *>	getChannel() const; 
@@ -54,6 +56,8 @@ class User{
 	void	setStatus(int status);
 	void	setUsername(std::string str);
 	void	setNickname(std::string str);
+	void	setCommand(const std::string& str);
+	void	cleanCommand();
 };
 
 #endif
